@@ -1,8 +1,8 @@
 package com.project.springboot.practice.springbootproject.controller;
 
 
-import com.example.dgistmembermanagementdemo.dto.CheckUser;
-import com.example.dgistmembermanagementdemo.dto.CheckUserResponse;
+import com.project.springboot.practice.springbootproject.dto.CheckUser;
+import com.project.springboot.practice.springbootproject.dto.CheckUserResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

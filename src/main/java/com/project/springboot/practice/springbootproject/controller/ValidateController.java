@@ -1,11 +1,12 @@
 package com.project.springboot.practice.springbootproject.controller;
 
-import com.example.dgistmembermanagementdemo.config.CodeConfig;
-import com.example.dgistmembermanagementdemo.dto.ValidateCode;
-import com.example.dgistmembermanagementdemo.dto.ValidateCodeResponse;
-import com.example.dgistmembermanagementdemo.service.EmailService;
-import com.example.dgistmembermanagementdemo.service.SmsService;
-import com.example.dgistmembermanagementdemo.util.QrCodeUtil;
+
+import com.project.springboot.practice.springbootproject.config.CodeConfig;
+import com.project.springboot.practice.springbootproject.dto.ValidateCode;
+import com.project.springboot.practice.springbootproject.dto.ValidateCodeResponse;
+import com.project.springboot.practice.springbootproject.service.EmailService;
+import com.project.springboot.practice.springbootproject.service.SmsService;
+import com.project.springboot.practice.springbootproject.util.QrCodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
