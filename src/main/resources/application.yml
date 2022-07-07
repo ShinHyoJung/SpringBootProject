@@ -1,0 +1,24 @@
+server:
+  port: 8070
+  servlet:
+    context-path: /demo
+
+spring:
+  profiles:
+    active: local
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: sljh1020@gmail.com
+    password: pizaagtsvukoenfy
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
