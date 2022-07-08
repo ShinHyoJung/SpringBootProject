@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpSession;
 
@@ -65,6 +66,7 @@ public class ValidateController {
         }
     }
 
+    @ResponseBody
     @RequestMapping("/qrCode")
     public String QrCode(Model model) {
         String codeInformation = "http://www.naver.com";

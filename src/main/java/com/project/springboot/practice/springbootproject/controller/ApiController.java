@@ -3,6 +3,7 @@ package com.project.springboot.practice.springbootproject.controller;
 
 import com.project.springboot.practice.springbootproject.dto.CheckUser;
 import com.project.springboot.practice.springbootproject.dto.CheckUserResponse;
+import com.project.springboot.practice.springbootproject.util.QrCodeUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,4 +58,12 @@ public class ApiController {
 
     */
         }
+
+    @ResponseBody
+    @RequestMapping("/postQrCode")
+    public String postQrCode() {
+        String codeInformation = "http://www.naver.com";
+        String img = QrCodeUtil.getQrCodeImage(codeInformation, 200, 200);
+        return img;
+    }
 }

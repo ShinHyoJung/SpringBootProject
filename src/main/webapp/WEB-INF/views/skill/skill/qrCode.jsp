@@ -10,6 +10,6 @@
     <title>Qr코드</title>
 </head>
 <body>
-<img src="data:image/jpg;base64,${img}">
+<img src="data:image/jpg;base64,${img}"/>
 </body>
 </html>

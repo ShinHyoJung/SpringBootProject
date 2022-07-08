@@ -11,6 +11,8 @@
     <title>홈</title>
 </head>
 <body>
-
+    <a href="/demo/emailPage">이메일 인증</a>
+    <a href="/demo/smsPage">휴대폰 인증</a>
+    <a href="/demo/qrCode">Qr코드</a>
 </body>
 </html>
