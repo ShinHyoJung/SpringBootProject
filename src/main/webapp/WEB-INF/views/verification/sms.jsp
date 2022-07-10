@@ -28,7 +28,7 @@
             method:"post",
             dataType: "json",
             data: {"phoneNum":phoneNum},
-            url: "/demo/sms"
+            url: "/developer/sms"
         })
         alert("인증번호가 전송되었습니다.");
     }
@@ -39,11 +39,16 @@
 
         $.ajax({
             method:"post",
+            url:"/developer/validate",
             dataType: "json",
             data: JSON.stringify(postObj),
-            url:"/validate",
-            success: function(data) {
-                alert(data.message);
+            contentType: "application/json; charset=UTF-8",
+            success: function(ValidateCodeResponse) {
+                alert(ValidateCodeResponse.message);
+                if(ValidateCodeResponse.status = "SUCCESS") {
+                    location.href="/developer/home";
+                }
+
             }
         })
     }

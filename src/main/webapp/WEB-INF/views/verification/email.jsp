@@ -27,34 +27,25 @@
             method:"post",
             dataType: "json",
             data: {"email":email},
-            url: "/demo/email",
-            success: function (res) {
-                console.log(res);
-                alert("인증번호가 전송되었습니다.");
-
-                $("#check").click(function () {
-                    var crNum = document.getElementById("crNum").value;
-                    if (res == crNum) {
-                        alert("인증 성공했습니다.");
-                    } else {
-                        alert("인증 실패했습니다.");
-                    }
-                });
-            }
+            url: "/developer/email"
         })
+        alert("인증번호가 전송되었습니다.");
     }
 
     function validate() {
         var code = document.getElementById("code").value;
         var postObj = {"code":code};
-
         $.ajax({
             method:"post",
-            data: JSON.stringify(postObj),
+            url: "/developer/validate",
             dataType: "json",
-            url: "/validate",
-            success: function(data) {
-                alert(data.message);
+            data: JSON.stringify(postObj),
+            contentType: "application/json; charset=UTF-8",
+            success: function(ValidateCodeResponse) {
+                alert(ValidateCodeResponse.message);
+                if(ValidateCodeResponse.status = "SUCCESS") {
+                    location.href="/developer/home";
+                }
             }
         })
     }
