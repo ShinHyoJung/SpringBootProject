@@ -11,6 +11,6 @@
     <title>홈</title>
 </head>
 <body>
-
+<p>홈</p>
 </body>
 </html>
