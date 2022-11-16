@@ -1,15 +1,16 @@
 <%--
   Created by IntelliJ IDEA.
-  User: USER
-  Date: 2022-07-07
-  Time: 오후 11:05
+  User: ShinHyoJung
+  Date: 2022-11-16
+  Time: 오후 2:51
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
 <head>
-    <title>Qr코드</title>
+    <title>Title</title>
 </head>
 <body>
-<img src="data:image/jpg;base64,${img}">
+sdf
 </body>
 </html>
