@@ -18,11 +18,11 @@ public class PostSignUp {
     private Date createDate;
     private Date updateDate;
 
-    public Member toEntity() {
+    public Member toEntity(String password) {
         Member member = new Member();
         member.setIdx(this.idx);
         member.setMemberID(this.memberID);
-        member.setPassword(this.password);
+        member.setPassword(password);
         member.setName(this.name);
         member.setBirth(this.birth);
         member.setMobile(this.mobile);

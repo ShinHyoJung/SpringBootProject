@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: ShinHyoJung
@@ -14,5 +15,15 @@
 메인
 <br>
 <a href="${pageContext.request.contextPath}/member/signUp">회원가입</a>
+<br>
+<c:choose>
+    <c:when test="${not empty sessionScope.loggedIn}">
+        <a href="${pageContext.request.contextPath}/member/logout">로그아웃</a>
+    </c:when>
+    <c:otherwise>
+        <a href="${pageContext.request.contextPath}/member/login">로그인</a>
+    </c:otherwise>
+</c:choose>
+
 </body>
 </html>
