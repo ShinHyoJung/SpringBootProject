@@ -1,7 +1,10 @@
 package com.project.shop.feature.member.controller;
 
+import com.project.shop.feature.member.dto.GetInfoResponse;
 import com.project.shop.feature.member.dto.PostLogin;
 import com.project.shop.feature.member.dto.PostSignUp;
+import com.project.shop.feature.member.dto.PostUpdateInfo;
+import com.project.shop.feature.member.entity.Member;
 import com.project.shop.feature.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -48,6 +51,9 @@ public class MemberController {
         boolean isValidate = memberService.isValidateIDPWD(postLogin);
 
         if(isValidate) {
+            Member member = memberService.select(postLogin.getId());
+            int idx = member.getIdx();
+            session.setAttribute("idx", idx);
             session.setAttribute("loggedIn", postLogin.getId());
         }
         model.addAttribute("main", "main/default");
@@ -59,5 +65,25 @@ public class MemberController {
         session.removeAttribute("loggedIn");
         model.addAttribute("main", "main/default");
         return "view";
+    }
+
+    @GetMapping("/info")
+    public String getInfo(Model model, HttpSession session) {
+        int idx = (int) session.getAttribute("idx");
+        Member member = memberService.select(idx);
+
+        GetInfoResponse getInfoResponse = memberService.selectInfo(member);
+        model.addAttribute("getInfoResponse", getInfoResponse);
+        model.addAttribute("main", VIEW_PREFIX + "info");
+        return "view";
+    }
+
+    @PostMapping("/info/update")
+    public String postUpdate(Model model, PostUpdateInfo postUpdateInfo) {
+        String password = postUpdateInfo.getPassword();
+        String encryptPassword = bCryptPasswordEncoder.encode(password);
+        memberService.update(postUpdateInfo.toEntity(encryptPassword));
+
+        return "redirect:/member/info";
     }
 }

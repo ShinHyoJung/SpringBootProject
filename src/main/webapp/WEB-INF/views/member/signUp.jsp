@@ -15,10 +15,117 @@
    비밀번호:  <input type="password" id="password" name="password" placeholder="비밀번호">  <br>
    이름: <input type="text" id="name" name="name" placeholder="이름">  <br>
    생년월일:  <input type="text" id="birth" name="birth" placeholder="생년월일">  <br>
-   휴대폰번호:  <input type="text" id="mobile" name="mobile" placeholder="휴대폰번호">  <br>
-   이메일: <input type="text" id="mail" name="mail" placeholder="이메일">  <br>
+   휴대폰번호:  <input type="text" id="mobile" name="mobile" placeholder="휴대폰번호"> <button type="button" onclick="sendSms()">전송</button> <br>
+   이메일: <input type="text" id="mail" name="mail" placeholder="이메일">  <button type="button" onclick="sendEmail()">전송</button> <br>
+   본인인증 코드 :<input type="text" id="code" name="code" placeholder="코드 입력"> <button type="button" onclick="checkAuth()">인증</button><br>
    주소: <input type="text" id="address" name="address" placeholder="주소">  <br>
-   <button type="submit">확인</button>
+   <button type="button" onclick="submit()">확인</button>
 </form>
+<input type="hidden" id="beCertified" value="false">
+<script>
+   function sendEmail() {
+      let mail = document.getElementById('mail').value;
+      let subject = '인증번호 발송';
+      let templateName = 'self-authentication';
+      let text = '본인인증';
+
+      let postObj = {
+         'mail':mail,
+         'subject':subject,
+         'templateName':templateName,
+         'text':text
+      };
+
+      if(document.getElementById('beCertified').value) {
+         alert("인증이 이미 완료되었습니다.");
+      }
+
+      $.ajax({
+         method: 'post',
+         url: '${pageContext.request.contextPath}/authentication/send-mail',
+         dataType: 'json',
+         data: JSON.stringify(postObj),
+         contentType: 'application/json; charset=utf-8',
+         success: function(pageResponse) {
+            alert(pageResponse.message);
+         }
+      })
+   }
+
+   function sendSms() {
+      let mobile = document.getElementById('mobile').value;
+      let type = 'SMS';
+
+      let postObj = {
+         'mobile':mobile,
+         'type':type
+      }
+
+      if(document.getElementById('beCertified').value) {
+         alert("인증이 이미 완료되었습니다.");
+      }
+
+      $.ajax({
+         method: 'post',
+         url: '${pageContext.request.contextPath}/authentication/send-sms',
+         dataType: 'json',
+         data: JSON.stringify(postObj),
+         contentType: 'application/json; charset=utf-8',
+         success: function(pageResponse) {
+            alert(pageResponse.message);
+         }
+      })
+   }
+
+   function checkAuth() {
+      let code = document.getElementById('code').value;
+
+      let postObj = {
+         'code':code
+      }
+
+      $.ajax({
+         method: 'post',
+         url: '${pageContext.request.contextPath}/authentication/check-auth',
+         dataType: 'json',
+         data: JSON.stringify(postObj),
+         contentType: 'application/json; charset=utf-8',
+         success: function(pageResponse) {
+            alert(pageResponse.message);
+            document.getElementById('beCertified').value = true;
+         }
+      })
+   }
+
+   function submit() {
+      let id = document.getElementById('memberID').value;
+      let password = document.getElementById('password').value;
+      let name = document.getElementById('name').value;
+      const beCertified = document.getElementById('beCertified').value;
+
+      if(id = "") {
+         alert("아이디를 입력해주세요.");
+         return false;
+      }
+
+      if(password = ""){
+         alert("비밀번호를 입력해주세요.");
+         return false;
+      }
+
+      if(name == "") {
+         alert("이름을 입력해주세요.");
+         return false;
+      }
+
+      if(!beCertified) {
+         alert("본인인증을 해주세요.");
+         return false;
+      }
+
+      let form = document.getElementById('signUpForm');
+      form.submit();
+   }
+</script>
 </body>
 </html>

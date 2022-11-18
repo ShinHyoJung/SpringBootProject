@@ -4,6 +4,7 @@ import com.project.shop.feature.member.entity.Member;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface MemberMapper {
@@ -34,11 +35,42 @@ public interface MemberMapper {
     void insert(Member member);
 
     @Select(
-            "SELECT member_id AS memberID, \n" +
+            "SELECT idx AS idx,\n" +
+                    "member_id AS memberID, \n" +
                     "password AS password \n" +
                     "FROM member \n" +
                     "WHERE 1=1 \n" +
                     "AND member_id = #{memberID}"
     )
-    Member select(String memberID);
+    Member selectID(String memberID);
+
+    @Select(
+            "SELECT idx AS idx, \n" +
+                    "member_id AS memberID, \n" +
+                    "name AS name, \n" +
+                    "birth AS birth, \n" +
+                    "mobile AS mobile, \n" +
+                    "mail AS mail, \n" +
+                    "address AS address, \n" +
+                    "create_date AS createDate, \n" +
+                    "update_date AS updateDate \n" +
+                    "FROM member \n" +
+                    "WHERE 1=1 \n" +
+                    "AND idx = #{idx}\n"
+    )
+    Member select(int idx);
+
+    @Update(
+            "UPDATE member \n" +
+                    "SET password = #{password}, \n" +
+                    "name = #{name}, \n" +
+                    "birth = #{birth}, \n" +
+                    "mobile = #{mobile}, \n" +
+                    "mail = #{mail}, \n" +
+                    "address = #{address}, \n" +
+                    "update_date = now() \n" +
+                    "WHERE 1=1 \n" +
+                    "AND idx = #{idx}\n"
+    )
+    void update(Member member);
 }

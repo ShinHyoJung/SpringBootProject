@@ -26,4 +26,16 @@ spring:
           auth: true
           starttls:
             enable: true
+  thymeleaf:
+    prefix: classpath:/templates/mail/
+    suffix:  .html
+    mode: HTML
+    encoding: UTF-8
+    check-templates: true
+    view-names: thymeleaf/*
+  sms:
+    from: 01052386416
+    apiKey: NCSC4PBSVBEEAKPQ
+    apiSecret: QDQVVJIAJOE4OCHIXN1MDPQTFFKMGZXM
+
 

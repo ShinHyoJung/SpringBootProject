@@ -19,6 +19,7 @@
 <c:choose>
     <c:when test="${not empty sessionScope.loggedIn}">
         <a href="${pageContext.request.contextPath}/member/logout">로그아웃</a>
+        <a href="${pageContext.request.contextPath}/member/info">내정보</a>
     </c:when>
     <c:otherwise>
         <a href="${pageContext.request.contextPath}/member/login">로그인</a>
