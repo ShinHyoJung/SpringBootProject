@@ -5,17 +5,12 @@ import com.project.shop.feature.code.success.SuccessCode;
 import com.project.shop.feature.member.dto.*;
 import com.project.shop.feature.member.entity.Member;
 import com.project.shop.feature.member.service.MemberService;
-import javafx.beans.property.IntegerProperty;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.encrypt.AesBytesEncryptor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -52,10 +47,12 @@ public class MemberController {
         boolean isValidate = memberService.isValidateIDPWD(postLogin);
 
         if(isValidate) {
-            Member member = memberService.select(postLogin.getId());
-            int idx = member.getIdx();
-            session.setAttribute("idx", idx);
-            session.setAttribute("loggedIn", postLogin.getId());
+            if(StringUtils.isNotEmpty(postLogin.getId())) {
+                Member member = memberService.select(postLogin.getId());
+                int idx = member.getIdx();
+                session.setAttribute("idx", idx);
+                session.setAttribute("loggedIn", postLogin.getId());
+            }
         }
         model.addAttribute("main", "main/default");
         return "view";
@@ -63,7 +60,11 @@ public class MemberController {
 
     @GetMapping("/logout")
     public String postLogout(Model model, HttpSession session) {
-        session.removeAttribute("loggedIn");
+        try {
+            session.removeAttribute("loggedIn");
+        } catch (Exception e) {
+
+        }
         model.addAttribute("main", "main/default");
         return "view";
     }
@@ -80,29 +81,44 @@ public class MemberController {
     }
 
     @PostMapping("/info/update")
-    public String postUpdate(PostUpdateInfo postUpdateInfo) {
+    public PostUpdateInfoResponse postUpdate(PostUpdateInfo postUpdateInfo) {
+        PostUpdateInfoResponse postUpdateInfoResponse = new PostUpdateInfoResponse();
+        try{
+            String password = postUpdateInfo.getPassword();
+            if(StringUtils.isNotEmpty(password)) {
+                String encryptPassword = bCryptPasswordEncoder.encode(password);
+                memberService.update(postUpdateInfo.toEntity(encryptPassword));
 
-        String password = postUpdateInfo.getPassword();
-        String encryptPassword = bCryptPasswordEncoder.encode(password);
-
-        memberService.update(postUpdateInfo.toEntity(encryptPassword));
-
-        return "redirect:/member/info";
+                postUpdateInfoResponse.setCode(SuccessCode.member.updateMember.getCode());
+                postUpdateInfoResponse.setMessage(SuccessCode.member.updateMember.getMessageKey());
+            }
+        } catch (Exception e) {
+            postUpdateInfoResponse.setCode(ErrorCode.member.updateMember.getCode());
+            postUpdateInfoResponse.setMessage(ErrorCode.member.updateMember.getMessageKey());
+        }
+        return postUpdateInfoResponse;
     }
 
-    @PostMapping("/withdrawal")
-    public PostWithdrawalResponse postWithdrawal(PostWithdrawal postWithdrawal) {
-        PostWithdrawalResponse postWithdrawalResponse = new PostWithdrawalResponse();
-        try {
-            int idx = postWithdrawal.getIdx();
 
-            memberService.delete(idx);
-            postWithdrawalResponse.setCode(SuccessCode.member.withdrawalMember.getCode());
-            postWithdrawalResponse.setMessage(SuccessCode.member.withdrawalMember.getMessage());
+
+    @GetMapping("/withdrawal")
+    public String getWithdrawal(Model model, HttpSession session) {
+        PostWithdrawalResponse pageResponse = new PostWithdrawalResponse();
+        try {
+            int idx = (int)session.getAttribute("idx");
+            if(Integer.valueOf(idx) != null) {
+                memberService.delete(idx);
+                session.removeAttribute("loggedIn");
+                pageResponse.setCode(SuccessCode.member.withdrawalMember.getCode());
+                pageResponse.setMessage(SuccessCode.member.withdrawalMember.getMessageKey());
+            } else {
+                throw new Exception();
+            }
         } catch (Exception e) {
-            postWithdrawalResponse.setCode(ErrorCode.member.withdrawalMember.getCode());
-            postWithdrawalResponse.setMessage(ErrorCode.member.withdrawalMember.getMessage());
+            pageResponse.setCode(ErrorCode.member.withdrawalMember.getCode());
+            pageResponse.setMessage(ErrorCode.member.withdrawalMember.getMessageKey());
         }
-        return postWithdrawalResponse;
+        model.addAttribute("main", "main/default");
+        return "view";
     }
 }

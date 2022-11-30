@@ -2,9 +2,18 @@ package com.project.shop.feature.code.error;
 
 import com.project.shop.feature.code.Code;
 import com.project.shop.feature.code.CodeType;
+import com.project.shop.feature.spring.config.yml.YamlPropertySourceFactory;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
-public enum ErrorCode {
+@Configuration
+@ConfigurationProperties(prefix = "error")
+@PropertySource(value = {"/message/error_code_message.yml"}, factory = YamlPropertySourceFactory.class)
+@Data
+public class ErrorCode {
     ;
 
     @AllArgsConstructor
@@ -24,7 +33,7 @@ public enum ErrorCode {
         }
 
         @Override
-        public String getMessage() {
+        public String getMessageKey() {
             return this.getCode().concat("message");
         }
     }
@@ -46,7 +55,7 @@ public enum ErrorCode {
         }
 
         @Override
-        public String getMessage() {
+        public String getMessageKey() {
             return this.getCode().concat(".message");
         }
     }
@@ -68,7 +77,7 @@ public enum ErrorCode {
         }
 
         @Override
-        public String getMessage() {
+        public String getMessageKey() {
             return this.getCode().concat(".message");
         }
     }
@@ -93,7 +102,7 @@ public enum ErrorCode {
         }
 
         @Override
-        public String getMessage() {
+        public String getMessageKey() {
             return this.getCode().concat(".message");
         }
     }
@@ -115,7 +124,7 @@ public enum ErrorCode {
         }
 
         @Override
-        public String getMessage() {
+        public String getMessageKey() {
             return this.getCode().concat(".message");
         }
     }
@@ -137,7 +146,7 @@ public enum ErrorCode {
         }
 
         @Override
-        public String getMessage() {
+        public String getMessageKey() {
             return this.getCode().concat(".message");
         }
     }
@@ -145,7 +154,7 @@ public enum ErrorCode {
     @AllArgsConstructor
     public enum sell implements Code {
         ;
-        private final String code;
+        private String code;
 
 
         @Override
@@ -159,7 +168,7 @@ public enum ErrorCode {
         }
 
         @Override
-        public String getMessage() {
+        public String getMessageKey() {
             return this.getCode().concat(".message");
         }
     }

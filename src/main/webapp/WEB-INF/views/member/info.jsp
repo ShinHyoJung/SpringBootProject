@@ -1,4 +1,4 @@
-<%--
+<%@ page import="com.project.shop.feature.code.success.SuccessCode" %><%--
   Created by IntelliJ IDEA.
   User: ShinHyoJung
   Date: 2022-11-16
@@ -22,8 +22,15 @@
     <button type="submit">수정하기</button>
 </form>
 <a href="${pageContext.request.contextPath}">메인으로 가기</a>
-<button type="button" onclick="withdrawal()">회원 탈퇴</button>
+<a href="${pageContext.request.contextPath}/member/withdrawal">회원 탈퇴</a>
 <script>
+    /*
+    $(document).ready(function() {
+        if(document.getElementById('idx').value == "") {
+            location.href= '${pageContext.request.contextPath}';
+        }
+    })
+
     function withdrawal() {
         let idx = document.getElementById('idx').value;
 
@@ -38,10 +45,11 @@
             data: JSON.stringify(postObj),
             contentType: 'application/json; charset=utf-8',
             success: function(pageResponse) {
-                alert(pageResponse.message);
+
             }
         })
     }
+    */
 </script>
 </body>
 </html>

@@ -7,5 +7,5 @@ public interface Code {
 
     String getCode();
 
-    String getMessage();
+    String getMessageKey();
 }

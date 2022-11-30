@@ -1,4 +1,4 @@
-package com.project.shop.feature.spring.config;
+package com.project.shop.feature.spring.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

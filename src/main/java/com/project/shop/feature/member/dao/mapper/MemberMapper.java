@@ -26,7 +26,7 @@ public interface MemberMapper {
                     "#{mail}, \n" +
                     "NOW(), \n" +
                     "NOW() \n" +
-                    ")"
+                    ") \n"
 
     )
     void insert(Member member);
