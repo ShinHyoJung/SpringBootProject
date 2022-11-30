@@ -10,7 +10,7 @@
 <body>
 <p>회원 가입</p>
 
-<form action="${pageContext.request.contextPath}/member/signUp" method="post" id="signUpForm">
+<form action="${pageContext.request.contextPath}/member/signUp" method="post" name="signUpForm">
    아이디:  <input type="text" id="memberID" name="memberID" placeholder="아이디"> <br>
    비밀번호:  <input type="password" id="password" name="password" placeholder="비밀번호">  <br>
    이름: <input type="text" id="name" name="name" placeholder="이름">  <br>
@@ -19,7 +19,7 @@
    이메일: <input type="text" id="mail" name="mail" placeholder="이메일">  <button type="button" onclick="sendEmail()">전송</button> <br>
    본인인증 코드 :<input type="text" id="code" name="code" placeholder="코드 입력"> <button type="button" onclick="checkAuth()">인증</button><br>
    주소: <input type="text" id="address" name="address" placeholder="주소">  <br>
-   <button type="button" onclick="submit()">확인</button>
+   <button type="button">확인</button>
 </form>
 <input type="hidden" id="beCertified" value="false">
 <script>
@@ -35,6 +35,7 @@
          'templateName':templateName,
          'text':text
       };
+
 
       if(document.getElementById('beCertified').value) {
          alert("인증이 이미 완료되었습니다.");
@@ -98,17 +99,17 @@
    }
 
    function submit() {
-      let id = document.getElementById('memberID').value;
+      let memberID = document.getElementById('memberID').value;
       let password = document.getElementById('password').value;
       let name = document.getElementById('name').value;
       const beCertified = document.getElementById('beCertified').value;
 
-      if(id = "") {
+      if(memberID == "") {
          alert("아이디를 입력해주세요.");
          return false;
       }
 
-      if(password = ""){
+      if(password == ""){
          alert("비밀번호를 입력해주세요.");
          return false;
       }
@@ -123,8 +124,8 @@
          return false;
       }
 
-      let form = document.getElementById('signUpForm');
-      form.submit();
+     let form = document.signUpForm;
+     form.submit();
    }
 </script>
 </body>

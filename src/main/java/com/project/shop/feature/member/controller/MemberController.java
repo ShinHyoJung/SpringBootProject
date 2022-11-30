@@ -1,12 +1,13 @@
 package com.project.shop.feature.member.controller;
 
-import com.project.shop.feature.member.dto.GetInfoResponse;
-import com.project.shop.feature.member.dto.PostLogin;
-import com.project.shop.feature.member.dto.PostSignUp;
-import com.project.shop.feature.member.dto.PostUpdateInfo;
+import com.project.shop.feature.code.error.ErrorCode;
+import com.project.shop.feature.code.success.SuccessCode;
+import com.project.shop.feature.member.dto.*;
 import com.project.shop.feature.member.entity.Member;
 import com.project.shop.feature.member.service.MemberService;
+import javafx.beans.property.IntegerProperty;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.encrypt.AesBytesEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -79,11 +80,29 @@ public class MemberController {
     }
 
     @PostMapping("/info/update")
-    public String postUpdate(Model model, PostUpdateInfo postUpdateInfo) {
+    public String postUpdate(PostUpdateInfo postUpdateInfo) {
+
         String password = postUpdateInfo.getPassword();
         String encryptPassword = bCryptPasswordEncoder.encode(password);
+
         memberService.update(postUpdateInfo.toEntity(encryptPassword));
 
         return "redirect:/member/info";
+    }
+
+    @PostMapping("/withdrawal")
+    public PostWithdrawalResponse postWithdrawal(PostWithdrawal postWithdrawal) {
+        PostWithdrawalResponse postWithdrawalResponse = new PostWithdrawalResponse();
+        try {
+            int idx = postWithdrawal.getIdx();
+
+            memberService.delete(idx);
+            postWithdrawalResponse.setCode(SuccessCode.member.withdrawalMember.getCode());
+            postWithdrawalResponse.setMessage(SuccessCode.member.withdrawalMember.getMessage());
+        } catch (Exception e) {
+            postWithdrawalResponse.setCode(ErrorCode.member.withdrawalMember.getCode());
+            postWithdrawalResponse.setMessage(ErrorCode.member.withdrawalMember.getMessage());
+        }
+        return postWithdrawalResponse;
     }
 }

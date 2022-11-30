@@ -15,4 +15,5 @@ public interface MemberService {
     GetInfoResponse selectInfo(Member member);
 
     void update(Member member);
+    void delete(int idx);
 }

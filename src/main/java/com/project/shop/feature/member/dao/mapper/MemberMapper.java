@@ -1,10 +1,7 @@
 package com.project.shop.feature.member.dao.mapper;
 
 import com.project.shop.feature.member.entity.Member;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface MemberMapper {
@@ -73,4 +70,11 @@ public interface MemberMapper {
                     "AND idx = #{idx}\n"
     )
     void update(Member member);
+
+    @Delete(
+            "DELETE FROM member\n" +
+                    "WHERE 1=1 \n" +
+                    "AND idx = #{idx} \n"
+    )
+    void delete(int idx);
 }

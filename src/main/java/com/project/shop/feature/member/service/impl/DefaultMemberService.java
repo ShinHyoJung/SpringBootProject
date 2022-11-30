@@ -83,4 +83,9 @@ public class DefaultMemberService implements MemberService {
     public void update(Member member) {
         memberMapper.update(member);
     }
+
+    @Override
+    public void delete(int idx) {
+        memberMapper.delete(idx);
+    }
 }
