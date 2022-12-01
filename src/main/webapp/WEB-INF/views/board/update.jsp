@@ -9,10 +9,10 @@
 <html>
 <body>
 <form method="post" action="${pageContext.request.contextPath}/board/update">
-  <textarea id="title" name="title" value="${getUpdateResponse.title}"></textarea>
-  작성자: ${getUpdateResponse.writer}
-  <textarea id="content" name="content" value="${getUpdateResponse.content}"></textarea>
-  <input type="hidden" id="boardID" name="boardID" value="${getUpdateResponse.boardID}">
+  제목: <textarea id="title" name="title">${getUpdateResponse.title}</textarea> <br>
+  작성자: ${getUpdateResponse.writer}<br>
+  내용: <textarea id="content" name="content">${getUpdateResponse.content}</textarea> <br>
+  <input type="hidden" id="boardID" name="boardID" value="${getUpdateResponse.boardID}"> <br>
   <button type="submit">등록</button>
 </form>
 </body>

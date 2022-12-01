@@ -7,11 +7,16 @@ import java.util.Date;
 @Data
 public class Sell {
     private int sellID;
-    private int productID;
-    private String code;
     private String name;
-    private String sellImageOrg;
-    private String sellImage;
+    private String title;
+    private String content;
+    private String price;
+    private String thumbnailImage;
+    private String thumbnailImagePath;
+    private String detailImage;
+    private String detailImagePath;
     private Date createDate;
     private Date updateDate;
+    private int productID;
+    private String productCode;
 }

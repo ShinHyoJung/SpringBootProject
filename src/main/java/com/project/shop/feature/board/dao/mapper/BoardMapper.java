@@ -61,8 +61,8 @@ public interface BoardMapper {
 
     @Update(
             "UPDATE board SET \n" +
-                    "title = #{title} \n" +
-                    "content = #{content} \n" +
+                    "title = #{title}, \n" +
+                    "content = #{content}, \n" +
                     "update_date = NOW() \n" +
                     "WHERE 1=1 \n" +
                     "AND board_id = #{boardID}"

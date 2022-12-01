@@ -89,6 +89,7 @@ public class BoardController {
         Board board = boardService.select(boardID);
 
         GetUpdateResponse pageResponse = new GetUpdateResponse();
+        pageResponse.setBoardID(boardID);
         pageResponse.setTitle(board.getTitle());
         pageResponse.setContent(board.getContent());
         pageResponse.setWriter(board.getWriter());
