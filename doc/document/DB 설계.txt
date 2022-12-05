@@ -1,0 +1,93 @@
+shopdb 테이블
+
+-member 회원관리
+idx 고유키
+member_id 회원아이디
+password 비밀번호
+name 이름
+birth 생년월일
+address 주소
+phone 휴대폰번호
+mail 이메일 
+create_date 회원가입날짜
+update_date 정보 수정 날짜
+기본키 idx
+
+-board 게시판 
+board_id 게시판 번호 
+member_id 회원 아이디
+writer 작성자(회원 이름) 
+content 내용
+create_date 게시글 등록 날짜
+update_date 수정 날짜
+기본키 board_id
+왜래키 member_id, idx
+
+-comment 댓글
+board_id 게시판 번호
+member_id 회원 아이디
+comment_id 댓글 번호
+writer 작성자
+content 내용
+create_date 댓글 등록 날짜
+update_date 수정 날짜
+기본키 comment_id
+왜래키 member_id, board_id
+
+-product 제품 
+product_id 제품 아이디
+code 제품 코드
+name 제품 이름
+price 제품 가격
+full_quantity 총 개수
+sold_quantity 판매된 개수  
+left_quantity 남은 개수
+register_date 등록 날짜
+update_date 수정 날짜 
+기본키 product_id
+
+-sell 판매
+sell_id 판매 아이디
+product_id 제품 아이디
+product_code 제품 코드
+price 제품 가격
+name 제품 이름
+title 판매 글 제목 
+content 판매 소개 내용 
+sell_image_org 판매상품 이미지 원본
+sell_image 판매 상품 이미지
+create_date 판매 등록 날짜
+update_date 판매 수정 날짜
+기본키 sell_id
+
+-purchase 구매
+purchase_id 구매번호
+product_id 제품번호
+product_code 제품코드
+member_id 회원아이디
+price 제품가격
+address 회원 주소 
+delivery_status 배송상태 
+purchase_date 구매날짜
+기본키 purchase_id
+왜래키 product_id, member_id
+
+-auth 권한
+id 회원아이디 
+auth 권한
+name 회원이름 
+auth_date 인증날짜
+
+-imagefile 파일 
+imagefile_id 파일 아이디 
+org_name 파일 원본 이름 
+stored_name 파일 저장 이름
+size 파일 사이즈 
+product_id 제품 아이디
+product_code 제품 코드
+sell_id 판매 아이디
+path 저장경로 
+create_date 생성날짜
+
+
+

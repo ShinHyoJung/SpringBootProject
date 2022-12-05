@@ -37,7 +37,7 @@ public class DefaultImageFileService implements ImageFileService {
         File thumbnailImageFile = new File(thumbnailImagePath);
 
         Thumbnails.of(imageFile)
-                .size(100, 100)
+                .size(200, 200)
                 .toFiles(thumbnailImageFile, Rename.PREFIX_DOT_THUMBNAIL);
 
         String thumbnailImageName = "thumbnail." + storedName;
@@ -58,7 +58,7 @@ public class DefaultImageFileService implements ImageFileService {
         File detailImageFile = new File(detailImagePath);
 
         Thumbnails.of(imageFile)
-                .size(300, 300)
+                .size(400, 400)
                 .toFiles(detailImageFile, Rename.NO_CHANGE);
 
         detailImagePath += storedName;

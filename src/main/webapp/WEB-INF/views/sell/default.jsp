@@ -33,6 +33,7 @@
         </tr>
     </c:forEach>
 </table>
+<a href="${pageContext.request.contextPath}/">뒤로가기</a> <br>
 <a href="${pageContext.request.contextPath}/sell/register">판매 등록</a>
 </body>
 </html>
