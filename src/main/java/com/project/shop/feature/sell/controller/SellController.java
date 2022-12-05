@@ -3,6 +3,7 @@ package com.project.shop.feature.sell.controller;
 import com.project.shop.feature.imagefile.entity.ImageFile;
 import com.project.shop.feature.imagefile.service.ImageFileService;
 import com.project.shop.feature.sell.dto.GetDetailResponse;
+import com.project.shop.feature.sell.dto.PostDelete;
 import com.project.shop.feature.sell.dto.PostRegister;
 import com.project.shop.feature.sell.entity.Sell;
 import com.project.shop.feature.sell.service.SellService;
@@ -69,6 +70,7 @@ public class SellController {
         Sell sell = sellService.select(sellID);
 
         GetDetailResponse pageResponse = new GetDetailResponse();
+        pageResponse.setSellID(sellID);
         pageResponse.setTitle(sell.getTitle());
         pageResponse.setContent(sell.getContent());
         pageResponse.setPrice(sell.getPrice());
@@ -79,5 +81,12 @@ public class SellController {
         model.addAttribute("getDetailResponse", pageResponse);
         model.addAttribute("main", VIEW_PREFIX + "detail");
         return "view";
+    }
+
+    @GetMapping("/delete/{sellID}")
+    public String getDelete(@PathVariable int sellID) {
+        sellService.delete(sellID);
+
+        return "redirect:/sell/";
     }
 }

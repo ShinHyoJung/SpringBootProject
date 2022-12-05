@@ -1,6 +1,7 @@
 package com.project.shop.feature.sell.dao.mapper;
 
 import com.project.shop.feature.sell.entity.Sell;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -68,4 +69,12 @@ public interface SellMapper {
                     "AND sell_id = #{sellID} \n"
     )
     Sell select(int sellID);
+
+    @Delete(
+            "DELETE FROM \n" +
+                    "sell \n" +
+                    "WHERE 1=1 \n" +
+                    "AND sell_id = #{sellID} \n"
+    )
+    void delete(int sellID);
 }

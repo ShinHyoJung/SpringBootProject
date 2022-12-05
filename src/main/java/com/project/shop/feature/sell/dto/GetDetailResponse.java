@@ -6,6 +6,7 @@ import java.util.Date;
 
 @Data
 public class GetDetailResponse {
+    private int sellID;
     private String title;
     private String content;
     private String price;

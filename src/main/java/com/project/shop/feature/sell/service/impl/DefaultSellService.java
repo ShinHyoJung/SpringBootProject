@@ -28,4 +28,9 @@ public class DefaultSellService implements SellService {
     public Sell select(int sellID) {
         return sellMapper.select(sellID);
     }
+
+    @Override
+    public void delete(int sellID) {
+        sellMapper.delete(sellID);
+    }
 }

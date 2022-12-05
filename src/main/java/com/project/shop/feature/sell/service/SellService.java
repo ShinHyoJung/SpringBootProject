@@ -11,4 +11,6 @@ public interface SellService {
     List<Sell> selectAll();
 
     Sell select(int sellID);
+
+    void delete(int sellID);
 }

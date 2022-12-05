@@ -9,30 +9,29 @@
   To change this template use File | Settings | File Templates.
 --%>
 <html>
+<style>
+    .grid {
+        display: grid;
+        grid-template-columns: 300px 300px 300px;
+        grid-template-rows: 300px 300px;
+    }
+
+    .item {
+
+    }
+</style>
 <body>
 <p>판매</p>
-<table>
+<div class="grid">
     <c:forEach items="${sellList}" var="sellList">
-        <tr>
-            <td>${sellList.sellID}</td>
-        </tr>
-        <tr>
-            <td><img src="${pageContext.request.contextPath}/static/images/thumbnail/${sellList.thumbnailImage}"></td>
-        </tr>
-        <tr>
-            <td><a href="${pageContext.request.contextPath}/sell/detail/${sellList.sellID}" name="sellList.title"/>${sellList.title}</td>
-        </tr>
-        <tr>
-            <td>${sellList.price}</td>
-        </tr>
-        <tr>
-            <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${sellList.createDate}"/></td>
-        </tr>
-        <tr>
-            <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${sellList.updateDate}"/></td>
-        </tr>
+                <span class="item">
+                    <input type="hidden" id="sellID" name="sellID" value="${sellList.sellID}"> <br>
+                    <img src="${pageContext.request.contextPath}/static/images/thumbnail/${sellList.thumbnailImage}" onclick="location.href='${pageContext.request.contextPath}/sell/detail/${sellList.sellID}'"/> <br>
+                        <a href="${pageContext.request.contextPath}/sell/detail/${sellList.sellID}" name="sellList.title">${sellList.title}</a> <br>
+                    ${sellList.price}원 <br>
+                </span>
     </c:forEach>
-</table>
+</div>
 <a href="${pageContext.request.contextPath}/">뒤로가기</a> <br>
 <a href="${pageContext.request.contextPath}/sell/register">판매 등록</a>
 </body>
