@@ -1,6 +1,7 @@
 package com.project.shop.feature.board.dao.mapper;
 
 import com.project.shop.feature.board.entity.Board;
+import com.project.shop.feature.page.Paging;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -34,9 +35,10 @@ public interface BoardMapper {
                     "writer AS writer, \n" +
                     "create_date AS createDate, \n" +
                     "update_date AS updateDate \n" +
-                    "FROM board \n"
+                    "FROM board \n" +
+                    "LIMIT #{skip}, #{amount} \n"
     )
-    List<Board> selectAll();
+    List<Board> selectAll(Paging paging);
 
     @Select(
             "SELECT board_id AS boardID, \n" +
@@ -68,4 +70,10 @@ public interface BoardMapper {
                     "AND board_id = #{boardID}"
     )
     void update(Board board);
+
+    @Select(
+            "SELECT COUNT(*) \n" +
+                    "FROM board \n"
+    )
+    int count();
 }

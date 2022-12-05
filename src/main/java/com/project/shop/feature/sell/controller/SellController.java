@@ -1,10 +1,9 @@
 package com.project.shop.feature.sell.controller;
 
+import com.project.shop.feature.sell.dto.*;
 import com.project.shop.feature.imagefile.entity.ImageFile;
 import com.project.shop.feature.imagefile.service.ImageFileService;
-import com.project.shop.feature.sell.dto.GetDetailResponse;
-import com.project.shop.feature.sell.dto.PostDelete;
-import com.project.shop.feature.sell.dto.PostRegister;
+import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.sell.entity.Sell;
 import com.project.shop.feature.sell.service.SellService;
 import com.project.shop.feature.util.FileUtils;
@@ -32,11 +31,13 @@ public class SellController {
     private final SellService sellService;
     private final ImageFileService imageFileService;
     private final FileUtils fileUtils;
-    @GetMapping("/")
-    public String getSell(Model model) {
-        List<Sell> sellList = sellService.selectAll();
+    @GetMapping("/{currentPage}")
+    public String getSell(@PathVariable int currentPage, Model model) {
+        int total = sellService.count();
+        Paging paging = new Paging(currentPage, 6, 5, total);
+        List<Sell> sellList = sellService.selectAll(paging);
 
-        model.addAttribute("sellList", sellList);
+        model.addAttribute("getDefaultResponse", new GetDefaultResponse(sellList, paging));
         model.addAttribute("main", VIEW_PREFIX + "default");
         return "view";
     }
@@ -86,6 +87,28 @@ public class SellController {
     @GetMapping("/delete/{sellID}")
     public String getDelete(@PathVariable int sellID) {
         sellService.delete(sellID);
+
+        return "redirect:/sell/";
+    }
+
+    @GetMapping("/update/{sellID}")
+    public String getUpdate(@PathVariable int sellID, Model model) {
+        Sell sell = sellService.select(sellID);
+        ImageFile imageFile = imageFileService.select(sellID);
+
+        GetUpdateResponse pageResponse = new GetUpdateResponse();
+        pageResponse.setTitle(sell.getTitle());
+        pageResponse.setContent(sell.getContent());
+        pageResponse.setPrice(sell.getPrice());
+        pageResponse.setProductCode(sell.getProductCode());
+        pageResponse.setStoredName(imageFile.getStoredName());
+        model.addAttribute("getUpdateResponse", pageResponse);
+        model.addAttribute("main", VIEW_PREFIX + "update");
+        return "view";
+    }
+
+    @PostMapping("/update")
+    public String postUpdate(PostUpdate postUpdate, MultipartHttpServletRequest multipartHttpServletRequest) {
 
         return "redirect:/sell/";
     }

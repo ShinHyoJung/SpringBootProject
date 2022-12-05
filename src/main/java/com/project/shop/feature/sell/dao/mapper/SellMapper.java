@@ -1,10 +1,8 @@
 package com.project.shop.feature.sell.dao.mapper;
 
+import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.sell.entity.Sell;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -49,9 +47,10 @@ public interface SellMapper {
                     "thumbnail_image_path AS thumbnailImagePath, \n" +
                     "create_date AS createDate, \n" +
                     "update_date AS updateDate \n" +
-                    "FROM sell \n"
+                    "FROM sell \n" +
+                    "LIMIT #{skip}, #{amount}\n"
     )
-    List<Sell> selectAll();
+    List<Sell> selectAll(Paging paging);
 
     @Select(
             "SELECT sell_id AS sellID, \n" +
@@ -77,4 +76,25 @@ public interface SellMapper {
                     "AND sell_id = #{sellID} \n"
     )
     void delete(int sellID);
+
+    @Select(
+            "SELECT COUNT(*) \n" +
+                    "FROM sell \n"
+    )
+    int count();
+
+    @Update("UPDATE sell SET \n" +
+            "title = #{title}, \n" +
+            "content = #{content}, \n" +
+            "price = #{price}, \n" +
+            "product_code = #{productCode}, \n" +
+            "detail_image = #{detailImage}, \n" +
+            "detail_image_path = #{detailImagePath}, \n" +
+            "thumbnail_image = #{thumbnailImage}, \n" +
+            "thumbnail_image_path = #{thumbnailImagePath}, \n" +
+            "update_date = NOW() \n" +
+            "WHERE 1=1 \n" +
+            "AND sell_id = #{sellID} \n"
+    )
+    void update(Sell sell);
 }

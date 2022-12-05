@@ -13,7 +13,7 @@
     .grid {
         display: grid;
         grid-template-columns: 300px 300px 300px;
-        grid-template-rows: 300px 300px;
+        grid-template-rows: 250px 250px;
     }
 
     .item {
@@ -23,7 +23,7 @@
 <body>
 <p>판매</p>
 <div class="grid">
-    <c:forEach items="${sellList}" var="sellList">
+    <c:forEach items="${getDefaultResponse.sellList}" var="sellList">
                 <span class="item">
                     <input type="hidden" id="sellID" name="sellID" value="${sellList.sellID}"> <br>
                     <img src="${pageContext.request.contextPath}/static/images/thumbnail/${sellList.thumbnailImage}" onclick="location.href='${pageContext.request.contextPath}/sell/detail/${sellList.sellID}'"/> <br>
@@ -32,6 +32,13 @@
                 </span>
     </c:forEach>
 </div>
+<ul class="paging">
+    <c:if test="${getDefaultResponse.paging.prev eq true}"> < </c:if>
+    <c:forEach begin="${getDefaultResponse.paging.startPage}" end="${getDefaultResponse.paging.endPage}" var="currentPage">
+        <a href="${pageContext.request.contextPath}/board/${currentPage}">${currentPage}</a>
+    </c:forEach>
+    <c:if test="${getDefaultResponse.paging.next eq true}"> > </c:if>
+</ul>
 <a href="${pageContext.request.contextPath}/">뒤로가기</a> <br>
 <a href="${pageContext.request.contextPath}/sell/register">판매 등록</a>
 </body>

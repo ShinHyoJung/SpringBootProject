@@ -1,5 +1,6 @@
 package com.project.shop.feature.sell.service.impl;
 
+import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.sell.dao.mapper.SellMapper;
 import com.project.shop.feature.sell.entity.Sell;
 import com.project.shop.feature.sell.service.SellService;
@@ -20,8 +21,8 @@ public class DefaultSellService implements SellService {
     }
 
     @Override
-    public List<Sell> selectAll() {
-        return sellMapper.selectAll();
+    public List<Sell> selectAll(Paging paging) {
+        return sellMapper.selectAll(paging);
     }
 
     @Override
@@ -32,5 +33,15 @@ public class DefaultSellService implements SellService {
     @Override
     public void delete(int sellID) {
         sellMapper.delete(sellID);
+    }
+
+    @Override
+    public int count() {
+        return sellMapper.count();
+    }
+
+    @Override
+    public void update(Sell sell) {
+        sellMapper.update(sell);
     }
 }

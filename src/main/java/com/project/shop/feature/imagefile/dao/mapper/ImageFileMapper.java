@@ -17,7 +17,8 @@ public interface ImageFileMapper {
                     "product_code, \n" +
                     "sell_id, \n" +
                     "path, \n" +
-                    "create_date \n" +
+                    "create_date, \n" +
+                    "delete_yn \n" +
                     ") VALUES ( \n" +
                     "#{orgName}, \n" +
                     "#{storedName}, \n" +
@@ -26,7 +27,8 @@ public interface ImageFileMapper {
                     "#{productCode}, \n" +
                     "#{sellID}, \n" +
                     "#{path}, \n" +
-                    "NOW() \n" +
+                    "NOW(), \n" +
+                    "N\n" +
                     ") \n"
     )
     void insert(ImageFile imageFile);

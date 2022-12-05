@@ -5,6 +5,7 @@ import com.project.shop.feature.board.entity.Board;
 import com.project.shop.feature.board.service.BoardService;
 import com.project.shop.feature.member.entity.Member;
 import com.project.shop.feature.member.service.MemberService;
+import com.project.shop.feature.page.Paging;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,12 +27,14 @@ public class BoardController {
     private final MemberService memberService;
     private final BoardService boardService;
 
-    @GetMapping("/")
-    public String getBoard(Model model) {
-        List<Board> boardList = boardService.selectAll();
+    @GetMapping("/{currentPage}")
+    public String getBoard(@PathVariable int currentPage, Model model) {
+        int total = boardService.count();
+        Paging paging = new Paging(currentPage, 5, 5, total);
+        List<Board> boardList = boardService.selectAll(paging);
 
-        model.addAttribute("boardList", boardList);
-        model.addAttribute("main", VIEW_PREFIX+"default");
+        model.addAttribute("getDefaultResponse", new GetDefaultResponse(boardList, paging));
+        model.addAttribute("main", VIEW_PREFIX + "default");
         return "view";
     }
 

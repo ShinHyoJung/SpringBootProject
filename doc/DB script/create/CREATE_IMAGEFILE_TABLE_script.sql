@@ -6,6 +6,7 @@ CREATE TABLE imagefile (
     product_id int,
     product_code varchar(300),
     create_date datetime,
+    delete_yn varchar(100),
     sell_id int,
     path varchar(500),
     primary key (imagefile_id)
