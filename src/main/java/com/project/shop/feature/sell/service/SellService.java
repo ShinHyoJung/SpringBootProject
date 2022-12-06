@@ -18,4 +18,6 @@ public interface SellService {
     int count();
 
     void update(Sell sell);
+
+    int selectMaxSellID();
 }

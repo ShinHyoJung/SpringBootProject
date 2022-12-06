@@ -1,8 +1,12 @@
 CREATE TABLE imagefile (
-    imagefile_id int not null auto_increment,
+    image_id int not null auto_increment,
     org_name varchar(300),
     stored_name varchar(300),
     size varchar(200),
+    thumbnail_image_name varchar(200),
+    thumbnail_image_name varchar(300),
+    detail_image_name varchar(200),
+    detail_image_path varchar(300),
     product_id int,
     product_code varchar(300),
     create_date datetime,

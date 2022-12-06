@@ -10,22 +10,16 @@ public class PostRegister {
     private String content;
     private String price;
     private String productCode;
-    private String detailImage;
-    private String detailImagePath;
-    private String thumbnailImage;
-    private String thumbnailImagePath;
+    private String thumbnailImageName;
 
     public Sell toEntity() {
         Sell sell = new Sell();
         sell.setName(this.name);
         sell.setTitle(this.title);
         sell.setContent(this.content);
+        sell.setThumbnailImageName(this.thumbnailImageName);
         sell.setPrice(this.price);
         sell.setProductCode(this.productCode);
-        sell.setDetailImage(this.detailImage);
-        sell.setDetailImagePath(this.detailImagePath);
-        sell.setThumbnailImage(this.thumbnailImage);
-        sell.setThumbnailImagePath(this.thumbnailImagePath);
         return sell;
     }
 }

@@ -44,4 +44,9 @@ public class DefaultSellService implements SellService {
     public void update(Sell sell) {
         sellMapper.update(sell);
     }
+
+    @Override
+    public int selectMaxSellID() {
+        return sellMapper.selectMaxSellID();
+    }
 }

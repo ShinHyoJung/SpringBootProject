@@ -16,10 +16,7 @@ public interface SellMapper {
                     "content, \n" +
                     "product_code, \n" +
                     "price, \n" +
-                    "thumbnail_image, " +
-                    "thumbnail_image_path, \n" +
-                    "detail_image, \n" +
-                    "detail_image_path, \n" +
+                    "thumbnail_image_name, \n" +
                     "create_date, \n" +
                     "update_date \n" +
                     ") VALUES ( \n" +
@@ -28,10 +25,7 @@ public interface SellMapper {
                     "#{content}, \n" +
                     "#{productCode}, \n" +
                     "#{price}, \n" +
-                    "#{thumbnailImage}, \n" +
-                    "#{thumbnailImagePath}, \n" +
-                    "#{detailImage}, \n" +
-                    "#{detailImagePath}, \n" +
+                    "#{thumbnailImageName}, \n" +
                     "NOW(), \n" +
                     "NOW() \n" +
                     ") \n"
@@ -42,9 +36,8 @@ public interface SellMapper {
             "SELECT sell_id AS sellID, \n" +
                     "name AS name, \n" +
                     "title AS title, \n" +
-                    "price AS price, \n" +
-                    "thumbnail_image AS thumbnailImage, \n" +
-                    "thumbnail_image_path AS thumbnailImagePath, \n" +
+                    "price AS price, " +
+                    "thumbnail_image_name AS thumbnailImageName, \n" +
                     "create_date AS createDate, \n" +
                     "update_date AS updateDate \n" +
                     "FROM sell \n" +
@@ -59,8 +52,6 @@ public interface SellMapper {
                     "content AS content,  \n" +
                     "product_code AS productCode,  \n" +
                     "price AS price,  \n" +
-                    "detail_image AS detailImage, \n" +
-                    "detail_image_path AS detailImagePath, \n" +
                     "create_date AS createDate,  \n" +
                     "update_date AS updateDate  \n" +
                     "FROM sell  \n" +
@@ -88,13 +79,15 @@ public interface SellMapper {
             "content = #{content}, \n" +
             "price = #{price}, \n" +
             "product_code = #{productCode}, \n" +
-            "detail_image = #{detailImage}, \n" +
-            "detail_image_path = #{detailImagePath}, \n" +
-            "thumbnail_image = #{thumbnailImage}, \n" +
-            "thumbnail_image_path = #{thumbnailImagePath}, \n" +
             "update_date = NOW() \n" +
             "WHERE 1=1 \n" +
             "AND sell_id = #{sellID} \n"
     )
     void update(Sell sell);
+
+    @Select(
+            "SELECT max(sell_id) \n" +
+                    "FROM sell \n"
+    )
+    int selectMaxSellID();
 }

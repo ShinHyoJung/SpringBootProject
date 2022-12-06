@@ -1,16 +1,15 @@
 package com.project.shop.feature.imagefile.service;
 
-import com.project.shop.feature.imagefile.entity.ImageFile;
+import com.project.shop.feature.imagefile.entity.Image;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
-public interface ImageFileService {
+public interface ImageService {
 
-    void insert(ImageFile imageFile);
+    void insert(Image image);
 
-    ImageFile select(int sellID);
+    Image select(int sellID);
 
     HashMap<String, String> makeThumbnail(String storedName) throws IOException;
 

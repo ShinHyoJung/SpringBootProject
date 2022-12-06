@@ -26,7 +26,7 @@
     <c:forEach items="${getDefaultResponse.sellList}" var="sellList">
                 <span class="item">
                     <input type="hidden" id="sellID" name="sellID" value="${sellList.sellID}"> <br>
-                    <img src="${pageContext.request.contextPath}/static/images/thumbnail/${sellList.thumbnailImage}" onclick="location.href='${pageContext.request.contextPath}/sell/detail/${sellList.sellID}'"/> <br>
+                    <img src="${pageContext.request.contextPath}/static/images/thumbnail/${sellList.thumbnailImageName}" onclick="location.href='${pageContext.request.contextPath}/sell/detail/${sellList.sellID}'"/> <br>
                         <a href="${pageContext.request.contextPath}/sell/detail/${sellList.sellID}" name="sellList.title">${sellList.title}</a> <br>
                     ${sellList.price}원 <br>
                 </span>
