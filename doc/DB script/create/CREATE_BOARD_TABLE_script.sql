@@ -4,7 +4,7 @@ CREATE TABLE board (
     title varchar(200),
     content varchar(10000),
     writer varchar(100),
-    create_date dateteime,
+    create_date datetime,
     update_date datetime,
     idx int,
     primary key (board_id)

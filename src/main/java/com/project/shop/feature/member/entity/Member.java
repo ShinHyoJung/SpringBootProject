@@ -1,10 +1,6 @@
 package com.project.shop.feature.member.entity;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 import java.util.Date;
 
 @Data
