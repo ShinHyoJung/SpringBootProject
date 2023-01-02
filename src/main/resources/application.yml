@@ -2,6 +2,8 @@ server:
   port: 28080
   servlet:
     context-path: /shop
+    session:
+      timeout: 1800
 
 spring:
   profiles:

@@ -7,12 +7,20 @@ import com.project.shop.feature.member.entity.Member;
 import com.project.shop.feature.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,6 +41,7 @@ public class MemberController {
         String password = postSignUp.getPassword();
         String encryptPassword = bCryptPasswordEncoder.encode(password);
         memberService.insert(postSignUp.toEntity(encryptPassword));
+
         model.addAttribute("main", "main/default");
         return "view";
     }
@@ -60,11 +69,7 @@ public class MemberController {
 
     @GetMapping("/logout")
     public String postLogout(Model model, HttpSession session) {
-        try {
-            session.removeAttribute("loggedIn");
-        } catch (Exception e) {
-
-        }
+        session.removeAttribute("loggedIn");
         model.addAttribute("main", "main/default");
         return "view";
     }
@@ -99,8 +104,37 @@ public class MemberController {
         return postUpdateInfoResponse;
     }
 
+    @GetMapping("/info/download")
+    public void postDownloadInfo(HttpServletResponse response, @ModelAttribute GetDownloadInfo getDownloadInfo) throws IOException {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("개인정보");
+        int rowNo = 0;
 
+        Row headerRow = sheet.createRow(rowNo++);
+        headerRow.createCell(0).setCellValue("아이디");
+        headerRow.createCell(1).setCellValue("이름");
+        headerRow.createCell(2).setCellValue("생년월일");
+        headerRow.createCell(3).setCellValue("휴대폰번호");
+        headerRow.createCell(4).setCellValue("이메일");
+        headerRow.createCell(5).setCellValue("주소");
 
+        Member member = memberService.select(getDownloadInfo.getIdx());
+        Row row = sheet.createRow(rowNo++);
+        row.createCell(0).setCellValue(member.getMemberID());
+        row.createCell(1).setCellValue(member.getName());
+        row.createCell(2).setCellValue(member.getBirth());
+        row.createCell(3).setCellValue(member.getMobile());
+        row.createCell(4).setCellValue(member.getMail());
+        row.createCell(5).setCellValue(member.getAddress());
+
+        response.setContentType("ms-vnd/excel");
+        response.setHeader("Content-Disposition", "attachment;filename=info.xls");
+
+        File xlsFile = new File("C:/info.xls");
+        FileOutputStream fileOut = new FileOutputStream(xlsFile);
+        workbook.write(fileOut);
+        workbook.close();
+    }
     @GetMapping("/withdrawal")
     public String getWithdrawal(Model model, HttpSession session) {
         PostWithdrawalResponse pageResponse = new PostWithdrawalResponse();

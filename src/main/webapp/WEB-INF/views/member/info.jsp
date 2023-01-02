@@ -21,35 +21,11 @@
     <input type="hidden" id="idx" name="idx" value="${getInfoResponse.idx}">
     <button type="submit">수정하기</button>
 </form>
-<a href="${pageContext.request.contextPath}">메인으로 가기</a>
+<a href="${pageContext.request.contextPath}/member/info/download?idx=${idx}" +>엑셀파일 다운로드</a> <br>
+<a href="${pageContext.request.contextPath}">메인으로 가기</a> <br>
 <a href="${pageContext.request.contextPath}/member/withdrawal">회원 탈퇴</a>
 <script>
-    /*
-    $(document).ready(function() {
-        if(document.getElementById('idx').value == "") {
-            location.href= '${pageContext.request.contextPath}';
-        }
-    })
 
-    function withdrawal() {
-        let idx = document.getElementById('idx').value;
-
-        let postObj = {
-            'idx':idx
-        }
-
-        $.ajax({
-            method: 'post',
-            url: '${pageContext.request.contextPath}/member/withdrawal',
-            dataType: 'json',
-            data: JSON.stringify(postObj),
-            contentType: 'application/json; charset=utf-8',
-            success: function(pageResponse) {
-
-            }
-        })
-    }
-    */
 </script>
 </body>
 </html>

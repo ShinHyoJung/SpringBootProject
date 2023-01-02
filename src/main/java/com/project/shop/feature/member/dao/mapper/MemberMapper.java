@@ -27,7 +27,6 @@ public interface MemberMapper {
                     "NOW(), \n" +
                     "NOW() \n" +
                     ") \n"
-
     )
     void insert(Member member);
 

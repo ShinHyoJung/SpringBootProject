@@ -11,6 +11,7 @@
 <html>
 <body>
 <p>게시판</p>
+<c:if test="${not empty getDefaultResponse.boardList}">
 <table>
     <th>
         <tr>
@@ -31,6 +32,7 @@
         </tr>
     </c:forEach>
 </table>
+</c:if>
 <br>
 <ul class="paging">
     <c:if test="${getDefaultResponse.paging.prev eq true}"> < </c:if>
