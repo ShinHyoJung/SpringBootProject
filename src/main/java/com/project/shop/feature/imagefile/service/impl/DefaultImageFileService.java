@@ -1,8 +1,8 @@
 package com.project.shop.feature.imagefile.service.impl;
 
-import com.project.shop.feature.imagefile.dao.mapper.ImageMapper;
+import com.project.shop.feature.imagefile.dao.ImageFileDAO;
 import com.project.shop.feature.imagefile.entity.Image;
-import com.project.shop.feature.imagefile.service.ImageService;
+import com.project.shop.feature.imagefile.service.ImageFileService;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.name.Rename;
@@ -10,23 +10,24 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 
 
 @Service("ImageFileService")
 @RequiredArgsConstructor
-public class DefaultImageService implements ImageService {
+public class DefaultImageFileService implements ImageFileService {
 
-    private final ImageMapper imageFileMapper;
-
+    private final ImageFileDAO imageFileDAO;
     @Override
-    public void insert(Image image) {
-        imageFileMapper.insert(image);
+    public void insert(List<Image> imageList) throws SQLException {
+        imageFileDAO.insert(imageList);
     }
 
     @Override
-    public Image select(int sellID) {
-        return imageFileMapper.select(sellID);
+    public Image select(int sellID) throws SQLException {
+        return imageFileDAO.select(sellID);
     }
 
     public HashMap<String, String> makeThumbnail(String storedName) throws IOException {

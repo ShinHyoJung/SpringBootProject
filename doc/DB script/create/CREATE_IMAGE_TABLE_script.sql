@@ -1,5 +1,5 @@
-CREATE TABLE imagefile (
-    imagefile_id int not null auto_increment,
+CREATE TABLE image (
+    image_id int not null auto_increment,
     org_name varchar(300),
     stored_name varchar(300),
     size varchar(200),
@@ -13,5 +13,5 @@ CREATE TABLE imagefile (
     delete_yn varchar(100),
     sell_id int,
     path varchar(500),
-    primary key (imagefile_id)
+    primary key (image_id)
 )

@@ -16,12 +16,12 @@ import java.util.List;
 @Component
 public class FileUtils {
 
-    public Image parseFile(Sell sell, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
+    public List<Image> parseFile(Sell sell, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
         if(ObjectUtils.isEmpty(multipartHttpServletRequest)) {
             return null;
         }
 
-        //List<Image> fileList = new ArrayList<>();
+        List<Image> imageList = new ArrayList<>();
         Image image = new Image();
         String path = "src/main/webapp/static/images/";
         File file = new File(path);
@@ -56,12 +56,13 @@ public class FileUtils {
                     image.setPath(path + storedFileName);
                     image.setProductCode(sell.getProductCode());
                     image.setDeleteYN("N");
+                    imageList.add(image);
 
                     file = new File(path + storedFileName);
                     multipartFile.transferTo(file);
                 }
             }
         }
-        return image;
+        return imageList;
     }
 }

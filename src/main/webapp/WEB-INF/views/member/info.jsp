@@ -1,4 +1,4 @@
-<%@ page import="com.project.shop.feature.code.success.SuccessCode" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: ShinHyoJung
   Date: 2022-11-16
