@@ -1,6 +1,6 @@
 package com.project.shop.feature.util;
 
-import com.project.shop.feature.imagefile.entity.Image;
+import com.project.shop.feature.image.entity.Image;
 import com.project.shop.feature.sell.entity.Sell;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;

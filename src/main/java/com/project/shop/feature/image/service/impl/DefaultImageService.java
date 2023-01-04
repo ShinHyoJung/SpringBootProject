@@ -1,8 +1,8 @@
-package com.project.shop.feature.imagefile.service.impl;
+package com.project.shop.feature.image.service.impl;
 
-import com.project.shop.feature.imagefile.dao.ImageFileDAO;
-import com.project.shop.feature.imagefile.entity.Image;
-import com.project.shop.feature.imagefile.service.ImageFileService;
+import com.project.shop.feature.image.dao.ImageDAO;
+import com.project.shop.feature.image.entity.Image;
+import com.project.shop.feature.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.name.Rename;
@@ -17,17 +17,17 @@ import java.util.List;
 
 @Service("ImageFileService")
 @RequiredArgsConstructor
-public class DefaultImageFileService implements ImageFileService {
+public class DefaultImageService implements ImageService {
 
-    private final ImageFileDAO imageFileDAO;
+    private final ImageDAO imageDAO;
     @Override
     public void insert(List<Image> imageList) throws SQLException {
-        imageFileDAO.insert(imageList);
+        imageDAO.insert(imageList);
     }
 
     @Override
     public Image select(int sellID) throws SQLException {
-        return imageFileDAO.select(sellID);
+        return imageDAO.select(sellID);
     }
 
     public HashMap<String, String> makeThumbnail(String storedName) throws IOException {

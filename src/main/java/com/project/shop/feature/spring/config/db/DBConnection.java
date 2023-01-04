@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Getter
-public class DBAccessInformation {
+public class DBConnection {
     @Value("${spring.datasource.url}")
     private String url;
 

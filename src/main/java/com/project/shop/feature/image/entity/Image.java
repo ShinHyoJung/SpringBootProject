@@ -1,4 +1,4 @@
-package com.project.shop.feature.imagefile.entity;
+package com.project.shop.feature.image.entity;
 
 import lombok.Data;
 

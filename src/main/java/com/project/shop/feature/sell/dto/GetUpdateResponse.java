@@ -1,6 +1,6 @@
 package com.project.shop.feature.sell.dto;
 
-import com.project.shop.feature.imagefile.entity.Image;
+import com.project.shop.feature.image.entity.Image;
 import lombok.Data;
 
 @Data

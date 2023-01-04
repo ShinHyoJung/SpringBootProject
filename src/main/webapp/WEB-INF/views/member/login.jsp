@@ -8,10 +8,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
-<form method="post" action="${pageContext.request.contextPath}/member/login" id="loginForm">
-  아이디: <input type="text" id="id" name="id"> <br>
-  비밀번호: <input type="password" id="password" name="password"> <br>
-  <button type="submit">로그인</button>
-</form>
+<div class="grid-container">
+  <form method="post" action="${pageContext.request.contextPath}/member/login" id="loginForm">
+    <div class="grid-x grid-padding-x">
+        <div class="small-12 cell">
+          <label>아이디
+            <input type="text" id="id" name="id">
+          </label>
+        </div>
+        <div class="small-12 cell">
+          <label> 비밀번호
+            <input type="password" id="password" name="password">
+          </label>
+        </div>
+      <button class="primary button" type="submit">로그인</button>
+    </div>
+  </form>
+</div>
 </body>
 </html>

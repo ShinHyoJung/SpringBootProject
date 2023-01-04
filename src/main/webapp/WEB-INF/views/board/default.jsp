@@ -12,16 +12,17 @@
 <body>
 <p>게시판</p>
 <c:if test="${not empty getDefaultResponse.boardList}">
-<table>
-    <th>
+<table class="hover">
+    <thead>
         <tr>
-            <td>글 번호</td>
-            <td>제목</td>
-            <td>작성자</td>
-            <td>작성 날짜</td>
-            <td>수정 날짜</td>
+            <th>글 번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성 날짜</th>
+            <th>수정 날짜</th>
         </tr>
-    </th>
+    </thead>
+    <tbody>
     <c:forEach items="${getDefaultResponse.boardList}" var="boardList">
         <tr>
             <td>${boardList.boardID}</td>
@@ -30,14 +31,15 @@
             <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${boardList.createDate}"/></td>
             <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${boardList.updateDate}"/></td>
         </tr>
+    </tbody>
     </c:forEach>
 </table>
 </c:if>
 <br>
-<ul class="paging">
+<ul class="pagination">
     <c:if test="${getDefaultResponse.paging.prev eq true}"> < </c:if>
     <c:forEach begin="${getDefaultResponse.paging.startPage}" end="${getDefaultResponse.paging.endPage}" var="currentPage">
-        <a href="${pageContext.request.contextPath}/board/${currentPage}">${currentPage}</a>
+        <li><a href="${pageContext.request.contextPath}/board/${currentPage}">${currentPage}</a></li>
     </c:forEach>
     <c:if test="${getDefaultResponse.paging.next eq true}"> > </c:if>
 </ul>

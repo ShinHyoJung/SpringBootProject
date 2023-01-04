@@ -1,8 +1,8 @@
 package com.project.shop.feature.sell.controller;
 
 import com.project.shop.feature.sell.dto.*;
-import com.project.shop.feature.imagefile.entity.Image;
-import com.project.shop.feature.imagefile.service.ImageFileService;
+import com.project.shop.feature.image.entity.Image;
+import com.project.shop.feature.image.service.ImageService;
 import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.sell.entity.Sell;
 import com.project.shop.feature.sell.service.SellService;
@@ -29,7 +29,7 @@ public class SellController {
     private static final String VIEW_PREFIX = "sell/";
 
     private final SellService sellService;
-    private final ImageFileService imageFileService;
+    private final ImageService imageService;
     private final FileUtils fileUtils;
     @GetMapping("/{currentPage}")
     public String getSell(@PathVariable int currentPage, Model model) {
@@ -53,21 +53,25 @@ public class SellController {
         List<Image> imageList = fileUtils.parseFile(postRegister.toEntity(), multipartHttpServletRequest);
 
         if(imageList != null) {
-            int sellID = sellService.selectMaxSellID();
             for(Image image : imageList) {
-                String detailImagePath = imageFileService.makeDetail(image.getStoredName());
-                HashMap<String, String> thumbnailImageMap = imageFileService.makeThumbnail(image.getStoredName());
+                String detailImagePath = imageService.makeDetail(image.getStoredName());
+                HashMap<String, String> thumbnailImageMap = imageService.makeThumbnail(image.getStoredName());
+
                 image.setThumbnailImageName(thumbnailImageMap.get("thumbnailImageName"));
                 postRegister.setThumbnailImageName(thumbnailImageMap.get("thumbnailImageName"));
+
                 image.setThumbnailImagePath(thumbnailImageMap.get("thumbnailImagePath"));
                 image.setDetailImageName(image.getStoredName());
+
                 image.setDetailImagePath(detailImagePath);
+
+                sellService.insert(postRegister.toEntity());
+                int sellID = sellService.selectMaxSellID();
                 image.setSellID(sellID);
             }
-            sellService.insert(postRegister.toEntity());
-            imageFileService.insert(imageList);
+            imageService.insert(imageList);
         }
-        return "redirect:/sell/1";
+        return "redirect:/sell/";
     }
 
     @GetMapping("/detail/{sellID}")
@@ -75,7 +79,7 @@ public class SellController {
         GetDetailResponse pageResponse = new GetDetailResponse();
 
         Sell sell = sellService.select(sellID);
-        Image image = imageFileService.select(sellID);
+        Image image = imageService.select(sellID);
 
         pageResponse.setSellID(sellID);
         pageResponse.setTitle(sell.getTitle());
@@ -100,7 +104,7 @@ public class SellController {
     @GetMapping("/update/{sellID}")
     public String getUpdate(@PathVariable int sellID, Model model) throws SQLException {
         Sell sell = sellService.select(sellID);
-        Image image = imageFileService.select(sellID);
+        Image image = imageService.select(sellID);
 
         GetUpdateResponse pageResponse = new GetUpdateResponse();
         pageResponse.setSellID(sellID);

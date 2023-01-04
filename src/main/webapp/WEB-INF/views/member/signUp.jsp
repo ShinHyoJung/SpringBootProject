@@ -8,18 +8,48 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
-<p>회원 가입</p>
-
-<form action="${pageContext.request.contextPath}/member/signUp" method="post" name="signUpForm">
-   아이디:  <input type="text" id="memberID" name="memberID" placeholder="아이디"> <br>
-   비밀번호:  <input type="password" id="password" name="password" placeholder="비밀번호">  <br>
-   이름: <input type="text" id="name" name="name" placeholder="이름">  <br>
-   생년월일:  <input type="text" id="birth" name="birth" placeholder="생년월일">  <br>
-   휴대폰번호:  <input type="text" id="mobile" name="mobile" placeholder="휴대폰번호"> <br>
-   이메일: <input type="text" id="mail" name="mail" placeholder="이메일">  <button type="button" onclick="sendEmail()">전송</button> <br>
-   주소: <input type="text" id="address" name="address" placeholder="주소">  <br>
-   <button type="button" onclick="signUp()">확인</button>
-</form>
+<div class="grid-container">
+      <form action="${pageContext.request.contextPath}/member/signUp" method="post" name="signUpForm">
+         <div class="grid-x grid-padding-x">
+            <div class="medium-12 cell">
+               <label> 아이디
+                  <input type="text" id="memberID" name="memberID" placeholder="아이디">
+               </label>
+            </div>
+            <div class="medium-12 cell">
+               <label> 비밀번호
+                  <input type="password" id="password" name="password" placeholder="비밀번호">
+               </label>
+            </div>
+            <div class="medium-12 cell">
+               <label> 이름
+                  <input type="text" id="name" name="name" placeholder="이름">
+               </label>
+            </div>
+            <div class="medium-12 cell">
+               <label> 생년월일
+                  <input type="text" id="birth" name="birth" placeholder="생년월일">
+               </label>
+            </div>
+            <div class="medium-12 cell">
+               <label> 휴대폰번호
+                  <input type="text" id="mobile" name="mobile" placeholder="휴대폰번호">
+               </label>
+            </div>
+            <div class="medium-12 cell">
+               <label> 이메일
+                  <input type="text" id="mail" name="mail" placeholder="이메일">
+               </label>
+            </div>
+            <div class="medium-12 cell">
+               <label> 주소
+                  <input type="text" id="address" name="address" placeholder="주소">
+               </label>
+            </div>
+         </div>
+         <button class="button primary" type="button" onclick="signUp()">확인</button>
+      </form>
+</div>
 <input type="hidden" id="isVerified" value="">
 <script>
    $(document).ready(function(){
