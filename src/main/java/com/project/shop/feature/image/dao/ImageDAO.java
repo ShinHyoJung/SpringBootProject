@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.sql.*;
 import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class ImageDAO {
@@ -71,5 +72,4 @@ public class ImageDAO {
         }
         return image;
     }
-
 }

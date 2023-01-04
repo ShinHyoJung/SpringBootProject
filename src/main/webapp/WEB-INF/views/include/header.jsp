@@ -20,6 +20,7 @@
             <li><a href="${pageContext.request.contextPath}/member/info">내정보</a></li>
             <li><a href="${pageContext.request.contextPath}/board/1">게시판</a></li>
             <li><a href="${pageContext.request.contextPath}/sell/1">판매</a></li>
+            <li><a href="${pageContext.request.contextPath}/product/manage">재고관리</a></li>
         </c:when>
         <c:otherwise>
             <li><a href="${pageContext.request.contextPath}/member/signUp">회원가입</a></li>

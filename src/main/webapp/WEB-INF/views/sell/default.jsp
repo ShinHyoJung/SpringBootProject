@@ -22,15 +22,21 @@
 </style>
 <body>
 <p>판매</p>
-<div class="grid">
+<div class="grid-container">
+    <div class="grid-x grid-margin-x small-up-2 medium-up-6">
     <c:forEach items="${getDefaultResponse.sellList}" var="sellList">
-                <span class="item">
-                    <input type="hidden" id="sellID" name="sellID" value="${sellList.sellID}"> <br>
-                    <img class="thumbnail" src="${pageContext.request.contextPath}/static/images/thumbnail/${sellList.thumbnailImageName}" onclick="location.href='${pageContext.request.contextPath}/sell/detail/${sellList.sellID}'"/> <br>
-                        <a href="${pageContext.request.contextPath}/sell/detail/${sellList.sellID}" name="sellList.title">${sellList.title}</a> <br>
-                    ${sellList.price}원 <br>
-                </span>
+        <div class="cell">
+            <div class="card">
+                <input type="hidden" id="sellID" name="sellID" value="${sellList.sellID}"> <br>
+                <img src="${pageContext.request.contextPath}/static/images/thumbnail/${sellList.thumbnailImageName}" onclick="location.href='${pageContext.request.contextPath}/sell/detail/${sellList.sellID}'"/>
+                <div class="card-section">
+                    <a href="${pageContext.request.contextPath}/sell/detail/${sellList.sellID}" name="sellList.title">${sellList.title}</a>
+                    <p>${sellList.price}원 </p>
+                </div>
+            </div>
+        </div>
     </c:forEach>
+    </div>
 </div>
 <ul class="paging">
     <c:if test="${getDefaultResponse.paging.prev eq true}"> < </c:if>
