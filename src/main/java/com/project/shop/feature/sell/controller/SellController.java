@@ -30,7 +30,6 @@ public class SellController {
 
     private final SellService sellService;
     private final ImageService imageService;
-    private final FileUtils fileUtils;
     @GetMapping("/{currentPage}")
     public String getSell(@PathVariable int currentPage, Model model) {
         int total = sellService.count();
@@ -50,7 +49,7 @@ public class SellController {
 
     @PostMapping("/register")
     public String postRegister(PostRegister postRegister, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException, SQLException {
-        List<Image> imageList = fileUtils.parseFile(postRegister.toEntity(), multipartHttpServletRequest);
+        List<Image> imageList = FileUtils.parseImage(new Image(), multipartHttpServletRequest);
 
         if(imageList != null) {
             for(Image image : imageList) {
@@ -59,10 +58,9 @@ public class SellController {
 
                 image.setThumbnailImageName(thumbnailImageMap.get("thumbnailImageName"));
                 postRegister.setThumbnailImageName(thumbnailImageMap.get("thumbnailImageName"));
-
                 image.setThumbnailImagePath(thumbnailImageMap.get("thumbnailImagePath"));
-                image.setDetailImageName(image.getStoredName());
 
+                image.setDetailImageName(image.getStoredName());
                 image.setDetailImagePath(detailImagePath);
 
                 sellService.insert(postRegister.toEntity());

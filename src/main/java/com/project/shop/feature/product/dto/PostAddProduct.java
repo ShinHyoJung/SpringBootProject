@@ -1,5 +1,6 @@
 package com.project.shop.feature.product.dto;
 
+import com.project.shop.feature.product.entity.Product;
 import lombok.Data;
 
 /**
@@ -13,5 +14,15 @@ import lombok.Data;
  */
 @Data
 public class PostAddProduct {
+    private String code;
+    private String name;
+    private int fullQuantity;
 
+    public Product toEntity() {
+        Product product = new Product();
+        product.setCode(this.code);
+        product.setName(this.name);
+        product.setFullQuantity(this.fullQuantity);
+        return product;
+    }
 }

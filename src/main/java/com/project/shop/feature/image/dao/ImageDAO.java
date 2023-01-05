@@ -11,14 +11,14 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class ImageDAO {
-    private final DBConnection DBConnection;
+    private final DBConnection dbConnection;
     private Connection connection;
     private PreparedStatement pstmt;
 
     public void insert(List<Image> imageList) throws SQLException {
-        String url = DBConnection.getUrl();
-        String username = DBConnection.getUsername();
-        String password = DBConnection.getPassword();
+        String url = dbConnection.getUrl();
+        String username = dbConnection.getUsername();
+        String password = dbConnection.getPassword();
 
         connection = DriverManager.getConnection(url, username, password);
         String sql = "INSERT INTO image(org_name, stored_name, size," +
@@ -30,7 +30,7 @@ public class ImageDAO {
         pstmt = connection.prepareStatement(sql);
 
         Date now = new Date();
-        long time = now.getDate();
+        long date = now.getDate();
 
         for(Image image : imageList) {
             pstmt.setString(1, image.getOrgName());
@@ -44,16 +44,16 @@ public class ImageDAO {
             pstmt.setInt(9, image.getProductID());
             pstmt.setString(10, image.getProductCode());
             pstmt.setInt(11, image.getSellID());
-            pstmt.setDate(12, new java.sql.Date(time));
+            pstmt.setDate(12, new java.sql.Date(date));
             pstmt.setString(13, "N");
             pstmt.executeUpdate();
         }
     }
 
     public Image select(int sellID) throws SQLException {
-        String url = DBConnection.getUrl();
-        String username = DBConnection.getUsername();
-        String password = DBConnection.getPassword();
+        String url = dbConnection.getUrl();
+        String username = dbConnection.getUsername();
+        String password = dbConnection.getPassword();
 
         Image image = null;
         connection = DriverManager.getConnection(url, username, password);

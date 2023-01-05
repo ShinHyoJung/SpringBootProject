@@ -1,6 +1,10 @@
 package com.project.shop.feature.product.service;
 
+import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.product.entity.Product;
+
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * <pre>
@@ -13,7 +17,11 @@ import com.project.shop.feature.product.entity.Product;
  */
 public interface ProductService {
 
-    void insert(Product product);
+    void insert(Product product) throws SQLException;
 
-    Product select(int productID);
+    int count() throws SQLException;
+
+    List<Product> selectAll(Paging paging) throws SQLException;
+
+    Product select(int productID) throws SQLException;
 }
