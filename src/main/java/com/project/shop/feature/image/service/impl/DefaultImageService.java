@@ -30,7 +30,7 @@ public class DefaultImageService implements ImageService {
         return imageDAO.select(sellID);
     }
 
-    public HashMap<String, String> makeThumbnail(String storedName) throws IOException {
+    public String makeThumbnail(String storedName) throws IOException {
         String storedImagePath = "src/main/webapp/static/images/";
         String thumbnailImagePath = "src/main/webapp/static/images/thumbnail/";
         File imageFile = new File(storedImagePath, storedName);
@@ -43,11 +43,7 @@ public class DefaultImageService implements ImageService {
         String thumbnailImageName = "thumbnail." + storedName;
         thumbnailImagePath += thumbnailImageName;
 
-        HashMap<String, String> map = new HashMap<>();
-        map.put("thumbnailImageName", thumbnailImageName);
-        map.put("thumbnailImagePath", thumbnailImagePath);
-
-        return map;
+        return thumbnailImageName;
     }
 
     public String makeDetail(String storedName) throws IOException {

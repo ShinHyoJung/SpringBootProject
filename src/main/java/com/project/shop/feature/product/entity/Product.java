@@ -21,7 +21,7 @@ public class Product {
     private int fullQuantity;
     private int soldQuantity;
     private int leftQuantity;
-    private String image;
+    private String thumbnailImageName;
     private Date registerDate;
     private Date updateDate;
 }

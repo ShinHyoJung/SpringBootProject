@@ -6,13 +6,11 @@ import com.project.shop.feature.board.service.BoardService;
 import com.project.shop.feature.member.entity.Member;
 import com.project.shop.feature.member.service.MemberService;
 import com.project.shop.feature.page.Paging;
+import com.project.shop.feature.board.dto.PostPrintList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -27,15 +25,20 @@ public class BoardController {
     private final MemberService memberService;
     private final BoardService boardService;
 
-    @GetMapping("/{currentPage}")
-    public String getBoard(@PathVariable int currentPage, Model model) {
-        int total = boardService.count();
-        Paging paging = new Paging(currentPage, 5, 5, total);
-        List<Board> boardList = boardService.selectAll(paging);
-
-        model.addAttribute("getDefaultResponse", new GetDefaultResponse(boardList, paging));
+    @GetMapping("/")
+    public String getBoard(Model model) {
         model.addAttribute("main", VIEW_PREFIX + "default");
         return "view";
+    }
+    @ResponseBody
+    @PostMapping("/list")
+    public PostPrintListResponse postBoard(@RequestBody PostPrintList postPrintList) {
+        int total = boardService.count();
+
+        Paging paging = new Paging(postPrintList.getCurrentPage(), 5, 5, total);
+        List<Board> boardList = boardService.selectAll(paging);
+
+        return new PostPrintListResponse(paging, boardList);
     }
 
     @GetMapping("/write")

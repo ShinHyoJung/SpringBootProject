@@ -10,15 +10,11 @@ import com.project.shop.feature.util.FileUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -27,20 +23,24 @@ import java.util.List;
 public class SellController {
 
     private static final String VIEW_PREFIX = "sell/";
-
     private final SellService sellService;
     private final ImageService imageService;
-    @GetMapping("/{currentPage}")
-    public String getSell(@PathVariable int currentPage, Model model) {
-        int total = sellService.count();
-        Paging paging = new Paging(currentPage, 6, 5, total);
-        List<Sell> sellList = sellService.selectAll(paging);
 
-        model.addAttribute("getDefaultResponse", new GetDefaultResponse(sellList, paging));
+    @GetMapping("/")
+    public String getSell(Model model) {
         model.addAttribute("main", VIEW_PREFIX + "default");
         return "view";
     }
 
+    @ResponseBody
+    @PostMapping("/list")
+    public PostPrintListResponse postSellList(@RequestBody PostPrintList postPrintList) {
+        int total = sellService.count();
+        Paging paging = new Paging(postPrintList.getCurrentPage(), 6, 5, total);
+        List<Sell> sellList = sellService.selectAll(paging);
+
+        return new PostPrintListResponse(paging, sellList);
+    }
     @GetMapping("/register")
     public String getRegister(Model model) {
         model.addAttribute("main", VIEW_PREFIX + "register");
@@ -54,16 +54,12 @@ public class SellController {
         if(imageList != null) {
             for(Image image : imageList) {
                 String detailImagePath = imageService.makeDetail(image.getStoredName());
-                HashMap<String, String> thumbnailImageMap = imageService.makeThumbnail(image.getStoredName());
+                String thumbnailImageName = imageService.makeThumbnail(image.getStoredName());
 
-                image.setThumbnailImageName(thumbnailImageMap.get("thumbnailImageName"));
-                postRegister.setThumbnailImageName(thumbnailImageMap.get("thumbnailImageName"));
-                image.setThumbnailImagePath(thumbnailImageMap.get("thumbnailImagePath"));
-
+                image.setThumbnailImageName(thumbnailImageName);
                 image.setDetailImageName(image.getStoredName());
                 image.setDetailImagePath(detailImagePath);
-
-                sellService.insert(postRegister.toEntity());
+                sellService.insert(postRegister.toEntity(thumbnailImageName));
                 int sellID = sellService.selectMaxSellID();
                 image.setSellID(sellID);
             }

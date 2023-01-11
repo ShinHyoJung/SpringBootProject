@@ -18,11 +18,12 @@ public class PostAddProduct {
     private String name;
     private int fullQuantity;
 
-    public Product toEntity() {
+    public Product toEntity(String thumbnailImageName) {
         Product product = new Product();
         product.setCode(this.code);
         product.setName(this.name);
         product.setFullQuantity(this.fullQuantity);
+        product.setThumbnailImageName(thumbnailImageName);
         return product;
     }
 }

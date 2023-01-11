@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
-<form method="post" action="${pageContext.request.contextPath}/product/manage/add" enctype="multipart/form-data">
+<form method="post" action="${pageContext.request.contextPath}/product/add" enctype="multipart/form-data">
   <input type="text" id="name" name="name" placeholder="제품 이름"> <br>
   <input type="text" id="code" name="code" placeholder="제품 코드"> <br>
   <input type="text" id="fullQuantity" name="fullQuantity" placeholder="총 개수">

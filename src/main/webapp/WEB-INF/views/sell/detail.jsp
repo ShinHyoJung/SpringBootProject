@@ -17,6 +17,6 @@ ${getDetailResponse.content} <br>
 수정날짜: <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${getDetailResponse.updateDate}"/> <br>
 <a href="${pageContext.request.contextPath}/sell/update/${getDetailResponse.sellID}">수정</a>
 <a href="${pageContext.request.contextPath}/sell/delete/${getDetailResponse.sellID}">삭제</a> <br>
-<a href="${pageContext.request.contextPath}/sell/1">뒤로가기</a>
+<a href="${pageContext.request.contextPath}/sell/">뒤로가기</a>
 </body>
 </html>

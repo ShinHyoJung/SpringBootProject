@@ -1,6 +1,6 @@
 package com.project.shop.feature.member.service.impl;
 
-import com.project.shop.feature.member.dao.mapper.MemberMapper;
+import com.project.shop.feature.member.dao.MemberDAO;
 import com.project.shop.feature.member.dto.GetInfoResponse;
 import com.project.shop.feature.member.dto.PostLogin;
 import com.project.shop.feature.member.entity.Member;
@@ -16,18 +16,18 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class DefaultMemberService implements MemberService {
 
-    private final MemberMapper memberMapper;
+    private final MemberDAO memberDAO;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Override
     public void insert(Member member) {
-        memberMapper.insert(member);
+        memberDAO.insert(member);
     }
 
     @Override
     public boolean isValidateIDPWD(PostLogin postLogin) {
         boolean isValidate;
 
-        Member member = memberMapper.selectID(postLogin.getId());
+        Member member = memberDAO.selectByMemberID(postLogin.getId());
         if(member == null) {
             isValidate = false;
         } else {
@@ -39,12 +39,12 @@ public class DefaultMemberService implements MemberService {
 
     @Override
     public Member select(String memberID) {
-        return memberMapper.selectID(memberID);
+        return memberDAO.selectByMemberID(memberID);
     }
 
     @Override
     public Member select(int idx) {
-        return memberMapper.select(idx);
+        return memberDAO.select(idx);
     }
 
     @Override
@@ -81,11 +81,11 @@ public class DefaultMemberService implements MemberService {
 
     @Override
     public void update(Member member) {
-        memberMapper.update(member);
+        memberDAO.update(member);
     }
 
     @Override
     public void delete(int idx) {
-        memberMapper.delete(idx);
+        memberDAO.delete(idx);
     }
 }

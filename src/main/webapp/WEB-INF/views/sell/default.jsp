@@ -20,32 +20,76 @@
 
     }
 </style>
-<body>
+<body onload="printList()">
 <p>판매</p>
 <div class="grid-container">
-    <div class="grid-x grid-margin-x small-up-2 medium-up-6">
-    <c:forEach items="${getDefaultResponse.sellList}" var="sellList">
-        <div class="cell">
-            <div class="card">
-                <input type="hidden" id="sellID" name="sellID" value="${sellList.sellID}"> <br>
-                <img src="${pageContext.request.contextPath}/static/images/thumbnail/${sellList.thumbnailImageName}" onclick="location.href='${pageContext.request.contextPath}/sell/detail/${sellList.sellID}'"/>
-                <div class="card-section">
-                    <a href="${pageContext.request.contextPath}/sell/detail/${sellList.sellID}" name="sellList.title">${sellList.title}</a>
-                    <p>${sellList.price}원 </p>
-                </div>
-            </div>
-        </div>
-    </c:forEach>
+    <div id="table" class="grid-x grid-margin-x small-up-2 medium-up-6">
     </div>
 </div>
-<ul class="paging">
-    <c:if test="${getDefaultResponse.paging.prev eq true}"> < </c:if>
-    <c:forEach begin="${getDefaultResponse.paging.startPage}" end="${getDefaultResponse.paging.endPage}" var="currentPage">
-        <a href="${pageContext.request.contextPath}/board/${currentPage}">${currentPage}</a>
-    </c:forEach>
-    <c:if test="${getDefaultResponse.paging.next eq true}"> > </c:if>
-</ul>
-<a href="${pageContext.request.contextPath}/">뒤로가기</a> <br>
+<nav id="pagination" aria-label="Pagination">
+</nav>
+<a href="${pageContext.request.contextPath}">뒤로가기</a> <br>
 <a href="${pageContext.request.contextPath}/sell/register">판매 등록</a>
 </body>
+<script>
+    function printList(currentPage) {
+        if(!currentPage) {
+            currentPage = 1;
+        }
+
+        let postObj = {
+            'currentPage':currentPage
+        };
+
+        $.ajax({
+            url: '${pageContext.request.contextPath}/sell/list',
+            method: 'post',
+            dataType: 'json',
+            data:JSON.stringify(postObj),
+            contentType: 'application/json; charset=utf-8',
+            success: function(pageResponse) {
+                console.log(pageResponse);
+                let pageHTML= '';
+                let listHTML = '';
+
+                pageHTML += '<ul class="pagination">';
+                if(pageResponse.paging.prev) {
+                    pageHTML += '<li class="pagination-previous"> < </li>';
+                }
+
+                for(let i = pageResponse.paging.startPage; i <= pageResponse.paging.endPage; i++) {
+                    if(currentPage == i) {
+                        pageHTML += '<li class="current"><button onclick="printList(' + i + ')">' + i + '</button></li>';
+                    } else {
+                        pageHTML += '<li><button onclick="printList(' + i + ')">' + i + '</button></li>';
+                    }
+                }
+
+                if(pageResponse.paging.next) {
+                    pageHTML += '<li class="pagination-next"> > </li>';
+                }
+
+                pageHTML += '</ul>';
+                pageHTML += '</li>';
+
+                $.each(pageResponse.sellList, function(i, sellList) {
+                    let imgSrc = '${pageContext.request.contextPath}/static/images/thumbnail/' + sellList.thumbnailImageName;
+                    let detailSrc = '${pageContext.request.contextPath}/sell/detail/' + sellList.sellID;
+                    listHTML += '<div class="cell">';
+                    listHTML += '<div class="card">';
+                    listHTML += '<input type="hidden" id="sellID" name="sellID" value="' + sellList.sellID + '"/>';
+                    listHTML += '<img src="' + imgSrc +'"/>';
+                    listHTML += '<div class="card-section"/>';
+                    listHTML += '<a href="' + detailSrc + '" name="' + sellList.title + '">' + sellList.title + '</a>';
+                    listHTML += '<p>' + sellList.price + '원 </p>';
+                    listHTML += '</div>';
+                    listHTML += '</div>';
+                });
+
+                $('#pagination').html(pageHTML);
+                $('#table').html(listHTML);
+            }
+        })
+    }
+</script>
 </html>

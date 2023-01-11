@@ -9,8 +9,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <html>
-<body>
+<body onload="printList()">
 <p>게시판</p>
+<!--
 <c:if test="${not empty getDefaultResponse.boardList}">
 <table class="hover">
     <thead>
@@ -44,7 +45,85 @@
     <c:if test="${getDefaultResponse.paging.next eq true}"> > </c:if>
 </ul>
 <br>
+-->
+<table class="hover" id="table">
+
+</table>
+<nav id="pagination" aria-label="Pagination">
+</nav>
+
 <a href="${pageContext.request.contextPath}/board/write">글쓰기</a> <br>
 <a href="${pageContext.request.contextPath}/">뒤로가기</a>
+<script>
+    function printList(currentPage) {
+        if(!currentPage) {
+            currentPage = 1;
+        }
+
+        let postObj = {
+            'currentPage':currentPage
+        };
+
+        $.ajax({
+            url: '${pageContext.request.contextPath}/board/list',
+            method: 'post',
+            dataType: 'json',
+            data: JSON.stringify(postObj),
+            contentType: 'application/json; charset=utf-8',
+            success: function(pageResponse) {
+                console.log(pageResponse);
+                let pageHTML= '';
+                let listHTML = '';
+
+                pageHTML += '<ul class="pagination">';
+                if(pageResponse.paging.prev) {
+                    pageHTML += '<li class="pagination-previous"> < </li>';
+                }
+
+                for(let i = pageResponse.paging.startPage; i <= pageResponse.paging.endPage; i++) {
+                    if(currentPage == i) {
+                        pageHTML += '<li class="current"><button onclick="printList(' + i + ')">' + i + '</button></li>';
+                    } else {
+                        pageHTML += '<li><button onclick="printList(' + i + ')">' + i + '</button></li>';
+                    }
+                }
+
+                if(pageResponse.paging.next) {
+                    pageHTML += '<li class="pagination-next"> > </li>';
+                }
+
+                pageHTML += '</ul>';
+                pageHTML += '</li>';
+
+                if(pageResponse.boardList) {
+                    listHTML += '<thead>';
+                    listHTML += '<tr>';
+                    listHTML += '<th>글 번호</th>';
+                    listHTML += '<th> 제목 </th>';
+                    listHTML += '<th> 작성자 </th>';
+                    listHTML += '<th> 작성날짜 </th>';
+                    listHTML += '<th> 수정날짜 </th>';
+                    listHTML += '</tr>';
+                    listHTML += '</thead>';
+                }
+
+                $.each(pageResponse.boardList, function (i, boardList) {
+                    let boardUrl = '${pageContext.request.contextPath}/board/read/' + boardList.boardID;
+                    listHTML += '<tbody>';
+                    listHTML += '<tr>';
+                    listHTML += '<td>'+ boardList.boardID +'</td>';
+                    listHTML += '<td><a href="'+ boardUrl + '">' + boardList.title + '</a></td>';
+                    listHTML += '<td>' + boardList.writer + '</td>';
+                    listHTML += '<td>' + boardList.createDate + '</td>';
+                    listHTML += '<td>' + boardList.updateDate + '</td>';
+                    listHTML += '</tbody>';
+                });
+
+                $('#pagination').html(pageHTML);
+                $('#table').html(listHTML);
+            }
+        })
+    }
+</script>
 </body>
 </html>

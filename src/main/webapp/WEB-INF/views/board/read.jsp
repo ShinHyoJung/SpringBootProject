@@ -20,7 +20,7 @@
 수정날짜: <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${getReadResponse.updateDate}"/>
 <br>
 <a href="${pageContext.request.contextPath}/board/update/${getReadResponse.boardID}">수정</a>
-<a href="${pageContext.request.contextPath}/board/1">뒤로가기</a>
+<a href="${pageContext.request.contextPath}/board/">뒤로가기</a>
 
 </body>
 </html>

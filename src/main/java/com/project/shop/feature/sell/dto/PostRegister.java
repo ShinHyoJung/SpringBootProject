@@ -10,14 +10,13 @@ public class PostRegister {
     private String content;
     private String price;
     private String productCode;
-    private String thumbnailImageName;
 
-    public Sell toEntity() {
+    public Sell toEntity(String thumbnailImageName) {
         Sell sell = new Sell();
         sell.setName(this.name);
         sell.setTitle(this.title);
         sell.setContent(this.content);
-        sell.setThumbnailImageName(this.thumbnailImageName);
+        sell.setThumbnailImageName(thumbnailImageName);
         sell.setPrice(this.price);
         sell.setProductCode(this.productCode);
         return sell;

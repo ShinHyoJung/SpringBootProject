@@ -13,7 +13,7 @@ public interface ImageService {
 
     Image select(int sellID) throws SQLException;
 
-    HashMap<String, String> makeThumbnail(String storedName) throws IOException;
+    String makeThumbnail(String storedName) throws IOException;
 
     String makeDetail(String storedName) throws IOException;
 }
