@@ -29,15 +29,15 @@ public class ProductDAO {
     }
 
     public void insert(Product product) throws SQLException {
-        String sql = "INSERT INTO product(code, name, full_quantity, sold_quantity, left_quantity, " +
+        String sql = "INSERT INTO product(code, name, full_quantity, sold_quantity, left_quantity, info," +
                 "thumbnail_image_name, register_date, update_date) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         Date now = new Date();
         long nowDate = now.getDate();
 
         jdbcTemplate.update(sql, product.getCode(), product.getName(), product.getFullQuantity(), 0, 0,
-                product.getThumbnailImageName(), new java.sql.Date(nowDate), new java.sql.Date(nowDate));
+                product.getInfo(), product.getThumbnailImageName(), new java.sql.Date(nowDate), new java.sql.Date(nowDate));
     }
 
     public int count() throws SQLException {
@@ -79,11 +79,27 @@ public class ProductDAO {
                 product.setFullQuantity(rs.getInt("full_quantity"));
                 product.setSoldQuantity(rs.getInt("sold_quantity"));
                 product.setLeftQuantity(rs.getInt("left_quantity"));
+                product.setInfo(rs.getString("info"));
                 product.setRegisterDate(rs.getDate("register_date"));
                 product.setUpdateDate(rs.getDate("update_date"));
                 return product;
             }
         });
         return product;
+    }
+
+    public void delete(int productID) {
+        String sql = "DELETE FROM product WHERE 1=1 AND product_id = ?";
+
+        jdbcTemplate.update(sql, new Object[]{productID});
+    }
+
+    public void update(Product product) {
+        String sql = "UPDATE product SET name = ?, info = ?, update_date = ? WHERE product_id = ?";
+
+        Date now = new Date();
+        long nowDate = now.getDate();
+
+        jdbcTemplate.update(sql, new Object[]{product.getName(), product.getInfo(), new java.sql.Date(nowDate), product.getProductID()});
     }
 }

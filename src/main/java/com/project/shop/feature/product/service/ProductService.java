@@ -25,4 +25,8 @@ public interface ProductService {
     List<Product> selectAll(Paging paging) throws SQLException;
 
     Product select(int productID) throws SQLException;
+
+    String makeProductCode();
+
+    void delete(int productID);
 }

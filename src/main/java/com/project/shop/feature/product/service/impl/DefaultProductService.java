@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * <pre>
@@ -43,5 +44,24 @@ public class DefaultProductService implements ProductService {
     @Override
     public Product select(int productID) throws SQLException {
         return productDAO.select(productID);
+    }
+
+    @Override
+    public String makeProductCode() {
+        Random rand = new Random();
+        StringBuilder numStr = new StringBuilder();
+        for(int i = 0; i < 6; i++) {
+            String ran = Integer.toString(rand.nextInt(10));
+            numStr.append(ran);
+        }
+        String prefix = "PRG";
+
+        String code = prefix + numStr.toString();
+        return code;
+    }
+
+    @Override
+    public void delete(int productID) {
+        productDAO.delete(productID);
     }
 }

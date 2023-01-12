@@ -15,21 +15,18 @@
         grid-template-columns: 300px 300px 300px;
         grid-template-rows: 250px 250px;
     }
-
-    .item {
-
-    }
 </style>
 <body onload="printList()">
 <p>판매</p>
-<div class="grid-container">
-    <div id="table" class="grid-x grid-margin-x small-up-2 medium-up-6">
-    </div>
-</div>
-<nav id="pagination" aria-label="Pagination">
-</nav>
 <a href="${pageContext.request.contextPath}">뒤로가기</a> <br>
-<a href="${pageContext.request.contextPath}/sell/register">판매 등록</a>
+<button class="ui button" onclick="location.href='${pageContext.request.contextPath}/sell/register'"><i class="plus icon"></i></button>
+<button class="ui button" onclick="location.reload()"><i class="undo icon"></i></button>
+<div class="ui three stackable cards" style="margin-top: 10px;">
+    <div id="table"></div>
+</div>
+<div id="pagination" class="ui pagination menu" style="margin-top: 30px;">
+</div>
+<br>
 </body>
 <script>
     function printList(currentPage) {
@@ -52,39 +49,39 @@
                 let pageHTML= '';
                 let listHTML = '';
 
-                pageHTML += '<ul class="pagination">';
                 if(pageResponse.paging.prev) {
-                    pageHTML += '<li class="pagination-previous"> < </li>';
+                    pageHTML += '<a class="item"> < </a>';
                 }
 
                 for(let i = pageResponse.paging.startPage; i <= pageResponse.paging.endPage; i++) {
                     if(currentPage == i) {
-                        pageHTML += '<li class="current"><button onclick="printList(' + i + ')">' + i + '</button></li>';
+                        pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
                     } else {
-                        pageHTML += '<li><button onclick="printList(' + i + ')">' + i + '</button></li>';
+                        pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
                     }
                 }
 
                 if(pageResponse.paging.next) {
-                    pageHTML += '<li class="pagination-next"> > </li>';
+                    pageHTML += '<a class="item"> > </a>';
                 }
 
-                pageHTML += '</ul>';
-                pageHTML += '</li>';
-
+                listHTML += '<div class="ui three stackable cards">';
                 $.each(pageResponse.sellList, function(i, sellList) {
                     let imgSrc = '${pageContext.request.contextPath}/static/images/thumbnail/' + sellList.thumbnailImageName;
                     let detailSrc = '${pageContext.request.contextPath}/sell/detail/' + sellList.sellID;
-                    listHTML += '<div class="cell">';
-                    listHTML += '<div class="card">';
+                    listHTML += '<div class="ui card">';
+                    listHTML += '<div class="image">';
                     listHTML += '<input type="hidden" id="sellID" name="sellID" value="' + sellList.sellID + '"/>';
                     listHTML += '<img src="' + imgSrc +'"/>';
-                    listHTML += '<div class="card-section"/>';
-                    listHTML += '<a href="' + detailSrc + '" name="' + sellList.title + '">' + sellList.title + '</a>';
-                    listHTML += '<p>' + sellList.price + '원 </p>';
+                    listHTML += '</div>';
+                    listHTML += '<div class="content">';
+                    listHTML += '<a class="header" href="' + detailSrc + '" name="' + sellList.title + '">' + sellList.title + '</a>';
+                    listHTML += '<div class="description" style="margin-top: 20px;">';
+                    listHTML +=  sellList.price + '원 </div>';
                     listHTML += '</div>';
                     listHTML += '</div>';
                 });
+                listHTML += '</div>';
 
                 $('#pagination').html(pageHTML);
                 $('#table').html(listHTML);

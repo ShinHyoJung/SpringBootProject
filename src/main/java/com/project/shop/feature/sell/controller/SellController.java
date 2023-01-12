@@ -48,7 +48,7 @@ public class SellController {
     }
 
     @PostMapping("/register")
-    public String postRegister(PostRegister postRegister, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException, SQLException {
+    public String postRegister(PostRegister postRegister, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException, SQLException, InterruptedException {
         List<Image> imageList = FileUtils.parseImage(new Image(), multipartHttpServletRequest);
 
         if(imageList != null) {

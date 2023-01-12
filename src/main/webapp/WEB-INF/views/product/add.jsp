@@ -8,12 +8,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
-<form method="post" action="${pageContext.request.contextPath}/product/add" enctype="multipart/form-data">
-  <input type="text" id="name" name="name" placeholder="제품 이름"> <br>
-  <input type="text" id="code" name="code" placeholder="제품 코드"> <br>
-  <input type="text" id="fullQuantity" name="fullQuantity" placeholder="총 개수">
-  <input type="file" id="image" name="image" multiple="multiple"> <br>
-  <button type="submit">등록</button>
+제품 등록
+<form class="ui form" method="post" action="${pageContext.request.contextPath}/product/add" enctype="multipart/form-data">
+  <div class="field">
+    <input type="text" id="name" name="name" placeholder="제품 이름">
+  </div>
+  <div class="field">
+    <input type="text" id="fullQuantity" name="fullQuantity" placeholder="총 개수">
+  </div>
+  <div class="field">
+    <input type="text" id="info" name="info" placeholder="상품 정보">
+  </div>
+    <input type="file" id="image" name="image" multiple="multiple">
+  <button class="ui button" type="submit">등록</button>
 </form>
+
+<button class="ui button" onclick="location.href='${pageContext.request.contextPath}/product/manage'">뒤로가기</button>
 </body>
 </html>

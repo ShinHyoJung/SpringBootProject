@@ -5,9 +5,14 @@ import com.project.shop.feature.image.entity.Image;
 import com.project.shop.feature.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Positions;
 import net.coobird.thumbnailator.name.Rename;
 import org.springframework.stereotype.Service;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.PixelGrabber;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -30,18 +35,23 @@ public class DefaultImageService implements ImageService {
         return imageDAO.select(sellID);
     }
 
-    public String makeThumbnail(String storedName) throws IOException {
-        String storedImagePath = "src/main/webapp/static/images/";
-        String thumbnailImagePath = "src/main/webapp/static/images/thumbnail/";
-        File imageFile = new File(storedImagePath, storedName);
-        File thumbnailImageFile = new File(thumbnailImagePath);
-
-        Thumbnails.of(imageFile)
-                .size(100, 100)
-                .toFiles(thumbnailImageFile, Rename.PREFIX_DOT_THUMBNAIL);
-
+    public String makeThumbnail(String storedName) throws IOException, InterruptedException {
+        int thumbnail_width = 150;
+        int thumbnail_height = 100;
         String thumbnailImageName = "thumbnail." + storedName;
-        thumbnailImagePath += thumbnailImageName;
+        File imageFile = new File("src/main/webapp/static/images/" + storedName);
+        File thumbnailImageFile = new File("src/main/webapp/static/images/thumbnail/" + thumbnailImageName);
+
+        BufferedImage buffer_original_image = ImageIO.read(imageFile);
+        java.awt.Image imgTarget = buffer_original_image.getScaledInstance(thumbnail_width, thumbnail_height, java.awt.Image.SCALE_SMOOTH);
+        int pixels[] = new int[thumbnail_width * thumbnail_height];
+        PixelGrabber pg = new PixelGrabber(imgTarget, 0, 0, thumbnail_width, thumbnail_height, pixels, 0, thumbnail_width);
+        pg.grabPixels();
+        BufferedImage buffer_thumbnail_image = new BufferedImage(thumbnail_width, thumbnail_height, BufferedImage.TYPE_INT_RGB);
+        buffer_thumbnail_image.setRGB(0, 0, thumbnail_width, thumbnail_height, pixels, 0, thumbnail_width);
+        Graphics2D graphics2D = buffer_thumbnail_image.createGraphics();
+        graphics2D.drawImage(buffer_original_image, 0, 0, thumbnail_width, thumbnail_height, null);
+        ImageIO.write(buffer_thumbnail_image, "png", thumbnailImageFile);
 
         return thumbnailImageName;
     }

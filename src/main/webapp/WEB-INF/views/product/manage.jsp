@@ -10,13 +10,14 @@
 <body onload="printList()">
 재고관리
 <br>
-<a href="${pageContext.request.contextPath}/product/add">재고 추가</a>
-
-<table id="table">
-
+<button class="ui button" onclick="location.href='${pageContext.request.contextPath}/product/add'"><i class="plus icon"></i></button>
+<button class="ui button" onclick="location.reload()"><i class="undo icon"></i></button>
+<button class="ui button" onclick="remove()"><i class="trash alternate icon"></i></button>
+<button class="ui button" onclick="save()"><i class="save icon"></i></button>
+<table id="table" class="ui fixed single line celled table">
 </table>
-<nav id="pagination">
-</nav>
+<div id="pagination" class="ui pagination menu">
+</div>
 <script>
     function printList(currentPage) {
         if(!currentPage) {
@@ -39,56 +40,97 @@
                 let pageHTML = '';
                 let listHTML = '';
 
-                pageHTML += '<ul class="pagination">';
                 if (pageResponse.paging.prev) {
-                    pageHTML += '<li class="pagination-previous"> < </li>';
+                    pageHTML += '<a class="item"> < </a>';
                 }
 
                 for (let i = pageResponse.paging.startPage; i <= pageResponse.paging.endPage; i++) {
                     if (currentPage == i) {
-                        pageHTML += '<li class="current"><button onclick="printList(' + i + ')">' + i + '</button></li>';
+                        pageHTML += '<a class="item active" onclick="printList(' + i + ')">' + i + '</a>';
                     } else {
-                        pageHTML += '<li><button onclick="printList(' + i + ')">' + i + '</button></li>';
+                        pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
                     }
                 }
 
                 if (pageResponse.paging.next) {
-                    pageHTML += '<li class="pagination-next"> > </li>';
+                    pageHTML += '<a class="item"> > </a>';
                 }
 
-                pageHTML += '</ul>';
-                pageHTML += '</li>';
+                listHTML += '<thead>';
+                listHTML += '<tr>';
+                listHTML += '<th class="one wide" style="width:40px;"></th>';
+                listHTML += '<th class="one wide">제품 번호</th>';
+                listHTML += '<th class="two wide"> 제품 이미지 </th>';
+                listHTML += '<th> 제품 이름 </th>';
+                listHTML += '<th> 제품 코드 </th>';
+                listHTML += '<th class="one wide"> 전체 수량 </th>';
+                listHTML += '<th class="one wide"> 팔린 개수 </th>';
+                listHTML += '<th class="one wide"> 남은 수량 </th>';
+                listHTML += '</tr>';
+                listHTML += '</thead>';
+                listHTML += '<tbody>';
 
-                if(pageResponse.productList) {
-                    listHTML += '<thead>';
+                if(pageResponse.productList == 0) {
                     listHTML += '<tr>';
-                    listHTML += '<th>제품 번호</th>';
-                    listHTML += '<th> 제품 이미지 </th>';
-                    listHTML += '<th> 제품 이름 </th>';
-                    listHTML += '<th> 전체 수량 </th>';
-                    listHTML += '<th> 팔린 개수 </th>';
-                    listHTML += '<th> 남은 수량 </th>';
+                    listHTML += '<td></td>';
+                    listHTML += '<td> 재고 목록이 없습니다. </td>';
+                    listHTML += '<td> </td>';
+                    listHTML += '<td> </td>';
+                    listHTML += '<td> </td>';
+                    listHTML += '<td> </td>';
+                    listHTML += '<td> </td>';
+                    listHTML += '<td> </td>';
                     listHTML += '</tr>';
-                    listHTML += '</thead>';
+                } else {
+                    $.each(pageResponse.productList, function(i, productList) {
+                        let imgSrc = '${pageContext.request.contextPath}/static/images/thumbnail/' + productList.thumbnailImageName;
+                        let detailSrc = '${pageContext.request.contextPath}/product/detail/' + productList.productID;
+                        listHTML += '<tr>';
+                        listHTML += '<td><input type="checkbox" name="productID" value="' + productList.productID + '"></td>';
+                        listHTML += '<td>'+ productList.productID +'</td>';
+                        listHTML += '<td height="100"><img src="'+ imgSrc + '"/></td>';
+                        listHTML += '<td><a href="'+ detailSrc + '">' + productList.name + '</a></td>';
+                        listHTML += '<td>' + productList.code + '</td>';
+                        listHTML += '<td>' + productList.fullQuantity + '</td>';
+                        listHTML += '<td>' + productList.soldQuantity + '</td>';
+                        listHTML += '<td>' + productList.leftQuantity + '</td>';
+                        listHTML += '</tr>';
+                    });
                 }
-
-                $.each(pageResponse.productList, function(i, productList) {
-                    let imgSrc = '${pageContext.request.contextPath}/static/images/thumbnail/' + productList.thumbnailImageName;
-                    listHTML += '<tbody>';
-                    listHTML += '<tr>';
-                    listHTML += '<td>'+ productList.productID +'</td>';
-                    listHTML += '<td height="150"><img src="'+ imgSrc + '"/></td>';
-                    listHTML += '<td>' + productList.name + '</td>';
-                    listHTML += '<td>' + productList.fullQuantity + '</td>';
-                    listHTML += '<td>' + productList.soldQuantity + '</td>';
-                    listHTML += '<td>' + productList.leftQuantity + '</td>';
-                    listHTML += '</tbody>';
-                });
+                listHTML += '</tbody>';
 
                 $('#pagination').html(pageHTML);
                 $('#table').html(listHTML);
             }
         })
+    }
+
+    function remove() {
+        $('input:checkbox[name=productID]').each(function (index) {
+            if($(this).is(':checked')==true){
+                let postObj = {
+                    'productID':$(this).val()
+                };
+
+                $.ajax({
+                    url:'${pageContext.request.contextPath}/product/delete',
+                    method:'post',
+                    dataType: 'json',
+                    data: JSON.stringify(postObj),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(pageResponse) {
+                        console.log(pageResponse);
+                        if(pageResponse.code == '성공') {
+                            location.reload();
+                        }
+                    }
+                })
+            }
+        })
+    }
+
+    function save() {
+
     }
 </script>
 </body>

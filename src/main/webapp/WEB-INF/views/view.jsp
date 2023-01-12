@@ -13,10 +13,8 @@
     <meta charset="UTF-8">
     <script src="${pageContext.request.contextPath}/static/js/jquery-3.1.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/css/common.css">
-    <!-- Compressed CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.5/dist/css/foundation.min.css" crossorigin="anonymous">
-    <!-- Compressed JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.5/dist/js/foundation.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/semantic/semantic.css">
+    <script src="${pageContext.request.contextPath}/static/semantic/semantic.js"></script>
 </head>
 <body>
     <div class="header">

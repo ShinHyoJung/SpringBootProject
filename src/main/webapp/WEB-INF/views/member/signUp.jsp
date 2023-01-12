@@ -8,48 +8,38 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
-<div class="grid-container">
-      <form action="${pageContext.request.contextPath}/member/signUp" method="post" name="signUpForm">
-         <div class="grid-x grid-padding-x">
-            <div class="medium-12 cell">
-               <label> 아이디
-                  <input type="text" id="memberID" name="memberID" placeholder="아이디">
-               </label>
-            </div>
-            <div class="medium-12 cell">
-               <label> 비밀번호
-                  <input type="password" id="password" name="password" placeholder="비밀번호">
-               </label>
-            </div>
-            <div class="medium-12 cell">
-               <label> 이름
-                  <input type="text" id="name" name="name" placeholder="이름">
-               </label>
-            </div>
-            <div class="medium-12 cell">
-               <label> 생년월일
-                  <input type="text" id="birth" name="birth" placeholder="생년월일">
-               </label>
-            </div>
-            <div class="medium-12 cell">
-               <label> 휴대폰번호
-                  <input type="text" id="mobile" name="mobile" placeholder="휴대폰번호">
-               </label>
-            </div>
-            <div class="medium-12 cell">
-               <label> 이메일
-                  <input type="text" id="mail" name="mail" placeholder="이메일">
-               </label>
-            </div>
-            <div class="medium-12 cell">
-               <label> 주소
-                  <input type="text" id="address" name="address" placeholder="주소">
-               </label>
-            </div>
+   <form class="ui form" action="${pageContext.request.contextPath}/member/signUp" method="post" name="signUpForm">
+         <div class="field">
+            <label> 아이디 </label>
+               <input type="text" id="memberID" name="memberID" placeholder="아이디">
          </div>
-         <button class="button primary" type="button" onclick="signUp()">확인</button>
-      </form>
-</div>
+         <div class="field">
+            <label> 비밀번호 </label>
+               <input type="password" id="password" name="password" placeholder="비밀번호">
+         </div>
+         <div class="field">
+            <label> 이름 </label>
+               <input type="text" id="name" name="name" placeholder="이름">
+         </div>
+         <div class="field">
+            <label> 생년월일 </label>
+               <input type="text" id="birth" name="birth" placeholder="생년월일">
+         </div>
+         <div class="field">
+            <label> 휴대폰번호 </label>
+               <input type="text" id="mobile" name="mobile" placeholder="휴대폰번호">
+         </div>
+         <div class="field">
+            <label> 이메일  </label>
+               <input type="text" id="mail" name="mail" placeholder="이메일">
+         </div>
+         <div class="field">
+            <label> 주소 </label>
+               <input type="text" id="address" name="address" placeholder="주소">
+         </div>
+      <button class="ui button" type="button" onclick="signUp()">확인</button>
+   </form>
+
 <input type="hidden" id="isVerified" value="">
 <script>
    $(document).ready(function(){

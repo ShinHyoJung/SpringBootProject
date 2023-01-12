@@ -86,7 +86,7 @@ public class MemberController {
     }
 
     @PostMapping("/info/update")
-    public PostUpdateInfoResponse postUpdate(PostUpdateInfo postUpdateInfo) {
+    public String postUpdate(PostUpdateInfo postUpdateInfo) {
         PostUpdateInfoResponse postUpdateInfoResponse = new PostUpdateInfoResponse();
         try{
             String password = postUpdateInfo.getPassword();
@@ -101,7 +101,7 @@ public class MemberController {
             postUpdateInfoResponse.setCode(ErrorCode.member.updateMember.getCode());
             postUpdateInfoResponse.setMessage(ErrorCode.member.updateMember.getMessageKey());
         }
-        return postUpdateInfoResponse;
+        return "redirect:/member/info";
     }
 
     @GetMapping("/info/download")
@@ -135,6 +135,7 @@ public class MemberController {
         workbook.write(fileOut);
         workbook.close();
     }
+
     @GetMapping("/withdrawal")
     public String getWithdrawal(Model model, HttpSession session) {
         PostWithdrawalResponse pageResponse = new PostWithdrawalResponse();

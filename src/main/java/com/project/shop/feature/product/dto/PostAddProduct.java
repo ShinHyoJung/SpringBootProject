@@ -14,15 +14,16 @@ import lombok.Data;
  */
 @Data
 public class PostAddProduct {
-    private String code;
     private String name;
     private int fullQuantity;
+    private String info;
 
-    public Product toEntity(String thumbnailImageName) {
+    public Product toEntity(String code, String thumbnailImageName) {
         Product product = new Product();
-        product.setCode(this.code);
+        product.setCode(code);
         product.setName(this.name);
         product.setFullQuantity(this.fullQuantity);
+        product.setInfo(this.info);
         product.setThumbnailImageName(thumbnailImageName);
         return product;
     }
