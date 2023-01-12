@@ -70,10 +70,12 @@ public class SellDAO {
             @Override
             public Sell mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Sell sell = new Sell();
+                sell.setSellID(rs.getInt("sell_id"));
                 sell.setName(rs.getString("name"));
+                sell.setTitle(rs.getString("title"));
                 sell.setContent(rs.getString("content"));
                 sell.setPrice(rs.getString("price"));
-                sell.setTitle(rs.getString("title"));
+                sell.setDetailImageName(rs.getString("detail_image_name"));
                 sell.setProductID(rs.getInt("product_id"));
                 sell.setProductCode(rs.getString("product_code"));
                 sell.setCreateDate(rs.getDate("create_date"));
@@ -81,7 +83,6 @@ public class SellDAO {
                 return sell;
             }
         });
-
         return sell;
     }
 
