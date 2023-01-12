@@ -10,8 +10,19 @@
 <html>
 <body>
 ${getDetailResponse.sell.title} <br>
-<img src="${pageContext.request.contextPath}/static/images/thumbnail/${getDetailResponse.sell.thumbnailImageName}"/><br>
-가격 : ${getDetailResponse.sell.price} 원<br>
+<div class="ui items">
+    <div class="item">
+        <a class="ui small image">
+            <img src="${pageContext.request.contextPath}/static/images/thumbnail/${getDetailResponse.sell.thumbnailImageName}"/>
+        </a>
+        <div class="content">
+            <a class="header">${getDetailResponse.sell.name}</a>
+            <div class="description">
+                <p>가격 : ${getDetailResponse.sell.price} 원</p>
+            </div>
+        </div>
+    </div>
+</div>
 <button class="ui button">구매</button> <button class="ui button">장바구니</button>
 <p class="subtitle"> 상세 정보 </p>
 <img src="${pageContext.request.contextPath}/static/images/detail/${getDetailResponse.sell.detailImageName}"/> <br>
