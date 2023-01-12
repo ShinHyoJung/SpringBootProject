@@ -8,7 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
-  <form class="ui form" method="post" action="${pageContext.request.contextPath}/member/login" id="loginForm">
+<p class="subtitle"> 로그인 </p>
+  <form class="ui form" method="post" action="${pageContext.request.contextPath}/member/login" style="width: 50%;">
     <div class="field">
         <label>아이디 </label>
             <input type="text" id="id" name="id">

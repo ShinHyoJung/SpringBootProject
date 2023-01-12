@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body onload="printList()">
-재고관리
+<p class="subtitle" style="margin-top: 10px;">재고관리</p>
 <br>
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/product/add'"><i class="plus icon"></i></button>
 <button class="ui button" onclick="location.reload()"><i class="undo icon"></i></button>
@@ -16,7 +16,7 @@
 <button class="ui button" onclick="save()"><i class="save icon"></i></button>
 <table id="table" class="ui fixed single line celled table">
 </table>
-<div id="pagination" class="ui pagination menu">
+<div id="pagination" class="ui pagination menu" style="margin-left: 500px;">
 </div>
 <script>
     function printList(currentPage) {
@@ -73,9 +73,9 @@
                 if(pageResponse.productList == 0) {
                     listHTML += '<tr>';
                     listHTML += '<td></td>';
-                    listHTML += '<td> 재고 목록이 없습니다. </td>';
+                    listHTML += '<td>  </td>';
                     listHTML += '<td> </td>';
-                    listHTML += '<td> </td>';
+                    listHTML += '<td>재고 목록이 없습니다. </td>';
                     listHTML += '<td> </td>';
                     listHTML += '<td> </td>';
                     listHTML += '<td> </td>';
@@ -92,8 +92,8 @@
                         listHTML += '<td><a href="'+ detailSrc + '">' + productList.name + '</a></td>';
                         listHTML += '<td>' + productList.code + '</td>';
                         listHTML += '<td>' + productList.fullQuantity + '</td>';
-                        listHTML += '<td>' + productList.soldQuantity + '</td>';
-                        listHTML += '<td>' + productList.leftQuantity + '</td>';
+                        listHTML += '<td><input type="text" style="width:60px;" value="' + productList.soldQuantity + '"/></td>';
+                        listHTML += '<td><input type="text" style="width:60px;" value="' + productList.leftQuantity + '"/></td>';
                         listHTML += '</tr>';
                     });
                 }

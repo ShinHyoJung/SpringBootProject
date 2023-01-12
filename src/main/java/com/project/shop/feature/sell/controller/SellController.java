@@ -28,6 +28,11 @@ public class SellController {
 
     @GetMapping("/")
     public String getSell(Model model) {
+        boolean isUseCategoryMenu = true;
+        boolean isUseUserMenu = false;
+
+        model.addAttribute("isUseCategoryMenu", isUseCategoryMenu);
+        model.addAttribute("isUseUserMenu", isUseUserMenu);
         model.addAttribute("main", VIEW_PREFIX + "default");
         return "view";
     }
@@ -70,20 +75,9 @@ public class SellController {
 
     @GetMapping("/detail/{sellID}")
     public String getDetail(@PathVariable int sellID, Model model) throws SQLException {
-        GetDetailResponse pageResponse = new GetDetailResponse();
-
         Sell sell = sellService.select(sellID);
-        Image image = imageService.select(sellID);
 
-        pageResponse.setSellID(sellID);
-        pageResponse.setTitle(sell.getTitle());
-        pageResponse.setContent(sell.getContent());
-        pageResponse.setPrice(sell.getPrice());
-        pageResponse.setDetailImage(image.getDetailImageName());
-        pageResponse.setCreateDate(sell.getCreateDate());
-        pageResponse.setUpdateDate(sell.getUpdateDate());
-
-        model.addAttribute("getDetailResponse", pageResponse);
+        model.addAttribute("getDetailResponse", new GetDetailResponse(sell));
         model.addAttribute("main", VIEW_PREFIX + "detail");
         return "view";
     }

@@ -10,22 +10,22 @@
 <html>
 <body>
 <div>
-    <p class="title">쇼핑몰</p>
+    <p class="title">Shop</p>
 </div>
-<div class="ui stackable menu" style="margin-top: 30px;">
+<div class="ui secondary menu" style="margin-top: 30px; margin-left: 1200px;">
     <div class="item">
         <i class="shopping cart icon"></i>
     </div>
 <c:choose>
     <c:when test="${not empty sessionScope.loggedIn}">
         <a href="${pageContext.request.contextPath}/member/logout" class="item">로그아웃</a>
-        <a href="${pageContext.request.contextPath}/member/info" class="item">내정보</a>
-        <a href="${pageContext.request.contextPath}/product/manage" class="item">재고 관리</a>
+        <a href="${pageContext.request.contextPath}/member/info" class="item" id="info">내정보</a>
+        <a href="${pageContext.request.contextPath}/product/manage" class="item" id="product">재고 관리</a>
     </c:when>
     <c:otherwise>
        <!-- <a href="${pageContext.request.contextPath}/board/" class="item">게시판</a>-->
-        <a href="${pageContext.request.contextPath}/member/signUp" class="item">회원가입</a>
-        <a href="${pageContext.request.contextPath}/member/login" class="item">로그인</a>
+        <a href="${pageContext.request.contextPath}/member/signUp" class="item" id="signUp">회원가입</a>
+        <a href="${pageContext.request.contextPath}/member/login" class="item" id="login">로그인</a>
     </c:otherwise>
 </c:choose>
     <a href="${pageContext.request.contextPath}/sell/" class="item">판매</a>

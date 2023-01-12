@@ -1,4 +1,3 @@
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: ShinHyoJung
@@ -7,10 +6,11 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <body>
 ${getDetailResponse.title} <br>
-<img src="${pageContext.request.contextPath}/static/images/detail/${getDetailResponse.detailImage}"/><br>
+<img src="${pageContext.request.contextPath}/static/images/detail/${getDetailResponse.detailImageName}"/><br>
 ${getDetailResponse.price} <br>
 ${getDetailResponse.content} <br>
 작성날짜: <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${getDetailResponse.createDate}"/> <br>

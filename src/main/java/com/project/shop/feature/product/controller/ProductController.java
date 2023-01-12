@@ -38,6 +38,11 @@ public class ProductController {
 
     @GetMapping("/manage")
     public String manage(Model model) {
+        boolean isUseCategoryMenu = true;
+        boolean isUseUserMenu = false;
+
+        model.addAttribute("isUseCategoryMenu", isUseCategoryMenu);
+        model.addAttribute("isUseUserMenu", isUseUserMenu);
         model.addAttribute("main", VIEW_PREFIX + "manage");
         return "view";
     }
@@ -89,5 +94,12 @@ public class ProductController {
         model.addAttribute("getDetailResponse", new GetDetailResponse(product));
         model.addAttribute("main", VIEW_PREFIX + "detail");
         return "view";
+    }
+
+    @PostMapping("/detail/update")
+    public String postUpdateDetailProduct(PostDetailUpdate postDetailUpdate) {
+        int productID = postDetailUpdate.getProductID();
+        productService.update(postDetailUpdate.toEntity());
+        return "redirect:/product/detail/" + productID;
     }
 }

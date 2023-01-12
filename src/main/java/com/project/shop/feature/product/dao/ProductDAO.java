@@ -74,6 +74,7 @@ public class ProductDAO {
             @Override
             public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Product product = new Product();
+                product.setProductID(rs.getInt("product_id"));
                 product.setName(rs.getString("name"));
                 product.setCode(rs.getString("code"));
                 product.setFullQuantity(rs.getInt("full_quantity"));
@@ -95,11 +96,12 @@ public class ProductDAO {
     }
 
     public void update(Product product) {
-        String sql = "UPDATE product SET name = ?, info = ?, update_date = ? WHERE product_id = ?";
+        String sql = "UPDATE product SET name = ?, info = ?, full_quantity = ?, update_date = ? " +
+                "WHERE 1=1 AND product_id = ?";
 
         Date now = new Date();
         long nowDate = now.getDate();
 
-        jdbcTemplate.update(sql, new Object[]{product.getName(), product.getInfo(), new java.sql.Date(nowDate), product.getProductID()});
+        jdbcTemplate.update(sql, new Object[]{product.getName(), product.getInfo(), product.getFullQuantity(), new java.sql.Date(nowDate), product.getProductID()});
     }
 }

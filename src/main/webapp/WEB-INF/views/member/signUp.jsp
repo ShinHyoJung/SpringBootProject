@@ -8,7 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
-   <form class="ui form" action="${pageContext.request.contextPath}/member/signUp" method="post" name="signUpForm">
+<p class="subtitle"> 회원가입 </p>
+   <form class="ui form" action="${pageContext.request.contextPath}/member/signUp" method="post" name="signUpForm" style="width: 50%;">
          <div class="field">
             <label> 아이디 </label>
                <input type="text" id="memberID" name="memberID" placeholder="아이디">
@@ -37,7 +38,7 @@
             <label> 주소 </label>
                <input type="text" id="address" name="address" placeholder="주소">
          </div>
-      <button class="ui button" type="button" onclick="signUp()">확인</button>
+      <button class="ui button" type="button" onclick="signUp()">가입</button>
    </form>
 
 <input type="hidden" id="isVerified" value="">

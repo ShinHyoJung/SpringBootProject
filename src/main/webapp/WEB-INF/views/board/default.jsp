@@ -10,7 +10,7 @@
 --%>
 <html>
 <body onload="printList()">
-<p>게시판</p>
+<p class="subtitle">게시판</p>
 <!--
 <c:if test="${not empty getDefaultResponse.boardList}">
 <table class="hover">

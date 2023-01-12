@@ -21,7 +21,12 @@
         <c:import url="include/header.jsp"/>
     </div>
     <div class="container">
-        <c:import url="${main}.jsp"/>
+        <div class="left">
+            <c:import url="include/left.jsp"/>
+        </div>
+        <div class="main">
+            <c:import url="${main}.jsp"/>
+        </div>
     </div>
     <div class="footer">
         <c:import url="include/footer.jsp"/>

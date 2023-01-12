@@ -9,6 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
+<p class="subtitle"> 판매글 수정 </p>
 <form action="${pageContext.request.contextPath}/sell/update" method="post" enctype="multipart/form-data">
     <input type="text" id="title" name="title" value="${getUpdateResponse.title}"> <br>
     <input type="text" id="content" name="content" value="${getUpdateResponse.content}"> <br>

@@ -64,4 +64,9 @@ public class DefaultProductService implements ProductService {
     public void delete(int productID) {
         productDAO.delete(productID);
     }
+
+    @Override
+    public void update(Product product) {
+        productDAO.update(product);
+    }
 }

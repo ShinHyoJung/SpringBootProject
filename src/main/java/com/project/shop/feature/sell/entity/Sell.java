@@ -12,6 +12,7 @@ public class Sell {
     private String content;
     private String price;
     private String thumbnailImageName;
+    private String detailImageName;
     private Date createDate;
     private Date updateDate;
     private int productID;

@@ -29,4 +29,6 @@ public interface ProductService {
     String makeProductCode();
 
     void delete(int productID);
+
+    void update(Product product);
 }
