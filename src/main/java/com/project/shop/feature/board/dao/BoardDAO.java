@@ -42,7 +42,7 @@ public class BoardDAO {
     public List<Board> selectAll(Paging paging) {
         String sql = "SELECT * FROM board LIMIT ?, ?";
 
-        List<Board> boardList = jdbcTemplate.query(sql, new Object[]{paging.getSkip(), paging.getAmount()},
+        List<Board> boardList = jdbcTemplate.query(sql, new Object[]{paging.getSkip(), paging.getCountPerPage()},
                 new RowMapper<Board>() {
             @Override
             public Board mapRow(ResultSet rs, int rowNum) throws SQLException {

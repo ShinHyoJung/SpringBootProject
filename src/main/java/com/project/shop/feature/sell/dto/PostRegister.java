@@ -9,7 +9,6 @@ public class PostRegister {
     private String title;
     private String content;
     private String price;
-    private String productCode;
 
     public Sell toEntity(String thumbnailImageName) {
         Sell sell = new Sell();
@@ -18,7 +17,6 @@ public class PostRegister {
         sell.setContent(this.content);
         sell.setThumbnailImageName(thumbnailImageName);
         sell.setPrice(this.price);
-        sell.setProductCode(this.productCode);
         return sell;
     }
 }

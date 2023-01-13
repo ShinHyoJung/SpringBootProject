@@ -36,19 +36,19 @@ public class SellDAO {
     }
 
     public void insert(Sell sell) {
-        String sql = "INSERT INTO sell (name, title, content, product_code, price, thumbnail_image_name," +
+        String sql = "INSERT INTO sell (name, title, content, price, thumbnail_image_name, product_id," +
                 "create_date, update_date) VALUES (" +
                 "?, ?, ?, ?, ?, ?, ?, ?)";
         Date now = new Date();
         long nowDate = now.getDate();
 
-        jdbcTemplate.update(sql, sell.getName(), sell.getTitle(), sell.getContent(), sell.getProductCode(),
-        sell.getPrice(), sell.getThumbnailImageName(), new java.sql.Date(nowDate), new java.sql.Date(nowDate));
+        jdbcTemplate.update(sql, sell.getName(), sell.getTitle(), sell.getContent(),
+        sell.getPrice(), sell.getThumbnailImageName(), sell.getProductID(), new java.sql.Date(nowDate), new java.sql.Date(nowDate));
     }
 
     public List<Sell> selectAll(Paging paging) {
         String sql = "SELECT * FROM sell LIMIT ?, ?";
-        List<Sell> sellList = jdbcTemplate.query(sql, new Object[]{paging.getSkip(), paging.getAmount()}, new RowMapper<Sell>() {
+        List<Sell> sellList = jdbcTemplate.query(sql, new Object[]{paging.getSkip(), paging.getCountPerPage()}, new RowMapper<Sell>() {
             @Override
             public Sell mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Sell sell = new Sell();
@@ -77,7 +77,6 @@ public class SellDAO {
                 sell.setPrice(rs.getString("price"));
                 sell.setDetailImageName(rs.getString("detail_image_name"));
                 sell.setProductID(rs.getInt("product_id"));
-                sell.setProductCode(rs.getString("product_code"));
                 sell.setCreateDate(rs.getDate("create_date"));
                 sell.setUpdateDate(rs.getDate("update_date"));
                 return sell;
@@ -102,14 +101,14 @@ public class SellDAO {
 
     public void update(Sell sell) {
         String sql = "UPDATE sell SET title = ?, content = ?, " +
-                "price = ?, product_code = ?, update_date = ?" +
+                "price = ?, update_date = ?" +
                 "WHERE 1=1 AND sell_id = ?";
 
         Date now = new Date();
         long nowDate = now.getDate();
 
         jdbcTemplate.update(sql, new Object[]{sell.getTitle(), sell.getContent(),
-                sell.getPrice(), sell.getProductCode(), new java.sql.Date(nowDate)});
+                sell.getPrice(), new java.sql.Date(nowDate)});
     }
 
     public int selectMaxSellID() {

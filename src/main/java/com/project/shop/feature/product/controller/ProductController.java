@@ -51,7 +51,7 @@ public class ProductController {
     @PostMapping("/manage/list")
     public PostPrintListResponse manageList(@RequestBody PostPrintList postPrintList) throws SQLException {
         int total = productService.count();
-        Paging paging = new Paging(postPrintList.getCurrentPage(), 5, 5, total);
+        Paging paging = new Paging(postPrintList.getCurrentPage(), 5, total);
         List<Product> productList = productService.selectAll(paging);
 
         return new PostPrintListResponse(paging, productList);
@@ -70,7 +70,7 @@ public class ProductController {
 
         if(imageList != null) {
             for(Image image : imageList) {
-                String thumbnailImageName = imageService.makeThumbnail(image.getStoredName());
+                String thumbnailImageName = imageService.makeThumbnailImage(image.getStoredName());
                 image.setThumbnailImageName(thumbnailImageName);
                 productService.insert(postAddProduct.toEntity(productCode, thumbnailImageName));
             }

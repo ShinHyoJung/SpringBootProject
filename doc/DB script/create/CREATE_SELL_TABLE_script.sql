@@ -7,7 +7,6 @@ CREATE TABLE sell (
     thumbnail_image_name varchar(300),
     create_date datetime,
     update_date datetime,
-    product_id int,
-    product_code varchar(300),
+    product_id int
     primary key (sell_id)
 )

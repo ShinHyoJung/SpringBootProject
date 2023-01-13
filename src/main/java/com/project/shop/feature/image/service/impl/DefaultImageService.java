@@ -35,7 +35,8 @@ public class DefaultImageService implements ImageService {
         return imageDAO.select(sellID);
     }
 
-    public String makeThumbnail(String storedName) throws IOException, InterruptedException {
+    // 썸네일 이미지 만들기
+    public String makeThumbnailImage(String storedName) throws IOException, InterruptedException {
         int thumbnail_width = 150;
         int thumbnail_height = 100;
         String thumbnailImageName = "thumbnail." + storedName;
@@ -56,7 +57,8 @@ public class DefaultImageService implements ImageService {
         return thumbnailImageName;
     }
 
-    public String makeDetail(String storedName) throws IOException {
+    // 상세이미지 만들기
+    public String makeDetailImage(String storedName) throws IOException {
         String storedImagePath = "src/main/webapp/static/images/";
         String detailImagePath = "src/main/webapp/static/images/detail/";
 

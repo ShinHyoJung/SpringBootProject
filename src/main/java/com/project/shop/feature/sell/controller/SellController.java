@@ -1,5 +1,7 @@
 package com.project.shop.feature.sell.controller;
 
+import com.project.shop.feature.product.entity.Product;
+import com.project.shop.feature.product.service.ProductService;
 import com.project.shop.feature.sell.dto.*;
 import com.project.shop.feature.image.entity.Image;
 import com.project.shop.feature.image.service.ImageService;
@@ -24,6 +26,7 @@ public class SellController {
 
     private static final String VIEW_PREFIX = "sell/";
     private final SellService sellService;
+    private final ProductService productService;
     private final ImageService imageService;
 
     @GetMapping("/")
@@ -41,13 +44,18 @@ public class SellController {
     @PostMapping("/list")
     public PostPrintListResponse postSellList(@RequestBody PostPrintList postPrintList) {
         int total = sellService.count();
-        Paging paging = new Paging(postPrintList.getCurrentPage(), 6, 5, total);
+        Paging paging = new Paging(postPrintList.getCurrentPage(), 12, total);
         List<Sell> sellList = sellService.selectAll(paging);
 
         return new PostPrintListResponse(paging, sellList);
     }
+
     @GetMapping("/register")
-    public String getRegister(Model model) {
+    public String getRegister(Model model) throws SQLException {
+        int total = productService.count();
+        Paging paging = new Paging(1, total, total);
+        List<Product> productList = productService.selectAll(paging);
+        model.addAttribute("productList", productList);
         model.addAttribute("main", VIEW_PREFIX + "register");
         return "view";
     }
@@ -58,17 +66,21 @@ public class SellController {
 
         if(imageList != null) {
             for(Image image : imageList) {
-                String detailImagePath = imageService.makeDetail(image.getStoredName());
-                String thumbnailImageName = imageService.makeThumbnail(image.getStoredName());
+                String detailImagePath = imageService.makeDetailImage(image.getStoredName());
+                String thumbnailImageName = imageService.makeThumbnailImage(image.getStoredName());
 
                 image.setThumbnailImageName(thumbnailImageName);
                 image.setDetailImageName(image.getStoredName());
                 image.setDetailImagePath(detailImagePath);
                 sellService.insert(postRegister.toEntity(thumbnailImageName));
-                int sellID = sellService.selectMaxSellID();
+            }
+
+            int sellID = sellService.selectMaxSellID();
+
+            for(int i = 0; i <imageList.size(); i++) {
+                Image image = imageList.get(i);
                 image.setSellID(sellID);
             }
-            imageService.insert(imageList);
         }
         return "redirect:/sell/";
     }
@@ -89,22 +101,11 @@ public class SellController {
         return "redirect:/sell/";
     }
 
-    @GetMapping("/update/{sellID}")
-    public String getUpdate(@PathVariable int sellID, Model model) throws SQLException {
-        Sell sell = sellService.select(sellID);
-        Image image = imageService.select(sellID);
+    @GetMapping("/update/")
+    public String getUpdate(PostUpdate postUpdate) throws SQLException {
+        sellService.update(postUpdate.toEntity());
 
-        GetUpdateResponse pageResponse = new GetUpdateResponse();
-        pageResponse.setSellID(sellID);
-        pageResponse.setTitle(sell.getTitle());
-        pageResponse.setContent(sell.getContent());
-        pageResponse.setPrice(sell.getPrice());
-        pageResponse.setProductCode(sell.getProductCode());
-        pageResponse.setImage(image);
-
-        model.addAttribute("getUpdateResponse", pageResponse);
-        model.addAttribute("main", VIEW_PREFIX + "update");
-        return "view";
+        return "redirect:/sell/";
     }
 
     @PostMapping("/update")

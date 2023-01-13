@@ -16,5 +16,4 @@ public class Sell {
     private Date createDate;
     private Date updateDate;
     private int productID;
-    private String productCode;
 }

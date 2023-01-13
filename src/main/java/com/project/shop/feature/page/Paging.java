@@ -9,16 +9,14 @@ public class Paging {
     private int countPerPage;
     private int currentPage;
     private int skip;
-    private int amount;
     private int total;
     private boolean prev;
     private boolean next;
 
-    public Paging(int currentPage, int countPerPage, int amount, int total) {
+    public Paging(int currentPage, int countPerPage, int total) {
         this.currentPage = currentPage;
         this.countPerPage = countPerPage;
         this.skip = (currentPage - 1) * countPerPage;
-        this.amount = amount;
         this.total = total;
         this.endPage = (int)(Math.ceil(getCurrentPage() / 10.0)) * 10;
         this.startPage = this.endPage - 9;

@@ -35,7 +35,7 @@ public class BoardController {
     public PostPrintListResponse postBoard(@RequestBody PostPrintList postPrintList) {
         int total = boardService.count();
 
-        Paging paging = new Paging(postPrintList.getCurrentPage(), 5, 5, total);
+        Paging paging = new Paging(postPrintList.getCurrentPage(), 5, total);
         List<Board> boardList = boardService.selectAll(paging);
 
         return new PostPrintListResponse(paging, boardList);

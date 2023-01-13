@@ -13,7 +13,7 @@ public interface ImageService {
 
     Image select(int sellID) throws SQLException;
 
-    String makeThumbnail(String storedName) throws IOException, InterruptedException;
+    String makeThumbnailImage(String storedName) throws IOException, InterruptedException;
 
-    String makeDetail(String storedName) throws IOException;
+    String makeDetailImage(String storedName) throws IOException;
 }

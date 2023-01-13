@@ -51,7 +51,7 @@ public class ProductDAO {
                 "LIMIT ?, ?";
 
         List<Product> productList = jdbcTemplate.query(sql, new Object[]{paging.getSkip(),
-                paging.getAmount()}, new RowMapper<Product>() {
+                paging.getCountPerPage()}, new RowMapper<Product>() {
             @Override
             public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Product product = new Product();

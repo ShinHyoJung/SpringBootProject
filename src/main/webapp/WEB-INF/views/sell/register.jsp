@@ -10,6 +10,7 @@
 <body>
 <p class="subtitle"> 판매 등록 </p>
 <form class="ui form" method="post" action="${pageContext.request.contextPath}/sell/register" enctype="multipart/form-data" style="width: 50%;">
+    <input type="file" id="titleImageOrg" name="titleImageOrg" multiple="multiple">
     <div class="field">
         <input type="text" id="title" name="title" placeholder="글 제목">
     </div>
