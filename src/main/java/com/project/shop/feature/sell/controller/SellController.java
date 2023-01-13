@@ -62,24 +62,19 @@ public class SellController {
 
     @PostMapping("/register")
     public String postRegister(PostRegister postRegister, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException, SQLException, InterruptedException {
-        List<Image> imageList = FileUtils.parseImage(new Image(), multipartHttpServletRequest);
+        List<Image> imageList = FileUtils.parseImage(multipartHttpServletRequest);
+        sellService.insert(postRegister.toEntity("thumbnail." + imageList.get(0).getStoredName()));
+        int sellID = sellService.selectMaxSellID();
 
         if(imageList != null) {
-            for(Image image : imageList) {
-                String detailImagePath = imageService.makeDetailImage(image.getStoredName());
-                String thumbnailImageName = imageService.makeThumbnailImage(image.getStoredName());
-
-                image.setThumbnailImageName(thumbnailImageName);
-                image.setDetailImageName(image.getStoredName());
-                image.setDetailImagePath(detailImagePath);
-                sellService.insert(postRegister.toEntity(thumbnailImageName));
-            }
-
-            int sellID = sellService.selectMaxSellID();
-
-            for(int i = 0; i <imageList.size(); i++) {
-                Image image = imageList.get(i);
-                image.setSellID(sellID);
+            for(int i = 0; i < imageList.size(); i++) {
+                imageService.makeDetailImage(imageList.get(i).getStoredName());
+                imageService.makeThumbnailImage(imageList.get(i).getStoredName());
+                imageList.get(i).setSellID(sellID);
+                imageList.get(i).setThumbnailImageName("thumbnail." + imageList.get(i).getStoredName());
+                imageList.get(i).setDetailImageName(imageList.get(i).getStoredName());
+                imageList.get(i).setType(i);
+                imageService.insert(imageList.get(i));
             }
         }
         return "redirect:/sell/";
@@ -88,7 +83,10 @@ public class SellController {
     @GetMapping("/detail/{sellID}")
     public String getDetail(@PathVariable int sellID, Model model) throws SQLException {
         Sell sell = sellService.select(sellID);
-
+        Image orgImage = imageService.select(sellID, 0);
+        Image detailImage = imageService.select(sellID, 1);
+        model.addAttribute("orgImageName", orgImage.getStoredName());
+        model.addAttribute("detailImageName", detailImage.getDetailImageName());
         model.addAttribute("getDetailResponse", new GetDetailResponse(sell));
         model.addAttribute("main", VIEW_PREFIX + "detail");
         return "view";

@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 public class FileUtils {
 
-    public static List<Image> parseImage(Image image, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
+    public static List<Image> parseImage(MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
         if(ObjectUtils.isEmpty(multipartHttpServletRequest)) {
             return null;
         }
@@ -38,26 +38,26 @@ public class FileUtils {
 
         while(iterator.hasNext()) {
             List<MultipartFile> multipartFileList = multipartHttpServletRequest.getFiles(iterator.next());
-            for(MultipartFile multipartFile : multipartFileList) {
-                if(multipartFile.isEmpty() == false) {
-                    contentType = multipartFile.getContentType();
+            for(int i = 0; i < multipartFileList.size(); i++) {
+                if(multipartFileList.get(i).isEmpty() == false) {
+                    contentType = multipartFileList.get(i).getContentType();
                     if(ObjectUtils.isEmpty(contentType)) {
                         break;
                     } else {
-                        originalFileName = multipartFile.getOriginalFilename();
+                        originalFileName = multipartFileList.get(i).getOriginalFilename();
                         originalFileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
                     }
-
-                    storedFileName = Long.toString(System.nanoTime()) + originalFileExtension;
-                    image.setSize(String.valueOf(multipartFile.getSize()));
-                    image.setOrgName(multipartFile.getOriginalFilename());
+                    Image image = new Image();
+                    storedFileName = Long.toString(System.nanoTime()) + "type" + String.valueOf(i) + originalFileExtension;
+                    image.setSize(String.valueOf(multipartFileList.get(i).getSize()));
+                    image.setOrgName(multipartFileList.get(i).getOriginalFilename());
                     image.setStoredName(storedFileName);
                     image.setPath(path + storedFileName);
                     image.setDeleteYN("N");
                     imageList.add(image);
 
                     file = new File(path + storedFileName);
-                    multipartFile.transferTo(file);
+                    multipartFileList.get(i).transferTo(file);
                 }
             }
         }

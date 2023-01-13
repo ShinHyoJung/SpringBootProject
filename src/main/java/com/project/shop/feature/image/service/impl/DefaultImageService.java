@@ -5,7 +5,6 @@ import com.project.shop.feature.image.entity.Image;
 import com.project.shop.feature.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.geometry.Positions;
 import net.coobird.thumbnailator.name.Rename;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +15,6 @@ import java.awt.image.PixelGrabber;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
 
 
 @Service("ImageFileService")
@@ -26,17 +23,17 @@ public class DefaultImageService implements ImageService {
 
     private final ImageDAO imageDAO;
     @Override
-    public void insert(List<Image> imageList) throws SQLException {
-        imageDAO.insert(imageList);
+    public void insert(Image image) throws SQLException {
+        imageDAO.insert(image);
     }
 
     @Override
-    public Image select(int sellID) throws SQLException {
-        return imageDAO.select(sellID);
+    public Image select(int sellID, int type) throws SQLException {
+        return imageDAO.select(sellID, type);
     }
 
     // 썸네일 이미지 만들기
-    public String makeThumbnailImage(String storedName) throws IOException, InterruptedException {
+    public void makeThumbnailImage(String storedName) throws IOException, InterruptedException {
         int thumbnail_width = 150;
         int thumbnail_height = 100;
         String thumbnailImageName = "thumbnail." + storedName;
@@ -53,8 +50,6 @@ public class DefaultImageService implements ImageService {
         Graphics2D graphics2D = buffer_thumbnail_image.createGraphics();
         graphics2D.drawImage(buffer_original_image, 0, 0, thumbnail_width, thumbnail_height, null);
         ImageIO.write(buffer_thumbnail_image, "png", thumbnailImageFile);
-
-        return thumbnailImageName;
     }
 
     // 상세이미지 만들기

@@ -11,13 +11,11 @@ public class Image {
     private String storedName;
     private String size;
     private String thumbnailImageName;
-    private String thumbnailImagePath;
     private String detailImageName;
-    private String detailImagePath;
     private int productID;
-    private String productCode;
     private int sellID;
     private String path;
+    private int type;
     private Date createDate;
     private String deleteYN;
 }

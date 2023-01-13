@@ -4,14 +4,12 @@ CREATE TABLE image (
     stored_name varchar(300),
     size varchar(200),
     thumbnail_image_name varchar(200),
-    thumbnail_image_path varchar(300),
     detail_image_name varchar(200),
-    detail_image_path varchar(300),
     product_id int,
-    product_code varchar(300),
+    sell_id int,
     create_date datetime,
     delete_yn varchar(100),
-    sell_id int,
     path varchar(500),
+    type int
     primary key (image_id)
 )

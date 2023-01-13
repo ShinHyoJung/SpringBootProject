@@ -10,7 +10,7 @@
 <body>
 <p class="subtitle"> 판매 등록 </p>
 <form class="ui form" method="post" action="${pageContext.request.contextPath}/sell/register" enctype="multipart/form-data" style="width: 50%;">
-    <input type="file" id="titleImageOrg" name="titleImageOrg" multiple="multiple">
+    <input type="file" name="sellImage" multiple="multiple">
     <div class="field">
         <input type="text" id="title" name="title" placeholder="글 제목">
     </div>
@@ -26,7 +26,7 @@
     <div class="field">
         <input type="text" id="content" name="content" placeholder="판매글 내용">
     </div>
-    <input type="file" id="sellImageOrg" name="sellImageOrg" multiple="multiple">
+    <input type="file" name="sellImage" multiple="multiple">
     <button class="ui button" type="submit"><i class="save icon"></i></button>
 </form>
 </body>

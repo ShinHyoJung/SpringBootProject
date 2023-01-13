@@ -12,7 +12,7 @@
 <div>
     <p class="title">Shop</p>
 </div>
-<div class="ui secondary menu" style="margin-top: 30px; margin-left: 1400px;">
+<div class="ui secondary menu" style="margin-top: 30px; margin-left: 1200px;">
     <div class="item">
         <i class="shopping cart icon"></i>
     </div>

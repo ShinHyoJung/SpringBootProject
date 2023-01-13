@@ -15,8 +15,8 @@ public class PostRegister {
         sell.setName(this.name);
         sell.setTitle(this.title);
         sell.setContent(this.content);
-        sell.setThumbnailImageName(thumbnailImageName);
         sell.setPrice(this.price);
+        sell.setThumbnailImageName(thumbnailImageName);
         return sell;
     }
 }

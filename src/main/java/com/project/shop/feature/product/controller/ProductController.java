@@ -65,16 +65,16 @@ public class ProductController {
 
     @PostMapping("/add")
     public String postAddProduct(PostAddProduct postAddProduct, MultipartHttpServletRequest multipartHttpServletRequest) throws SQLException, IOException, InterruptedException {
-        List<Image> imageList = FileUtils.parseImage(new Image(), multipartHttpServletRequest);
+        List<Image> imageList = FileUtils.parseImage(multipartHttpServletRequest);
         String productCode = productService.makeProductCode();
 
         if(imageList != null) {
             for(Image image : imageList) {
-                String thumbnailImageName = imageService.makeThumbnailImage(image.getStoredName());
-                image.setThumbnailImageName(thumbnailImageName);
-                productService.insert(postAddProduct.toEntity(productCode, thumbnailImageName));
+                imageService.makeThumbnailImage(image.getStoredName());
+                image.setThumbnailImageName("thumbnail." + image.getStoredName());
+                productService.insert(postAddProduct.toEntity(productCode, "thumbnail." + image.getStoredName()));
+                imageService.insert(image);
             }
-            imageService.insert(imageList);
         }
         return "redirect:/product/manage/";
     }
