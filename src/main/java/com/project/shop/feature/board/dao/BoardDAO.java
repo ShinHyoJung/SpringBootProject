@@ -8,6 +8,8 @@ import com.project.shop.feature.board.entity.Board;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class BoardDAO {
         long nowDate = now.getDate();
 
         jdbcTemplate.update(sql, board.getMemberID(), board.getTitle(), board.getContent(), board.getWriter(),
-                new java.sql.Date(nowDate), new java.sql.Date(nowDate), board.getIdx());
+                new java.sql.Date(nowDate), Timestamp.valueOf(LocalDateTime.now()), board.getIdx());
     }
 
     public List<Board> selectAll(Paging paging) {
@@ -88,9 +90,8 @@ public class BoardDAO {
     public void update(Board board) {
         String sql = "UPDATE board SET title = ?," +
                 "content = ?, update_date = ?";
-        Date now = new Date();
-        long nowDate = now.getDate();
-        jdbcTemplate.update(sql, board.getTitle(), board.getContent(), new java.sql.Date(nowDate));
+
+        jdbcTemplate.update(sql, board.getTitle(), board.getContent(), Timestamp.valueOf(LocalDateTime.now()));
     }
 
     public void delete(int boardID) {

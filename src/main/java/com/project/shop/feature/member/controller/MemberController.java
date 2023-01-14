@@ -79,12 +79,8 @@ public class MemberController {
         int idx = (int) session.getAttribute("idx");
         Member member = memberService.select(idx);
 
-        boolean isUseUserMenu = true;
-        boolean isUseCategoryMenu = false;
-
         GetInfoResponse getInfoResponse = memberService.selectInfo(member);
-        model.addAttribute("isUseUserMenu", isUseUserMenu);
-        model.addAttribute("isUseCategoryMenu", isUseCategoryMenu);
+        model.addAttribute("menu", "user");
         model.addAttribute("getInfoResponse", getInfoResponse);
         model.addAttribute("main", VIEW_PREFIX + "info");
         return "view";

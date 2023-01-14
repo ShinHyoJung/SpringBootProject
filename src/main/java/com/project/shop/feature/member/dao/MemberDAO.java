@@ -9,6 +9,8 @@ import com.project.shop.feature.member.entity.Member;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,10 +36,9 @@ public class MemberDAO {
         String sql = "INSERT INTO member(" +
                 "member_id, password, name, birth, address, mobile, mail, create_date, update_date) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        Date now = new Date();
-        long nowDate = now.getDate();
+
         jdbcTemplate.update(sql, member.getMemberID(), member.getPassword(), member.getName(),
-                member.getBirth(), member.getAddress(), member.getMobile(), new java.sql.Date(nowDate), new java.sql.Date(nowDate));
+                member.getBirth(), member.getAddress(), member.getMobile(), Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
     }
 
     public Member selectByMemberID(String memberID) {
@@ -82,11 +83,9 @@ public class MemberDAO {
                 "password = ?, name = ?, birth = ?, mobile = ?" +
                 "mail = ?, address = ?, update_date = ? WHERE 1=1" +
                 "AND idx = ?";
-        Date now = new Date();
-        long nowDate = now.getDate();
 
         jdbcTemplate.update(sql, member.getPassword(), member.getName(), member.getBirth(),
-                member.getMail(), member.getAddress(), new java.sql.Date(nowDate));
+                member.getMail(), member.getAddress(), Timestamp.valueOf(LocalDateTime.now()));
     }
 
     public void delete(int idx) {

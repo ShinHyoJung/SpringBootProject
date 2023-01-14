@@ -22,8 +22,8 @@ public class DefaultSellService implements SellService {
     }
 
     @Override
-    public List<Sell> selectAll(Paging paging) {
-        return sellDAO.selectAll(paging);
+    public List<Sell> selectAll(Paging paging, String category, String searchOption, String keyword) {
+        return sellDAO.selectAll(paging, category, searchOption, keyword);
     }
 
     @Override
@@ -37,8 +37,8 @@ public class DefaultSellService implements SellService {
     }
 
     @Override
-    public int count() {
-        return sellDAO.count();
+    public int count(String category, String searchOption, String keyword) {
+        return sellDAO.count(category, searchOption, keyword);
     }
 
     @Override

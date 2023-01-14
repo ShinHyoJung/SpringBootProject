@@ -9,23 +9,39 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <body>
-<c:if test="${isUseCategoryMenu}">
+<c:if test="${menu eq 'sell'}">
     <div class="ui secondary vertical pointing menu" style="width: 90%;">
-        <a class="active item">
+        <a class="item" href="${pageContext.request.contextPath}/sell/?category=notebook">
             노트북
         </a>
-        <a class="item">
+        <a class="item" href="${pageContext.request.contextPath}/sell/?category=monitor">
             모니터
         </a>
-        <a class="item">
+        <a class="item" href="${pageContext.request.contextPath}/sell/?category=etc">
            주변기기
         </a>
     </div>
 </c:if>
-<c:if test="${isUseUserMenu}">
+<c:if test="${menu eq 'manage'}">
     <div class="ui secondary vertical pointing menu" style="width: 90%;">
-        <a class="active item">
+        <a class="item" href="${pageContext.request.contextPath}/manage/product/">
+            재고 관리
+        </a>
+        <a class="item" href="${pageContext.request.contextPath}/manage/category/">
+            카테고리 관리
+        </a>
+    </div>
+</c:if>
+<c:if test="${menu eq 'user'}">
+    <div class="ui secondary vertical pointing menu" style="width: 90%;">
+        <a class="item" href="${pageContext.request.contextPath}/member/info">
+            내 정보
+        </a>
+        <a class="item">
             주문 내역
+        </a>
+        <a class="item">
+            장바구니
         </a>
         <a class="item">
             배송조회
@@ -35,5 +51,7 @@
         </a>
     </div>
 </c:if>
+<script>
+</script>
 </body>
 </html>

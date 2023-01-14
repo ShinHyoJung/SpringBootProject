@@ -10,9 +10,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body onload="printList()">
-<a href="${pageContext.request.contextPath}">뒤로가기</a> <br>
+<input type="hidden" id="category" value="${category}">
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/sell/register'"><i class="plus icon"></i></button>
 <button class="ui button" onclick="location.reload()"><i class="undo icon"></i></button>
+<select class="ui dropdown" id="searchOption">
+    <option value="title">글 제목</option>
+    <option value="name">제품 이름</option>
+</select>
+<div class="ui icon input">
+    <input type="text" id="keyword" onkeyup="enter()" placeholder="Search...">
+    <i class="search icon"></i>
+</div>
 <div class="ui six cards" id="cards" style="margin-top: 20px;">
 </div>
 <div id="pagination" class="ui pagination menu" style="margin-top: 30px; margin-left: 500px;">
@@ -21,12 +29,27 @@
 </body>
 <script>
     function printList(currentPage) {
+        let category = document.getElementById('category').value;
+        let searchOption = document.getElementById('searchOption').value;
+        let keyword = document.getElementById('keyword').value;
+
         if(!currentPage) {
             currentPage = 1;
         }
 
+        if(!category) {
+            category = 'notebook';
+        }
+
+        if(!searchOption) {
+            searchOption = 'title';
+        }
+
         let postObj = {
-            'currentPage':currentPage
+            'currentPage':currentPage,
+            'category': category,
+            'searchOption':searchOption,
+            'keyword':keyword
         };
 
         $.ajax({
@@ -60,10 +83,8 @@
                     let imgSrc = '${pageContext.request.contextPath}/static/images/thumbnail/' + sellList.thumbnailImageName;
                     let detailSrc = '${pageContext.request.contextPath}/sell/detail/' + sellList.sellID;
                     listHTML += '<div class="card">';
-                    listHTML += '<div class="image">';
                     listHTML += '<input type="hidden" id="sellID" name="sellID" value="' + sellList.sellID + '"/>';
                     listHTML += '<img src="' + imgSrc +'"/>';
-                    listHTML += '</div>';
                     listHTML += '<div class="extra">';
                     listHTML += '<a class="header" href="' + detailSrc + '" name="' + sellList.title + '">' + sellList.title + '</a>';
                     listHTML += '<div class="description" style="margin-top: 20px;">';
@@ -76,6 +97,12 @@
                 $('#cards').html(listHTML);
             }
         })
+    }
+
+    function enter() {
+        if(window.event.keyCode == 13) {
+            printList();
+        }
     }
 </script>
 </html>

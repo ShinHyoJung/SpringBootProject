@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -36,19 +38,17 @@ public class SellDAO {
     }
 
     public void insert(Sell sell) {
-        String sql = "INSERT INTO sell (name, title, content, price, thumbnail_image_name, product_id," +
+        String sql = "INSERT INTO sell (name, title, content, price, category, thumbnail_image_name, " +
                 "create_date, update_date) VALUES (" +
                 "?, ?, ?, ?, ?, ?, ?, ?)";
-        Date now = new Date();
-        long nowDate = now.getDate();
-
         jdbcTemplate.update(sql, sell.getName(), sell.getTitle(), sell.getContent(),
-        sell.getPrice(), sell.getThumbnailImageName(), sell.getProductID(), new java.sql.Date(nowDate), new java.sql.Date(nowDate));
+        sell.getPrice(), sell.getCategory(), sell.getThumbnailImageName(), Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
     }
 
-    public List<Sell> selectAll(Paging paging) {
-        String sql = "SELECT * FROM sell LIMIT ?, ?";
-        List<Sell> sellList = jdbcTemplate.query(sql, new Object[]{paging.getSkip(), paging.getCountPerPage()}, new RowMapper<Sell>() {
+    public List<Sell> selectAll(Paging paging, String category, String searchOption, String keyword) {
+        String sql = "SELECT * FROM sell WHERE 1=1 AND category = ? AND " + searchOption + " LIKE concat('%', ?, '%') LIMIT ?, ?";
+        List<Sell> sellList = jdbcTemplate.query(sql, new Object[]{category, keyword,
+                paging.getSkip(), paging.getCountPerPage()}, new RowMapper<Sell>() {
             @Override
             public Sell mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Sell sell = new Sell();
@@ -75,7 +75,6 @@ public class SellDAO {
                 sell.setTitle(rs.getString("title"));
                 sell.setContent(rs.getString("content"));
                 sell.setPrice(rs.getString("price"));
-                sell.setProductID(rs.getInt("product_id"));
                 sell.setCreateDate(rs.getDate("create_date"));
                 sell.setUpdateDate(rs.getDate("update_date"));
                 return sell;
@@ -91,10 +90,10 @@ public class SellDAO {
 
     }
 
-    public int count() {
-        String sql = "SELECT COUNT(*) FROM sell";
+    public int count(String category, String searchOption, String keyword) {
+        String sql = "SELECT COUNT(*) FROM sell WHERE 1=1 AND category = ? AND " +  searchOption + " LIKE concat('%', ?, '%')";
 
-        int total = jdbcTemplate.queryForObject(sql, Integer.class);
+        int total = jdbcTemplate.queryForObject(sql, new Object[]{category, keyword}, Integer.class);
         return total;
     }
 
@@ -103,11 +102,8 @@ public class SellDAO {
                 "price = ?, update_date = ?" +
                 "WHERE 1=1 AND sell_id = ?";
 
-        Date now = new Date();
-        long nowDate = now.getDate();
-
         jdbcTemplate.update(sql, new Object[]{sell.getTitle(), sell.getContent(),
-                sell.getPrice(), new java.sql.Date(nowDate)});
+                sell.getPrice(), Timestamp.valueOf(LocalDateTime.now())});
     }
 
     public int selectMaxSellID() {

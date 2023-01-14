@@ -13,6 +13,8 @@ import lombok.Data;
  */
 @Data
 public class PostPrintList {
-    private String keyword;
     private int currentPage;
+    private String category;
+    private String searchOption;
+    private String keyword;
 }

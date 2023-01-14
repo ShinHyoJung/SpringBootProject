@@ -10,13 +10,13 @@ public interface SellService {
 
     void insert(Sell sell);
 
-    List<Sell> selectAll(Paging paging);
+    List<Sell> selectAll(Paging paging, String category, String searchOption, String keyword);
 
     Sell select(int sellID);
 
     void delete(int sellID);
 
-    int count();
+    int count(String category, String searchOption, String keyword);
 
     void update(Sell sell);
 

@@ -21,6 +21,14 @@
         <input type="text" id="productCode" name="productCode" placeholder="제품 코드">
     </div>
     <div class="field">
+        <select class="ui dropdown" name="category">
+            <option value="">카테고리</option>
+            <option value="notebook">노트북</option>
+            <option value="monitor">모니터</option>
+            <option value="etc">주변기기</option>
+        </select>
+    </div>
+    <div class="field">
         <input type="text" id="price" name="price" placeholder="제품 가격">
     </div>
     <div class="field">

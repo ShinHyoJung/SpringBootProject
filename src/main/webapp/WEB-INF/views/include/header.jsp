@@ -20,7 +20,7 @@
     <c:when test="${not empty sessionScope.loggedIn}">
         <a href="${pageContext.request.contextPath}/member/logout" class="item">로그아웃</a>
         <a href="${pageContext.request.contextPath}/member/info" class="item" id="info">내정보</a>
-        <a href="${pageContext.request.contextPath}/product/manage" class="item" id="product">재고 관리</a>
+        <a href="${pageContext.request.contextPath}/manage/product/" class="item" id="manage">관리자 메뉴</a>
     </c:when>
     <c:otherwise>
        <!-- <a href="${pageContext.request.contextPath}/board/" class="item">게시판</a>-->

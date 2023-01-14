@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: ShinHyoJung
@@ -40,11 +41,11 @@
     </div>
     <div class="field">
         <label> 생성일시 </label>
-            ${getInfoResponse.createDate}
+        <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${getInfoResponse.createDate}"/>
     </div>
     <div class="field">
         <label> 변경일시 </label>
-            ${getInfoResponse.updateDate}
+        <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${getInfoResponse.updateDate}"/>
     </div>
         <input type="hidden" id="idx" name="idx" value="${getInfoResponse.idx}">
         <button class="ui button" type="submit"><i class="save icon"></i></button>
