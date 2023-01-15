@@ -63,6 +63,7 @@ public class MemberDAO {
             @Override
             public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Member member = new Member();
+                member.setIdx(rs.getInt("idx"));
                 member.setMemberID(rs.getString("member_id"));
                 member.setPassword(rs.getString("password"));
                 member.setName(rs.getString("name"));

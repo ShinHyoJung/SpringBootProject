@@ -10,7 +10,7 @@
 <body onload="printList()">
 <p class="subtitle" style="margin-top: 10px;">재고관리</p>
 <br>
-<button class="ui button" onclick="location.href='${pageContext.request.contextPath}/product/add'"><i class="plus icon"></i></button>
+<button class="ui button" onclick="location.href='${pageContext.request.contextPath}/manage/product/add'"><i class="plus icon"></i></button>
 <button class="ui button" onclick="location.reload()"><i class="undo icon"></i></button>
 <button class="ui button" onclick="remove()"><i class="trash alternate icon"></i></button>
 <button class="ui button" onclick="save()"><i class="save icon"></i></button>
@@ -130,7 +130,7 @@
                 };
 
                 $.ajax({
-                    url:'${pageContext.request.contextPath}/product/delete',
+                    url:'${pageContext.request.contextPath}/manage/product/delete',
                     method:'post',
                     dataType: 'json',
                     data: JSON.stringify(postObj),

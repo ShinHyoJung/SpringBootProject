@@ -11,15 +11,11 @@
 <body>
 <c:if test="${menu eq 'sell'}">
     <div class="ui secondary vertical pointing menu" style="width: 90%;">
-        <a class="item" href="${pageContext.request.contextPath}/sell/?category=notebook">
-            노트북
+        <c:forEach items="${categoryList}" var="categoryList">
+        <a class="item" href="${pageContext.request.contextPath}/sell/?category=${categoryList.code}">
+            ${categoryList.name}
         </a>
-        <a class="item" href="${pageContext.request.contextPath}/sell/?category=monitor">
-            모니터
-        </a>
-        <a class="item" href="${pageContext.request.contextPath}/sell/?category=etc">
-           주변기기
-        </a>
+        </c:forEach>
     </div>
 </c:if>
 <c:if test="${menu eq 'manage'}">
@@ -37,7 +33,7 @@
         <a class="item" href="${pageContext.request.contextPath}/member/info">
             내 정보
         </a>
-        <a class="item">
+        <a class="item" href="${pageContext.request.contextPath}/purchase/ordered">
             주문 내역
         </a>
         <a class="item">

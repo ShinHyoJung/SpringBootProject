@@ -1,6 +1,7 @@
 package com.project.shop.feature.sell.controller;
 
 import com.project.shop.feature.image.entity.SellImage;
+import com.project.shop.feature.manage.category.service.CategoryService;
 import com.project.shop.feature.manage.product.entity.Product;
 import com.project.shop.feature.manage.product.service.ProductService;
 import com.project.shop.feature.sell.dto.*;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import com.project.shop.feature.manage.category.entity.Category;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -28,9 +30,13 @@ public class SellController {
     private final SellService sellService;
     private final ProductService productService;
     private final SellImageService sellImageService;
+    private final CategoryService categoryService;
 
     @GetMapping("/")
     public String getSell(Model model, @ModelAttribute GetDefault getDefault) {
+        List<Category> categoryList = categoryService.selectAll();
+
+        model.addAttribute("categoryList", categoryList);
         model.addAttribute("category", getDefault.getCategory());
         model.addAttribute("menu", "sell");
         model.addAttribute("main", VIEW_PREFIX + "default");
