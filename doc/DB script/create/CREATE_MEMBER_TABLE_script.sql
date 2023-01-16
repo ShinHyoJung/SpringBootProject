@@ -11,3 +11,4 @@ CREATE TABLE member (
     update_date datetime,
     primary key (idx)
 )
+;

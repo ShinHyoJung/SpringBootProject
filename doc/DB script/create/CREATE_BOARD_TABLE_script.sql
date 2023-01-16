@@ -9,3 +9,4 @@ CREATE TABLE board (
     idx int,
     primary key (board_id)
 )
+;

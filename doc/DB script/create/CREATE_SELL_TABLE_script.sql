@@ -6,8 +6,11 @@ CREATE TABLE sell (
     price varchar(500),
     category varchar(300),
     thumbnail_image_name varchar(300),
+    title_image_name varchar(300),
+    detail_image_name varchar(300),
     create_date datetime,
     update_date datetime,
     product_id int
     primary key (sell_id)
 )
+;
