@@ -20,7 +20,7 @@ ${getDetailResponse.sell.title} <br>
 <div class="ui items">
     <div class="item">
         <a class="ui small sellImage">
-            <img src="${pageContext.request.contextPath}/static/images/title/${titleImageName}"/>
+            <img src="${pageContext.request.contextPath}/static/images/cut/${getDetailResponse.sell.titleImageName}"/>
         </a>
         <div class="content">
             <a class="header">${getDetailResponse.sell.name}</a>
@@ -40,7 +40,7 @@ ${getDetailResponse.sell.title} <br>
 </form>
 <div class="ui divider">
 <p class="subtitle"> 상세 정보 </p>
-<img src="${pageContext.request.contextPath}/static/images/detail/${detailImageName}"/> <br>
+<img src="${pageContext.request.contextPath}/static/images/resize/${getDetailResponse.sell.detailImageName}"/> <br>
 ${getDetailResponse.sell.content} <br>
 작성날짜: <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${getDetailResponse.sell.createDate}"/> <br>
 수정날짜: <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${getDetailResponse.sell.updateDate}"/> <br>

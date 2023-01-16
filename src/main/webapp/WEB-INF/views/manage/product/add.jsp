@@ -10,7 +10,7 @@
 <html>
 <body>
 <p class="subtitle">제품 등록</p>
-<form class="ui form" method="post" action="${pageContext.request.contextPath}/product/add" enctype="multipart/form-data" style="width: 50%;">
+<form class="ui form" method="post" action="${pageContext.request.contextPath}/manage/product/add" enctype="multipart/form-data" style="width: 50%;">
   <div class="field">
     <input type="text" id="name" name="name" placeholder="제품 이름">
   </div>
@@ -28,10 +28,10 @@
   <div class="field">
     <textarea id="info" name="info" placeholder="상품 정보"></textarea>
   </div>
-    <input type="file" id="sellImage" name="sellImage" multiple="multiple">
+    <input type="file" id="productImage" name="productImage" multiple="multiple">
   <button class="ui button" type="submit"><i class="save icon"></i></button>
 </form>
 
-<button class="ui button" onclick="location.href='${pageContext.request.contextPath}/product/manage'">뒤로가기</button>
+<button class="ui button" onclick="location.href='${pageContext.request.contextPath}/manage/product/'">뒤로가기</button>
 </body>
 </html>

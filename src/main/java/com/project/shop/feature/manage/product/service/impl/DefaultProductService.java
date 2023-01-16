@@ -68,4 +68,9 @@ public class DefaultProductService implements ProductService {
     public void update(Product product) {
         productDAO.update(product);
     }
+
+    @Override
+    public int selectMaxProductID() {
+        return productDAO.selectMaxProductID();
+    }
 }

@@ -76,7 +76,7 @@
                 }
 
                 $.each(pageResponse.sellList, function(i, sellList) {
-                    let imgSrc = '${pageContext.request.contextPath}/static/images/thumbnail/' + sellList.thumbnailImageName;
+                    let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + sellList.thumbnailImageName;
                     let detailSrc = '${pageContext.request.contextPath}/sell/detail/' + sellList.sellID;
                     listHTML += '<div class="card">';
                     listHTML += '<input type="hidden" id="sellID" name="sellID" value="' + sellList.sellID + '"/>';

@@ -39,10 +39,11 @@ public class SellDAO {
 
     public void insert(Sell sell) {
         String sql = "INSERT INTO sell (name, title, content, price, category, thumbnail_image_name, " +
-                "create_date, update_date) VALUES (" +
-                "?, ?, ?, ?, ?, ?, ?, ?)";
+                "title_image_name, detail_image_name, create_date, update_date) VALUES (" +
+                "?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, sell.getName(), sell.getTitle(), sell.getContent(),
-        sell.getPrice(), sell.getCategory(), sell.getThumbnailImageName(), Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
+        sell.getPrice(), sell.getCategory(), sell.getThumbnailImageName(), sell.getTitleImageName(), sell.getDetailImageName(),
+                Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
     }
 
     public List<Sell> selectAll(Paging paging, String category, String searchOption, String keyword) {
@@ -59,7 +60,6 @@ public class SellDAO {
                 return sell;
             }
         });
-
         return sellList;
     }
 
@@ -75,6 +75,8 @@ public class SellDAO {
                 sell.setTitle(rs.getString("title"));
                 sell.setContent(rs.getString("content"));
                 sell.setPrice(rs.getString("price"));
+                sell.setTitleImageName(rs.getString("title_image_name"));
+                sell.setDetailImageName(rs.getString("detail_image_name"));
                 sell.setCreateDate(rs.getDate("create_date"));
                 sell.setUpdateDate(rs.getDate("update_date"));
                 return sell;

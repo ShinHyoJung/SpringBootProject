@@ -1,7 +1,8 @@
 package com.project.shop.feature.manage.product.controller;
 
-import com.project.shop.feature.image.entity.SellImage;
-import com.project.shop.feature.image.service.SellImageService;
+import com.project.shop.feature.image.productimage.entity.ProductImage;
+import com.project.shop.feature.image.productimage.service.ProductImageService;
+import com.project.shop.feature.image.sellimage.service.SellImageService;
 import com.project.shop.feature.manage.category.entity.Category;
 import com.project.shop.feature.manage.category.service.CategoryService;
 import com.project.shop.feature.manage.product.dto.*;
@@ -9,6 +10,7 @@ import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.manage.product.entity.Product;
 import com.project.shop.feature.manage.product.service.ProductService;
 import com.project.shop.feature.util.FileUtils;
+import com.project.shop.feature.util.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +37,7 @@ public class ProductController {
 
     private final static String VIEW_PREFIX = "manage/product/";
     private final ProductService productService;
-    private final SellImageService sellImageService;
+    private final ProductImageService productImageService;
     private final CategoryService categoryService;
 
     @GetMapping("/")
@@ -65,14 +67,18 @@ public class ProductController {
 
     @PostMapping("/add")
     public String postAddProduct(PostAddProduct postAddProduct, MultipartHttpServletRequest multipartHttpServletRequest) throws SQLException, IOException, InterruptedException {
-        List<SellImage> sellImageList = FileUtils.parseImage(multipartHttpServletRequest);
+        List<ProductImage> productImageList = FileUtils.parseProductImage(multipartHttpServletRequest);
         String productCode = productService.makeProductCode();
 
-        if(sellImageList != null) {
-            for(SellImage sellImage : sellImageList) {
-                sellImageService.makeThumbnailImage(sellImage.getStoredName());
-                productService.insert(postAddProduct.toEntity(productCode, "thumbnail." + sellImage.getStoredName()));
+        if(productImageList != null) {
+            ImageUtils.cutImage(productImageList.get(0).getStoredName(), 100, 100);
+            productService.insert(postAddProduct.toEntity(productCode, productImageList.get(0).getStoredName(), productImageList.get(1).getStoredName()));
+            int productID = productService.selectMaxProductID();
+
+            for(ProductImage productImage : productImageList) {
+                productImage.setProductID(productID);
             }
+            productImageService.insert(productImageList);
         }
         return "redirect:/manage/product/";
     }
@@ -88,7 +94,9 @@ public class ProductController {
     @GetMapping("/detail/{productID}")
     public String getDetailProduct(Model model, @PathVariable int productID) throws SQLException {
         Product product = productService.select(productID);
+        List<ProductImage> productImageList = productImageService.select(productID);
 
+        model.addAttribute("productImageList", productImageList);
         model.addAttribute("getDetailResponse", new GetDetailResponse(product));
         model.addAttribute("main", VIEW_PREFIX + "detail");
         return "view";

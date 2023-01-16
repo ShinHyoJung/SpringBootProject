@@ -19,7 +19,7 @@ public class PostAddProduct {
     private String category;
     private String info;
 
-    public Product toEntity(String code, String thumbnailImageName) {
+    public Product toEntity(String code, String thumbnailImageName, String detailImageName) {
         Product product = new Product();
         product.setCode(code);
         product.setName(this.name);
@@ -27,6 +27,7 @@ public class PostAddProduct {
         product.setInfo(this.info);
         product.setCategory(this.category);
         product.setThumbnailImageName(thumbnailImageName);
+        product.setDetailImageName(detailImageName);
         return product;
     }
 }

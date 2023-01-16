@@ -30,4 +30,6 @@ public interface ProductService {
     void delete(int productID);
 
     void update(Product product);
+
+    int selectMaxProductID();
 }

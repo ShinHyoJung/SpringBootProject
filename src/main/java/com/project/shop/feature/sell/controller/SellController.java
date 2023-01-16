@@ -1,15 +1,15 @@
 package com.project.shop.feature.sell.controller;
 
-import com.project.shop.feature.image.entity.SellImage;
+import com.project.shop.feature.image.sellimage.entity.SellImage;
 import com.project.shop.feature.manage.category.service.CategoryService;
-import com.project.shop.feature.manage.product.entity.Product;
 import com.project.shop.feature.manage.product.service.ProductService;
 import com.project.shop.feature.sell.dto.*;
-import com.project.shop.feature.image.service.SellImageService;
+import com.project.shop.feature.image.sellimage.service.SellImageService;
 import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.sell.entity.Sell;
 import com.project.shop.feature.sell.service.SellService;
 import com.project.shop.feature.util.FileUtils;
+import com.project.shop.feature.util.ImageUtils;
 import com.project.shop.feature.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -72,22 +72,21 @@ public class SellController {
 
     @PostMapping("/register")
     public String postRegister(PostRegister postRegister, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException, SQLException, InterruptedException {
-        List<SellImage> sellImageList = FileUtils.parseImage(multipartHttpServletRequest);
-        sellService.insert(postRegister.toEntity("thumbnail." + sellImageList.get(0).getStoredName()));
+        List<SellImage> sellImageList = FileUtils.parseSellImage(multipartHttpServletRequest);
+        sellService.insert(postRegister.toEntity(sellImageList.get(0).getStoredName(),
+                sellImageList.get(1).getStoredName(), sellImageList.get(2).getStoredName()));
         int sellID = sellService.selectMaxSellID();
 
         if(sellImageList != null) {
-            for(int i = 0; i < sellImageList.size(); i++) {
-                sellImageService.makeDetailImage(sellImageList.get(i).getStoredName());
-                sellImageService.makeThumbnailImage(sellImageList.get(i).getStoredName());
-                sellImageService.makeTitleImage(sellImageList.get(i).getStoredName());
-                sellImageList.get(i).setSellID(sellID);
-                sellImageList.get(i).setThumbnailImageName("thumbnail." + sellImageList.get(i).getStoredName());
-                sellImageList.get(i).setTitleImageName("title." + sellImageList.get(i).getStoredName());
-                sellImageList.get(i).setDetailImageName(sellImageList.get(i).getStoredName());
-                sellImageList.get(i).setType(i);
-                sellImageService.insert(sellImageList.get(i));
+            for(SellImage sellImage : sellImageList) {
+                sellImage.setSellID(sellID);
             }
+
+            ImageUtils.cutImage(sellImageList.get(0).getStoredName(), 150, 100);
+            ImageUtils.cutImage(sellImageList.get(1).getStoredName(), 300, 300);
+            ImageUtils.resizeImage(sellImageList.get(2).getStoredName(), 500, 500);
+
+            sellImageService.insert(sellImageList);
         }
         return "redirect:/sell/";
     }
@@ -95,10 +94,7 @@ public class SellController {
     @GetMapping("/detail/{sellID}")
     public String getDetail(@PathVariable int sellID, Model model) throws SQLException {
         Sell sell = sellService.select(sellID);
-        SellImage titleSellImage = sellImageService.select(sellID, 1);
-        SellImage detailSellImage = sellImageService.select(sellID, 2);
-        model.addAttribute("orgImageName", titleSellImage.getStoredName());
-        model.addAttribute("detailImageName", detailSellImage.getDetailImageName());
+
         model.addAttribute("getDetailResponse", new GetDetailResponse(sell));
         model.addAttribute("main", VIEW_PREFIX + "detail");
         return "view";

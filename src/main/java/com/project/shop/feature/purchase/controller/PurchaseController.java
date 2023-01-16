@@ -1,7 +1,7 @@
 package com.project.shop.feature.purchase.controller;
 
-import com.project.shop.feature.image.entity.SellImage;
-import com.project.shop.feature.image.service.SellImageService;
+import com.project.shop.feature.image.sellimage.entity.SellImage;
+import com.project.shop.feature.image.sellimage.service.SellImageService;
 import com.project.shop.feature.member.service.MemberService;
 import com.project.shop.feature.purchase.dto.PostDoPay;
 import com.project.shop.feature.purchase.dto.PostPayment;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.project.shop.feature.member.entity.Member;
@@ -38,7 +37,7 @@ public class PurchaseController {
         int idx = (int) session.getAttribute("idx");
         Member member = memberService.select(idx);
         Sell sell = sellService.select(postPayment.getSellID());
-        SellImage sellImage = sellImageService.select(postPayment.getSellID(), 0);
+        SellImage sellImage = sellImageService.select(postPayment.getSellID());
 
         model.addAttribute("quantity", postPayment.getQuantity());
         model.addAttribute("sell", sell);

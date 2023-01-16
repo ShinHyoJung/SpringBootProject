@@ -24,6 +24,7 @@ public class Product {
     private String info;
     private String category;
     private String thumbnailImageName;
+    private String detailImageName;
     private Date registerDate;
     private Date updateDate;
 }

@@ -4,8 +4,6 @@ import com.project.shop.feature.sell.entity.Sell;
 import lombok.Data;
 import lombok.NonNull;
 
-import java.util.Date;
-
 @Data
 public class GetDetailResponse {
     @NonNull

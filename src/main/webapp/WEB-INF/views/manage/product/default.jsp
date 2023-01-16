@@ -100,7 +100,7 @@
                     listHTML += '</tr>';
                 } else {
                     $.each(pageResponse.productList, function(i, productList) {
-                        let imgSrc = '${pageContext.request.contextPath}/static/images/thumbnail/' + productList.thumbnailImageName;
+                        let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + productList.thumbnailImageName;
                         let detailSrc = '${pageContext.request.contextPath}/manage/product/detail/' + productList.productID;
                         listHTML += '<tr>';
                         listHTML += '<td><input type="checkbox" name="productID" value="' + productList.productID + '"></td>';

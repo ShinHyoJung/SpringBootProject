@@ -30,11 +30,11 @@ public class ProductDAO {
 
     public void insert(Product product) throws SQLException {
         String sql = "INSERT INTO product(code, name, full_quantity, sold_quantity, left_quantity, info," +
-                "category, thumbnail_image_name, register_date, update_date) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "category, thumbnail_image_name, detail_image_name, register_date, update_date) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, product.getCode(), product.getName(), product.getFullQuantity(), 0, 0,
-                product.getInfo(), product.getCategory(), product.getThumbnailImageName(),
+                product.getInfo(), product.getCategory(), product.getThumbnailImageName(), product.getDetailImageName(),
                 Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
     }
 
@@ -79,6 +79,7 @@ public class ProductDAO {
                 product.setSoldQuantity(rs.getInt("sold_quantity"));
                 product.setLeftQuantity(rs.getInt("left_quantity"));
                 product.setInfo(rs.getString("info"));
+                product.setDetailImageName(rs.getString("detail_image_name"));
                 product.setRegisterDate(rs.getDate("register_date"));
                 product.setUpdateDate(rs.getDate("update_date"));
                 return product;
@@ -99,5 +100,12 @@ public class ProductDAO {
 
         jdbcTemplate.update(sql, new Object[]{product.getName(), product.getInfo(), product.getFullQuantity(),
                 Timestamp.valueOf(LocalDateTime.now()), product.getProductID()});
+    }
+
+    public int selectMaxProductID() {
+        String sql = "SELECT MAX(product_id)" +
+                "FROM product";
+        int maxProductID = jdbcTemplate.queryForObject(sql, Integer.class);
+        return maxProductID;
     }
 }
