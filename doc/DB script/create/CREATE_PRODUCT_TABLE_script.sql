@@ -6,6 +6,7 @@ CREATE TABLE product (
      sold_quantity int,
      left_quantity int,
      info longtext,
+     category varchar(300),
      thumbnail_image_name varchar(300),
      register_date datetime,
      update_date datetime,

@@ -22,7 +22,7 @@
     <input type="text" id="keyword" onkeyup="printList();" placeholder="Search...">
     <i class="search icon"></i>
 </div>
-<table id="table" class="ui fixed single line celled table">
+<table id="table" class="ui fixed single line celled table" style="width: 90%;">
 </table>
 <div id="pagination" class="ui pagination menu" style="margin-left: 500px;">
 </div>

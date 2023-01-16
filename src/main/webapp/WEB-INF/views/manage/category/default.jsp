@@ -11,7 +11,7 @@
     <p class="subtitle">카테고리 관리</p>
     <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/manage/category/add'"><i class="plus icon"></i></button>
     <button class="ui button" onclick="remove()"><i class="trash alternate icon"></i></button>
-    <table id="table" class="ui fixed single line celled table">
+    <table id="table" class="ui fixed single line celled table" style="width:50%;">
     </table>
 <script>
     function printList() {

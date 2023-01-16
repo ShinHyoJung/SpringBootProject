@@ -2,6 +2,8 @@ package com.project.shop.feature.manage.product.controller;
 
 import com.project.shop.feature.image.entity.SellImage;
 import com.project.shop.feature.image.service.SellImageService;
+import com.project.shop.feature.manage.category.entity.Category;
+import com.project.shop.feature.manage.category.service.CategoryService;
 import com.project.shop.feature.manage.product.dto.*;
 import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.manage.product.entity.Product;
@@ -34,6 +36,7 @@ public class ProductController {
     private final static String VIEW_PREFIX = "manage/product/";
     private final ProductService productService;
     private final SellImageService sellImageService;
+    private final CategoryService categoryService;
 
     @GetMapping("/")
     public String manage(Model model) {
@@ -54,6 +57,8 @@ public class ProductController {
 
     @GetMapping("/add")
     public String getAddProduct(Model model) {
+        List<Category> categoryList = categoryService.selectAll();
+        model.addAttribute("categoryList", categoryList);
         model.addAttribute("main", VIEW_PREFIX + "add");
         return "view";
     }

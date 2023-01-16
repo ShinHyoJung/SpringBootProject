@@ -11,6 +11,7 @@ public class SellImage {
     private String storedName;
     private String size;
     private String thumbnailImageName;
+    private String titleImageName;
     private String detailImageName;
     private int productID;
     private int sellID;

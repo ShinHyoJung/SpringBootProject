@@ -60,6 +60,7 @@ public class PurchaseController {
         int idx = (int)session.getAttribute("idx");
         List<Purchase> purchaseList = purchaseService.select(idx);
 
+        model.addAttribute("menu", "user");
         model.addAttribute("purchaseList", purchaseList);
         model.addAttribute("main", VIEW_PREFIX + "ordered");
         return "view";

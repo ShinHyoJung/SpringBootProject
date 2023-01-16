@@ -20,7 +20,7 @@ ${getDetailResponse.sell.title} <br>
 <div class="ui items">
     <div class="item">
         <a class="ui small sellImage">
-            <img src="${pageContext.request.contextPath}/static/images/${orgImageName}"/>
+            <img src="${pageContext.request.contextPath}/static/images/title/${titleImageName}"/>
         </a>
         <div class="content">
             <a class="header">${getDetailResponse.sell.name}</a>

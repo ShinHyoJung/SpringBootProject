@@ -13,5 +13,7 @@ public interface SellImageService {
 
     void makeThumbnailImage(String storedName) throws IOException, InterruptedException;
 
-    String makeDetailImage(String storedName) throws IOException;
+    void makeTitleImage(String storedName) throws IOException, InterruptedException;
+
+    void makeDetailImage(String storedName) throws IOException;
 }

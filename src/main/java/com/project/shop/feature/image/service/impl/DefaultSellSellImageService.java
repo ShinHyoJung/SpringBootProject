@@ -20,6 +20,7 @@ import java.sql.SQLException;
 @Service("ImageFileService")
 @RequiredArgsConstructor
 public class DefaultSellSellImageService implements SellImageService {
+    private static final String ORG_IMAGE_PATH = "src/main/webapp/static/images/";
 
     private final SellImageDAO sellImageDAO;
     @Override
@@ -34,38 +35,54 @@ public class DefaultSellSellImageService implements SellImageService {
 
     // 썸네일 이미지 만들기
     public void makeThumbnailImage(String storedName) throws IOException, InterruptedException {
-        int thumbnail_width = 150;
-        int thumbnail_height = 100;
+        int thumbnailWidth = 150;
+        int thumbnailHeight = 100;
         String thumbnailImageName = "thumbnail." + storedName;
-        File imageFile = new File("src/main/webapp/static/images/" + storedName);
+        File imageFile = new File(ORG_IMAGE_PATH + storedName);
         File thumbnailImageFile = new File("src/main/webapp/static/images/thumbnail/" + thumbnailImageName);
 
-        BufferedImage buffer_original_image = ImageIO.read(imageFile);
-        java.awt.Image imgTarget = buffer_original_image.getScaledInstance(thumbnail_width, thumbnail_height, java.awt.Image.SCALE_SMOOTH);
-        int pixels[] = new int[thumbnail_width * thumbnail_height];
-        PixelGrabber pg = new PixelGrabber(imgTarget, 0, 0, thumbnail_width, thumbnail_height, pixels, 0, thumbnail_width);
+        BufferedImage bufferedOrgImage = ImageIO.read(imageFile);
+        java.awt.Image imgTarget = bufferedOrgImage.getScaledInstance(thumbnailWidth, thumbnailHeight, java.awt.Image.SCALE_SMOOTH);
+        int pixels[] = new int[thumbnailWidth * thumbnailHeight];
+        PixelGrabber pg = new PixelGrabber(imgTarget, 0, 0, thumbnailWidth, thumbnailHeight, pixels, 0, thumbnailWidth);
         pg.grabPixels();
-        BufferedImage buffer_thumbnail_image = new BufferedImage(thumbnail_width, thumbnail_height, BufferedImage.TYPE_INT_RGB);
-        buffer_thumbnail_image.setRGB(0, 0, thumbnail_width, thumbnail_height, pixels, 0, thumbnail_width);
-        Graphics2D graphics2D = buffer_thumbnail_image.createGraphics();
-        graphics2D.drawImage(buffer_original_image, 0, 0, thumbnail_width, thumbnail_height, null);
-        ImageIO.write(buffer_thumbnail_image, "png", thumbnailImageFile);
+        BufferedImage bufferThumbnailImage = new BufferedImage(thumbnailWidth, thumbnailHeight, BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D graphics2D = bufferedOrgImage.createGraphics();
+        graphics2D.drawImage(bufferedOrgImage, 0, 0, thumbnailWidth, thumbnailHeight, null);
+        ImageIO.write(bufferThumbnailImage, "png", thumbnailImageFile);
+    }
+
+    //판매글 제목 이미지 만들기
+    public void makeTitleImage(String storedName) throws IOException, InterruptedException {
+        int titleWidth = 300;
+        int titleHeight = 300;
+        String titleImageName = "title." + storedName;
+
+        File imageFile = new File(ORG_IMAGE_PATH, storedName);
+        File titleImageFile = new File("src/main/webapp/static/images/title/" + titleImageName);
+
+        BufferedImage bufferedOrgImage = ImageIO.read(imageFile);
+        java.awt.Image imgTarget = bufferedOrgImage.getScaledInstance(titleWidth, titleHeight, java.awt.Image.SCALE_SMOOTH);
+        int pixels[] = new int[titleWidth * titleHeight];
+        PixelGrabber pg = new PixelGrabber(imgTarget, 0, 0, titleWidth, titleHeight, pixels, 0, titleWidth);
+        pg.grabPixels();
+        BufferedImage bufferedTitleImage = new BufferedImage(titleWidth, titleHeight, BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D graphics2D = bufferedOrgImage.createGraphics();
+        graphics2D.drawImage(bufferedOrgImage, 0, 0, titleWidth, titleHeight, null);
+        ImageIO.write(bufferedTitleImage, "png", titleImageFile);
     }
 
     // 상세이미지 만들기
-    public String makeDetailImage(String storedName) throws IOException {
-        String storedImagePath = "src/main/webapp/static/images/";
-        String detailImagePath = "src/main/webapp/static/images/detail/";
+    public void makeDetailImage(String storedName) throws IOException {
+        String detailImageName = "detail." + storedName;
 
-        File imageFile = new File(storedImagePath, storedName);
-        File detailImageFile = new File(detailImagePath);
+        File imageFile = new File(ORG_IMAGE_PATH, storedName);
+        File detailImageFile = new File("src/main/webapp/static/images/detail/" + detailImageName);
 
         Thumbnails.of(imageFile)
-                .size(400, 400)
+                .size(500, 500)
                 .toFiles(detailImageFile, Rename.NO_CHANGE);
-
-        detailImagePath += storedName;
-
-        return detailImagePath;
     }
 }

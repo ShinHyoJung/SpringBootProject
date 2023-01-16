@@ -4,6 +4,7 @@ CREATE TABLE sell (
     title varchar(300),
     content longtext,
     price varchar(500),
+    category varchar(300),
     thumbnail_image_name varchar(300),
     create_date datetime,
     update_date datetime,

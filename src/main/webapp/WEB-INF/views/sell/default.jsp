@@ -37,10 +37,6 @@
             currentPage = 1;
         }
 
-        if(!category) {
-            category = 'notebook';
-        }
-
         if(!searchOption) {
             searchOption = 'title';
         }

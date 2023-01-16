@@ -19,12 +19,12 @@ public class SellImageDAO {
 
     public void insert(SellImage sellImage) throws SQLException {
         String sql = "INSERT INTO sell_image(org_name, stored_name, size," +
-                "path, thumbnail_image_name, detail_image_name, " +
+                "path, thumbnail_image_name, title_image_name, detail_image_name, " +
                 "product_id, sell_id, type, create_date, delete_yn) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, sellImage.getOrgName(), sellImage.getStoredName(), sellImage.getSize(),
-                sellImage.getPath(), sellImage.getThumbnailImageName(),
+                sellImage.getPath(), sellImage.getThumbnailImageName(), sellImage.getTitleImageName(),
                 sellImage.getDetailImageName(), sellImage.getProductID(),
                 sellImage.getSellID(), sellImage.getType(), Timestamp.valueOf(LocalDateTime.now()), "N");
     }
@@ -40,6 +40,7 @@ public class SellImageDAO {
                     sellImage.setStoredName(rs.getString("stored_name"));
                     sellImage.setSize(rs.getString("size"));
                     sellImage.setThumbnailImageName(rs.getString("thumbnail_image_name"));
+                    sellImage.setTitleImageName(rs.getString("title_image_name"));
                     sellImage.setDetailImageName(rs.getString("detail_image_name"));
                     sellImage.setProductID(rs.getInt("product_id"));
                     sellImage.setSellID(rs.getInt("sell_id"));

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: ShinHyoJung
@@ -19,13 +20,13 @@
   <div class="field">
     <select class="ui dropdown" name="category">
       <option value="">카테고리</option>
-      <option value="notebook">노트북</option>
-      <option value="monitor">모니터</option>
-      <option value="etc">주변기기</option>
+      <c:forEach items="${categoryList}" var="categoryList">
+        <option value="${categoryList.code}">${categoryList.name}</option>
+      </c:forEach>
     </select>
   </div>
   <div class="field">
-    <input type="text" id="info" name="info" placeholder="상품 정보">
+    <textarea id="info" name="info" placeholder="상품 정보"></textarea>
   </div>
     <input type="file" id="sellImage" name="sellImage" multiple="multiple">
   <button class="ui button" type="submit"><i class="save icon"></i></button>

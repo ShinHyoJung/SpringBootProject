@@ -10,6 +10,7 @@ import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.sell.entity.Sell;
 import com.project.shop.feature.sell.service.SellService;
 import com.project.shop.feature.util.FileUtils;
+import com.project.shop.feature.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,6 +47,10 @@ public class SellController {
     @ResponseBody
     @PostMapping("/list")
     public PostPrintListResponse postSellList(@RequestBody PostPrintList postPrintList) {
+        if(StringUtils.isNullOrEmpty(postPrintList.getCategory())) {
+            List<Category> categoryList = categoryService.selectAll();
+            postPrintList.setCategory(categoryList.get(0).getCode());
+        }
         int total = sellService.count(postPrintList.getCategory(), postPrintList.getSearchOption(), postPrintList.getKeyword());
         Paging paging = new Paging(postPrintList.getCurrentPage(), 12, total);
         List<Sell> sellList = sellService.selectAll(paging, postPrintList.getCategory(), postPrintList.getSearchOption(), postPrintList.getKeyword());
@@ -55,10 +60,12 @@ public class SellController {
 
     @GetMapping("/register")
     public String getRegister(Model model) throws SQLException {
-        int total = productService.count("", "");
-        Paging paging = new Paging(1, total, total);
-        List<Product> productList = productService.selectAll(paging, "", "");
-        model.addAttribute("productList", productList);
+       // int total = productService.count("title", "");
+       // Paging paging = new Paging(1, total, total);
+        //List<Product> productList = productService.selectAll(paging, "", "");
+        //model.addAttribute("productList", productList);
+        List<Category> categoryList = categoryService.selectAll();
+        model.addAttribute("categoryList", categoryList);
         model.addAttribute("main", VIEW_PREFIX + "register");
         return "view";
     }
@@ -73,8 +80,10 @@ public class SellController {
             for(int i = 0; i < sellImageList.size(); i++) {
                 sellImageService.makeDetailImage(sellImageList.get(i).getStoredName());
                 sellImageService.makeThumbnailImage(sellImageList.get(i).getStoredName());
+                sellImageService.makeTitleImage(sellImageList.get(i).getStoredName());
                 sellImageList.get(i).setSellID(sellID);
                 sellImageList.get(i).setThumbnailImageName("thumbnail." + sellImageList.get(i).getStoredName());
+                sellImageList.get(i).setTitleImageName("title." + sellImageList.get(i).getStoredName());
                 sellImageList.get(i).setDetailImageName(sellImageList.get(i).getStoredName());
                 sellImageList.get(i).setType(i);
                 sellImageService.insert(sellImageList.get(i));
@@ -86,9 +95,9 @@ public class SellController {
     @GetMapping("/detail/{sellID}")
     public String getDetail(@PathVariable int sellID, Model model) throws SQLException {
         Sell sell = sellService.select(sellID);
-        SellImage orgSellImage = sellImageService.select(sellID, 0);
-        SellImage detailSellImage = sellImageService.select(sellID, 1);
-        model.addAttribute("orgImageName", orgSellImage.getStoredName());
+        SellImage titleSellImage = sellImageService.select(sellID, 1);
+        SellImage detailSellImage = sellImageService.select(sellID, 2);
+        model.addAttribute("orgImageName", titleSellImage.getStoredName());
         model.addAttribute("detailImageName", detailSellImage.getDetailImageName());
         model.addAttribute("getDetailResponse", new GetDetailResponse(sell));
         model.addAttribute("main", VIEW_PREFIX + "detail");
