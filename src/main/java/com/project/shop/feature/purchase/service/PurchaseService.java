@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface PurchaseService {
 
-    void insert(Purchase purchase);
+    void insert(List<Purchase> purchaseList);
 
     List<Purchase> select(int idx);
+
+    void delete(int purchaseID);
 }

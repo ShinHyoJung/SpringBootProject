@@ -29,9 +29,9 @@ public class SellImageDAO {
         }
     }
 
-    public SellImage select(int sellID) throws SQLException {
+    public List<SellImage> select(int sellID) throws SQLException {
         String sql = "SELECT * FROM sell_image WHERE 1=1 AND sell_id = ? AND delete_yn = ?";
-        SellImage sellImage = jdbcTemplate.queryForObject(sql, new Object[]{sellID, "N"}, new RowMapper<SellImage>() {
+        List<SellImage> sellImageList = jdbcTemplate.query(sql, new Object[]{sellID, "N"}, new RowMapper<SellImage>() {
             @Override
             public SellImage mapRow(ResultSet rs, int rowNum) throws SQLException {
                     SellImage sellImage = new SellImage();
@@ -46,6 +46,6 @@ public class SellImageDAO {
                     return sellImage;
             }
         });
-        return sellImage;
+        return sellImageList;
     }
 }

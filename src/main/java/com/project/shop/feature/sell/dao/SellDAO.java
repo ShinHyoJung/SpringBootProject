@@ -75,6 +75,7 @@ public class SellDAO {
                 sell.setTitle(rs.getString("title"));
                 sell.setContent(rs.getString("content"));
                 sell.setPrice(rs.getString("price"));
+                sell.setThumbnailImageName(rs.getString("thumbnail_image_name"));
                 sell.setTitleImageName(rs.getString("title_image_name"));
                 sell.setDetailImageName(rs.getString("detail_image_name"));
                 sell.setCreateDate(rs.getDate("create_date"));

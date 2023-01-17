@@ -18,7 +18,7 @@
     <div class="ui items">
         <div class="item">
             <div class="image">
-                <img src="${pageContext.request.contextPath}/static/images/thumbnail/${sellImage.thumbnailImageName}">
+                <img src="${pageContext.request.contextPath}/static/images/cut/${sell.thumbnailImageName}">
             </div>
             <div class="content">
                 <a class="header">${sell.name}</a>

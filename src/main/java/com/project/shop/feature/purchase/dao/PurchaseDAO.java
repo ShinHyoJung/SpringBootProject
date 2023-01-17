@@ -21,12 +21,15 @@ public class PurchaseDAO {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public void insert(Purchase purchase) {
-        String sql = "INSERT INTO purchase (name, price, address, sell_id, idx, delivery_status, purchase_date)" +
-                " VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public void insert(List<Purchase> purchaseList) {
+        String sql = "INSERT INTO purchase (name, price, address, thumbnail_image_name, sell_id, idx, order_status, purchase_date)" +
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        jdbcTemplate.update(sql, purchase.getName(), purchase.getPrice(), purchase.getAddress(), purchase.getSellID(), purchase.getIdx(),
-                purchase.getDeliveryStatus(), Timestamp.valueOf(LocalDateTime.now()));
+        for(Purchase purchase : purchaseList) {
+            jdbcTemplate.update(sql, purchase.getName(), purchase.getPrice(), purchase.getAddress(),
+                    purchase.getThumbnailImageName(), purchase.getSellID(), purchase.getIdx(),
+                    purchase.getOrderStatus(), Timestamp.valueOf(LocalDateTime.now()));
+        }
     }
 
     public List<Purchase> select(int idx) {
@@ -40,14 +43,21 @@ public class PurchaseDAO {
                 purchase.setName(rs.getString("name"));
                 purchase.setPrice(rs.getString("price"));
                 purchase.setAddress(rs.getString("address"));
+                purchase.setThumbnailImageName(rs.getString("thumbnail_image_name"));
                 purchase.setProductID(rs.getInt("product_id"));
                 purchase.setSellID(rs.getInt("sell_id"));
                 purchase.setIdx(rs.getInt("idx"));
-                purchase.setDeliveryStatus(rs.getString("delivery_status"));
+                purchase.setOrderStatus(rs.getString("order_status"));
                 purchase.setPurchaseDate(rs.getDate("purchase_date"));
                 return purchase;
             }
         });
         return purchaseList;
+    }
+
+    public void delete(int purchaseID) {
+        String sql = "DELETE FROM purchase WHERE 1=1 AND purchase_id = ?";
+
+        jdbcTemplate.update(sql, purchaseID);
     }
 }

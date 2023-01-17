@@ -72,7 +72,7 @@ public class ProductController {
 
         if(productImageList != null) {
             ImageUtils.cutImage(productImageList.get(0).getStoredName(), 100, 100);
-            productService.insert(postAddProduct.toEntity(productCode, productImageList.get(0).getStoredName(), productImageList.get(1).getStoredName()));
+            productService.insert(postAddProduct.toEntity(productCode, productImageList.get(0).getStoredName()));
             int productID = productService.selectMaxProductID();
 
             for(ProductImage productImage : productImageList) {

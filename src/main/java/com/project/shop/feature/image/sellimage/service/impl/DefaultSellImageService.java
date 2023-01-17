@@ -26,7 +26,7 @@ public class DefaultSellImageService implements SellImageService {
     }
 
     @Override
-    public SellImage select(int sellID) throws SQLException {
+    public List<SellImage> select(int sellID) throws SQLException {
         return sellImageDAO.select(sellID);
     }
 }

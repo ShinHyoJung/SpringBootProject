@@ -36,7 +36,7 @@
         <a class="item" href="${pageContext.request.contextPath}/purchase/ordered">
             주문 내역
         </a>
-        <a class="item">
+        <a class="item" href="${pageContext.request.contextPath}/purchase/cart">
             장바구니
         </a>
         <a class="item">

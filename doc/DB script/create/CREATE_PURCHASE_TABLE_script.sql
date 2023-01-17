@@ -3,10 +3,11 @@ CREATE TABLE purchase(
     name varchar(300),
     price varchar(200),
     address varchar(400),
+    thumbnail_image_name varchar(300),
     product_id int,
     sell_id int,
     idx int,
-    delivery_status varchar(100),
+    order_status varchar(100),
     purchase_date datetime,
     primary key (purchase_id)
 )

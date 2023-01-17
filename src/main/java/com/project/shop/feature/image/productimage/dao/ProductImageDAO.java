@@ -30,9 +30,9 @@ public class ProductImageDAO {
     }
 
     public List<ProductImage> select(int productID) {
-        String sql = "SELECT * FROM product_image WHERE 1=1 AND product_id = ?";
+        String sql = "SELECT * FROM product_image WHERE 1=1 AND product_id = ? WHERE delete_yn = ?";
 
-        List<ProductImage> productImageList = jdbcTemplate.query(sql, new Object[]{productID}, new RowMapper<ProductImage>() {
+        List<ProductImage> productImageList = jdbcTemplate.query(sql, new Object[]{productID, "N"}, new RowMapper<ProductImage>() {
             @Override
             public ProductImage mapRow(ResultSet rs, int rowNum) throws SQLException {
                 ProductImage productImage = new ProductImage();

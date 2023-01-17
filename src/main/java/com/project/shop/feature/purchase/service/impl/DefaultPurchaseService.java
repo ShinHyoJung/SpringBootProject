@@ -14,12 +14,17 @@ public class DefaultPurchaseService implements PurchaseService {
     private final PurchaseDAO purchaseDAO;
 
     @Override
-    public void insert(Purchase purchase) {
-        purchaseDAO.insert(purchase);
+    public void insert(List<Purchase> purchaseList) {
+        purchaseDAO.insert(purchaseList);
     }
 
     @Override
     public List<Purchase> select(int idx) {
         return purchaseDAO.select(idx);
+    }
+
+    @Override
+    public void delete(int purchaseID) {
+        purchaseDAO.delete(purchaseID);
     }
 }

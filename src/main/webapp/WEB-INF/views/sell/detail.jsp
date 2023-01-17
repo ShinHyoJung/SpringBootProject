@@ -10,7 +10,7 @@
 <html>
 <body>
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/sell/update/${getDetailResponse.sell.sellID}'"><i class="alternate pencil icon"></i></button>
-<button class="ui button" onclick="href='${pageContext.request.contextPath}/sell/delete/${getDetailResponse.sell.sellID}'"><i class="trash alternate icon"></i></button>
+<button class="ui button" onclick="location.href='${pageContext.request.contextPath}/sell/delete/${getDetailResponse.sell.sellID}'"><i class="trash alternate icon"></i></button>
 <br>
 ${getDetailResponse.sell.title} <br>
 <form method="post" action="${pageContext.request.contextPath}/purchase/pay" name="purchaseForm">
@@ -25,7 +25,7 @@ ${getDetailResponse.sell.title} <br>
         <div class="content">
             <a class="header">${getDetailResponse.sell.name}</a>
             <div class="ui right labeled input">
-                <input type="text" name="quantity" value="1" placeholder="수량">
+                <input type="text" id="quantity" name="quantity" value="1" placeholder="수량">
                 <div class="ui basic label">
                     개
                 </div>
@@ -36,7 +36,8 @@ ${getDetailResponse.sell.title} <br>
         </div>
     </div>
 </div>
-<button class="ui button" onclick="purchase()">구매</button> <button class="ui button"><i class="cart arrow down icon"></i></button>
+    <button class="ui button" type="button" onclick="purchase()">구매</button>
+    <button class="ui button" type="button" onclick="addCart()"><i class="cart arrow down icon"></i></button>
 </form>
 <div class="ui divider">
 <p class="subtitle"> 상세 정보 </p>
@@ -50,6 +51,31 @@ ${getDetailResponse.sell.content} <br>
     function purchase() {
         let form = document.purchaseForm;
         form.submit();
+    }
+
+    function addCart() {
+        let sellID = document.getElementById('sellID').value;
+        let name = document.getElementById('name').value;
+        let price = document.getElementById('price').value;
+        let quantity = document.getElementById('quantity').value;
+
+        let postObj = {
+            'sellID':sellID,
+            'name': name,
+            'price':price,
+            'quantity':quantity
+        };
+
+        $.ajax({
+            url: '${pageContext.request.contextPath}/purchase/cart/add',
+            method: 'post',
+            dataType: 'json',
+            data: JSON.stringify(postObj),
+            contentType: 'application/json; charset=utf-8',
+            success: function(pageResponse) {
+
+            }
+        })
     }
 </script>
 </body>

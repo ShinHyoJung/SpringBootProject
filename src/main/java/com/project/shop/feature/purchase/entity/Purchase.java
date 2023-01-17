@@ -10,9 +10,10 @@ public class Purchase {
     private String name;
     private String price;
     private String address;
+    private String thumbnailImageName;
     private int productID;
     private int sellID;
     private int idx;
-    private String deliveryStatus;
+    private String orderStatus;
     private Date purchaseDate;
 }

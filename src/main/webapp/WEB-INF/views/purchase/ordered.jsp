@@ -11,18 +11,39 @@
 <html>
 <body>
 <p class="subtitle">주문 내역</p>
-<div class="ui relaxed divided list">
-  <c:forEach items="${purchaseList}" var="purchaseList">
-    <div class="item">
-      <i class="large github middle aligned icon"></i>
-      <div class="content">
-        <a class="header">${purchaseList.name}</a>
-        <div class="description">${purchaseList.price}</div>
-        <div class="description">${purchaseList.deliveryStatus}</div>
-        <div class="description"> <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${purchaseList.purchaseDate}"/></div>
-      </div>
+    <div class="ui list">
+      <c:forEach items="${purchaseList}" var="purchaseList">
+        <div class="item">
+          <img class="ui image" src="${pageContext.request.contextPath}/static/images/cut/${purchaseList.thumbnailImageName}"/>
+          <div class="content">
+            <div class="header">${purchaseList.name}
+            <div class="description">${purchaseList.price}</div>
+            <div class="description">${purchaseList.orderStatus}</div>
+            <div class="description"> <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${purchaseList.purchaseDate}"/></div>
+              <button class="ui button" onclick="cancel(this.value)" value="${purchaseList.purchaseID}">주문 취소</button>
+              <button class="ui button">배송 조회</button>
+            </div>
+          </div>
+        </div>
+      </c:forEach>
     </div>
-  </c:forEach>
-</div>
+<script>
+function cancel(purchaseID) {
+    let postObj = {
+      'purchaseID':purchaseID
+    };
+
+    $.ajax({
+      url: '${pageContext.request.contextPath}/purchase/cancel',
+      method: 'post',
+      dataType: 'json',
+      data: JSON.stringify(postObj),
+      contentType: 'application/json; charset=utf-8',
+      success: function(pageResponse) {
+          location.reload();
+      }
+    });
+  }
+</script>
 </body>
 </html>
