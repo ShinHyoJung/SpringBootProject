@@ -53,52 +53,44 @@
             contentType: 'application/json; charset=utf-8',
             success: function(pageResponse) {
                 console.log(pageResponse);
-
+                let emptyMsg = '재고가 없습니다.';
                 let pageHTML = '';
                 let listHTML = '';
 
-                if (pageResponse.paging.prev) {
-                    pageHTML += '<a class="item"> < </a>';
-                }
-
-                for (let i = pageResponse.paging.startPage; i <= pageResponse.paging.endPage; i++) {
-                    if (currentPage == i) {
-                        pageHTML += '<a class="item active" onclick="printList(' + i + ')">' + i + '</a>';
-                    } else {
-                        pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
-                    }
-                }
-
-                if (pageResponse.paging.next) {
-                    pageHTML += '<a class="item"> > </a>';
-                }
-
-                listHTML += '<thead>';
-                listHTML += '<tr>';
-                listHTML += '<th class="one wide" style="width:40px;"></th>';
-                listHTML += '<th class="one wide">제품 번호</th>';
-                listHTML += '<th class="two wide"> 제품 이미지 </th>';
-                listHTML += '<th> 제품 이름 </th>';
-                listHTML += '<th> 제품 코드 </th>';
-                listHTML += '<th class="one wide"> 전체 수량 </th>';
-                listHTML += '<th class="one wide"> 팔린 개수 </th>';
-                listHTML += '<th class="one wide"> 남은 수량 </th>';
-                listHTML += '</tr>';
-                listHTML += '</thead>';
-                listHTML += '<tbody>';
-
                 if(pageResponse.productList == 0) {
-                    listHTML += '<tr>';
-                    listHTML += '<td></td>';
-                    listHTML += '<td>  </td>';
-                    listHTML += '<td> </td>';
-                    listHTML += '<td>재고 목록이 없습니다. </td>';
-                    listHTML += '<td> </td>';
-                    listHTML += '<td> </td>';
-                    listHTML += '<td> </td>';
-                    listHTML += '<td> </td>';
-                    listHTML += '</tr>';
+                    $('#table').html(emptyMsg);
+                    $('#pagination').css('display', 'none');
                 } else {
+                    if (pageResponse.paging.prev) {
+                        pageHTML += '<a class="item"> < </a>';
+                    }
+
+                    for (let i = pageResponse.paging.startPage; i <= pageResponse.paging.endPage; i++) {
+                        if (currentPage == i) {
+                            pageHTML += '<a class="item active" onclick="printList(' + i + ')">' + i + '</a>';
+                        } else {
+                            pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
+                        }
+                    }
+
+                    if (pageResponse.paging.next) {
+                        pageHTML += '<a class="item"> > </a>';
+                    }
+
+                    listHTML += '<thead>';
+                    listHTML += '<tr>';
+                    listHTML += '<th class="one wide" style="width:40px;"></th>';
+                    listHTML += '<th class="one wide">제품 번호</th>';
+                    listHTML += '<th class="two wide"> 제품 이미지 </th>';
+                    listHTML += '<th> 제품 이름 </th>';
+                    listHTML += '<th> 제품 코드 </th>';
+                    listHTML += '<th class="one wide"> 전체 수량 </th>';
+                    listHTML += '<th class="one wide"> 팔린 개수 </th>';
+                    listHTML += '<th class="one wide"> 남은 수량 </th>';
+                    listHTML += '</tr>';
+                    listHTML += '</thead>';
+                    listHTML += '<tbody>';
+
                     $.each(pageResponse.productList, function(i, productList) {
                         let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + productList.thumbnailImageName;
                         let detailSrc = '${pageContext.request.contextPath}/manage/product/detail/' + productList.productID;
@@ -113,11 +105,11 @@
                         listHTML += '<td><input type="text" style="width:60px;" value="' + productList.leftQuantity + '"/></td>';
                         listHTML += '</tr>';
                     });
-                }
-                listHTML += '</tbody>';
+                    listHTML += '</tbody>';
 
-                $('#pagination').html(pageHTML);
-                $('#table').html(listHTML);
+                    $('#pagination').html(pageHTML);
+                    $('#table').html(listHTML);
+                }
             }
         })
     }

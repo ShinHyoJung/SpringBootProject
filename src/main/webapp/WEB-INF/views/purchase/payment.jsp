@@ -7,10 +7,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
 <body>
 <p class="subtitle">결제</p>
 
-<form class="ui form" method="post" action="${pageContext.request.contextPath}/purchase/do" style="width: 50%;">
+<form class="ui form" method="post" name="payForm" action="${pageContext.request.contextPath}/purchase/do" style="width: 50%;">
     <input type="hidden" id="idx" name="idx" value="${member.idx}">
     <input type="hidden" id="sellID" name="sellID" value="${sell.sellID}">
     <input type="hidden" id="name" name="name" value="${sell.name}">
@@ -49,7 +50,7 @@
         </div>${quantity} = 계산 금액 <span id="calculatedPrice"></span> 원
             <button class="ui button" type="button" onclick="modifyQuantity()">변경</button>
     </div>
-    <button class="ui button" type="submit" style="margin-top: 30px;">구매</button>
+    <button class="ui button" type="button" onclick="payCard();">카드 결제</button>
 </form>
 <script>
     $(document).ready(function () {
@@ -73,6 +74,33 @@
         $('#calculatedPrice').html(result);
         document.getElementById('price').value = result;
     }
+
+    function payCard() {
+        let price = document.getElementById('price').value;
+        var IMP = window.IMP;
+        IMP.init('imp31116588');
+
+        IMP.request_pay({
+            pg: 'html5_inicis',
+            pay_method: 'card',
+            merchant_uid : 'merchant_'+new Date().getTime(),
+            name : '결제테스트',
+            amount : price,
+            buyer_email : '${member.mail}',
+            buyer_name : '${member.name}',
+            buyer_tel : '${member.mobile}',
+            buyer_addr : '${member.address}',
+        }, function(rsp) {
+            if(rsp.success) {
+                let form = document.payForm;
+                form.submit();
+            } else {
+                alert("결제에 실패하였습니다.");
+            }
+        });
+    }
+
+
 </script>
 </body>
 </html>

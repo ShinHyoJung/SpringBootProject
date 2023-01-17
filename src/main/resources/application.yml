@@ -39,5 +39,8 @@ spring:
     from: 01052386416
     apiKey: NCSC4PBSVBEEAKPQ
     apiSecret: QDQVVJIAJOE4OCHIXN1MDPQTFFKMGZXM
+  pay:
+    apiKey: 2101734355174268
+    apiSecretKey: f7VWu9wmMtInrcEYo3wtwCJ9PDsvxrLlHSUiz9Mxg1ZW0i9iAbQK3JYJr4euL00Bn0qVzUNYPlwG8Y1H
 
 

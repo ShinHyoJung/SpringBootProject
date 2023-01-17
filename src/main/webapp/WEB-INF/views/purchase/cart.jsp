@@ -8,47 +8,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<!-- iamport.payment.js -->
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
 <body onload="printList()">
 <p class="subtitle">장바구니</p>
-
-<form class="ui form" id="form" method="post" action="${pageContext.request.contextPath}/purchase/do" style="width: 50%;">
-    <input type="hidden" id="idx" name="idx" value="${member.idx}">
-    <input type="hidden" id="price" name="price" value="${totalPrice}">
-    <div id="list"></div>
- <!--   <c:forEach items="${cartList}" var="cartList">
-        <input type="hidden" id="sellID" name="sellID" value="${cartList.sellID}">
-        <input type="hidden" id="name" name="name" value="${cartList.name}">
-        <div class="ui items">
-            <div class="item">
-                <div class="image">
-                    <img src="${pageContext.request.contextPath}/static/images/cut/${cartList.thumbnailImageName}">
-                </div>
-                <div class="content">
-                    <a class="header">${cartList.name}</a>
-                    <div class="description">
-                        <p> ${cartList.price}원</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </c:forEach> -->
-    <p class="subtitle">배송 정보</p>
-    <div class="field">
-        <label>이름</label>
-        <input type="text" value="${member.name}">
-    </div>
-    <div class="field">
-        <label>전화번호</label>
-        <input type="text" value="${member.mobile}">
-    </div>
-    <div class="field">
-        <label>배송지 주소</label>
-        <input type="text" name="address" value="${member.address}">
-    </div>
-    <div class="ui divider">
-        계산 금액 <span id="totalPrice"></span>원
-    </div>
-    <button class="ui button" type="submit" style="margin-top: 30px;">구매</button>
+<form class="ui form" id="form" name="payForm" method="post" action="${pageContext.request.contextPath}/purchase/do" style="width: 50%;">
 </form>
 <script>
     function printList() {
@@ -58,32 +22,85 @@
             contentType: 'application/json; charset=utf-8',
             success: function(pageResponse) {
                 console.log(pageResponse);
-                let listHTML = '';
-                let stringHTML = pageResponse.totalPrice;
-                $.each(pageResponse.cartList, function(i, cartList) {
-                    let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + cartList.thumbnailImageName;
-                    listHTML += '<input type="hidden" id="sellID" name="sellID" value="' + cartList.sellID + '">';
-                    listHTML += '<input type="hidden" id="name" name="name" value="' + cartList.name + '">';
-                    listHTML += '<div class="ui items">';
-                    listHTML += '<div class="item">';
-                    listHTML += '<div class="image">';
-                    listHTML += '<img src="' + imgSrc +'"/>';
-                    listHTML += '</div>';
-                    listHTML += '<div class="content">';
-                    listHTML += '<a class="header">' + cartList.name + '</a>';
-                    listHTML += '<div class="description">';
-                    listHTML += '<p>' + cartList.price + "</p>";
-                    listHTML += '<button type="button" onclick="dumbCart(this.id)" value="'+ cartList.sellID +'"></button>';
-                    listHTML += '</div>';
-                    listHTML += '</div>';
-                    listHTML += '</div>';
-                    listHTML += '</div>';
-                })
+                let stringHTML = '';
+                let emptyMsg = '장바구니가 비었습니다.';
 
-                $('#list').html(listHTML);
-                $('#totalPrice').html(stringHTML);
+                if(pageResponse.cartList == 0) {
+                    $('#form').html(emptyMsg);
+                } else {
+                    stringHTML += '<input type="hidden" id="idx" name="idx" value="'+ pageResponse.member.idx + '">';
+                    stringHTML += '<input type="hidden" id="price" name="price" value="' + pageResponse.totalPrice +'">';
+                    $.each(pageResponse.cartList, function(i, cartList) {
+                        let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + cartList.thumbnailImageName;
+                        stringHTML += '<input type="hidden" id="sellID" name="sellID" value="' + cartList.sellID + '">';
+                        stringHTML += '<input type="hidden" id="name" name="name" value="' + cartList.name + '">';
+                        stringHTML += '<div class="ui items">';
+                        stringHTML += '<div class="item">';
+                        stringHTML += '<div class="image">';
+                        stringHTML += '<img src="' + imgSrc +'"/>';
+                        stringHTML += '</div>';
+                        stringHTML += '<div class="content">';
+                        stringHTML += '<a class="header">' + cartList.name + '</a>';
+                        stringHTML += '<div class="description">';
+                        stringHTML += '<p>' + cartList.price + "</p>";
+                        stringHTML += '<button class="ui button" type="button" onclick="dumbCart(this.id)" value="'+ cartList.sellID +'">삭제</button>';
+                        stringHTML += '</div>';
+                        stringHTML += '</div>';
+                        stringHTML += '</div>';
+                        stringHTML += '</div>';
+                    })
+                    stringHTML += '<p class="subtitle"> 배송정보 </p>';
+                    stringHTML += '<div class="field">';
+                    stringHTML += '<label>이름</label>';
+                    stringHTML += '<input type="text" id="name" name="name" value="' + pageResponse.member.name + '">';
+                    stringHTML += '</div>';
+                    stringHTML += '<div class="field">';
+                    stringHTML += '<label>전화번호</label>';
+                    stringHTML += '<input type="text" id="mobile" name="mobile" value="' + pageResponse.member.mobile + '">';
+                    stringHTML += '</div>';
+                    stringHTML += '<div class="field">';
+                    stringHTML += '<label>배송지 주소</label>';
+                    stringHTML += '<input type="text" id="address" name="address" value="' + pageResponse.member.address + '">';
+                    stringHTML += '</div>';
+
+                    stringHTML += '<div class="ui divider">';
+                    stringHTML += '계산 금액' +  pageResponse.totalPrice + '원 <br>';
+                    stringHTML += '<button class="ui button" type="button" onclick="' + payCard() + '" style="margin-top: 30px;">구매</button>';
+                    stringHTML += '</div>';
+                    $('#form').html(stringHTML);
+                }
             }
         })
+    }
+
+    function payCard() {
+        let name = document.getElementById('name').value;
+        let mail = document.getElementById('mail').value;
+        let mobile = document.getElementById('mobile').value;
+        let address = document.getElementById('address').value;
+        let price = document.getElementById('price').value;
+        var IMP = window.IMP;
+
+        IMP.init('imp31116588');
+
+        IMP.request_pay({
+            pg: 'html5_inicis',
+            pay_method: 'card',
+            merchant_uid : 'merchant_'+new Date().getTime(),
+            name : '결제테스트',
+            amount : price,
+            buyer_email : mail,
+            buyer_name : name,
+            buyer_tel : mobile,
+            buyer_addr : address,
+        }, function(rsp) {
+            if(rsp.success) {
+                let form = document.payForm;
+                form.submit();
+            } else {
+                alert("결제에 실패하였습니다.");
+            }
+        });
     }
 
     function dumbCart(sellID) {

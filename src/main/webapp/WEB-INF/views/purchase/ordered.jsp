@@ -13,8 +13,8 @@
 <p class="subtitle">주문 내역</p>
     <div class="ui list">
       <c:forEach items="${purchaseList}" var="purchaseList">
-        <div class="item">
-          <img class="ui image" src="${pageContext.request.contextPath}/static/images/cut/${purchaseList.thumbnailImageName}"/>
+        <div class="ui item">
+         <!-- <img class="ui image" src="${pageContext.request.contextPath}/static/images/cut/${purchaseList.thumbnailImageName}"/> -->
           <div class="content">
             <div class="header">${purchaseList.name}
             <div class="description">${purchaseList.price}</div>

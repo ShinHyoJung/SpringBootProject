@@ -31,7 +31,6 @@ public class PurchaseController {
     private static final String VIEW_PREFIX = "purchase/";
     private final MemberService memberService;
     private final SellService sellService;
-    private final CartService cartService;
     private final PurchaseService purchaseService;
 
     @PostMapping("/pay")
@@ -48,8 +47,9 @@ public class PurchaseController {
     }
 
     @PostMapping("/do")
-    public String postDoPay(Model model, PostDoPay postDoPay) {
+    public String postDoPay(Model model, PostDoPay postDoPay, HttpSession session) {
         purchaseService.insert(postDoPay.toEntity());
+        session.removeAttribute("cartList");
         model.addAttribute("main", VIEW_PREFIX + "complete");
         return "view";
     }
@@ -76,7 +76,6 @@ public class PurchaseController {
     @ResponseBody
     @PostMapping("/cart/add")
     public PostAddCartResponse postAddCart(@RequestBody PostAddCart postAddCart, HttpSession session) {
-        //cartService.insert(postAddCart.toEntity());
         ArrayList<Cart> cartList = (ArrayList<Cart>)(session.getAttribute("cartList"));
 
         if(session.getAttribute("cartList") == null) {
@@ -91,11 +90,7 @@ public class PurchaseController {
     }
 
     @GetMapping("/cart")
-    public String getCart(Model model,HttpSession session) {
-        int idx = (int)session.getAttribute("idx");
-        Member member = memberService.select(idx);
-
-        model.addAttribute("member", member);
+    public String getCart(Model model) {
         model.addAttribute("menu", "user");
         model.addAttribute("main", VIEW_PREFIX + "cart");
         return "view";
@@ -103,6 +98,8 @@ public class PurchaseController {
     @ResponseBody
     @PostMapping("/cart")
     public PostCartListResponse postCartList(HttpSession session) {
+        int idx = (int)session.getAttribute("idx");
+        Member member = memberService.select(idx);
         ArrayList<Cart> cartList = (ArrayList<Cart>)session.getAttribute("cartList");
         int totalPrice = 0;
         if(cartList == null) {
@@ -112,7 +109,7 @@ public class PurchaseController {
                 totalPrice += Integer.parseInt(cart.getPrice()) * cart.getQuantity();
             }
         }
-        return new PostCartListResponse(cartList, totalPrice);
+        return new PostCartListResponse(cartList, member, totalPrice);
     }
 
     @ResponseBody
