@@ -18,7 +18,5 @@ import java.util.List;
 @Data
 public class PostDumpCartResponse {
     @NonNull
-    private List<Cart> cartList;
-    @NonNull
     private int totalPrice;
 }

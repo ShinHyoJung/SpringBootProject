@@ -46,7 +46,7 @@
         <input type="text" name="address" value="${member.address}">
     </div>
     <div class="ui divider">
-        계산 금액 <span id="totalPrice"></span>
+        계산 금액 <span id="totalPrice"></span>원
     </div>
     <button class="ui button" type="submit" style="margin-top: 30px;">구매</button>
 </form>
@@ -59,6 +59,7 @@
             success: function(pageResponse) {
                 console.log(pageResponse);
                 let listHTML = '';
+                let stringHTML = pageResponse.totalPrice;
                 $.each(pageResponse.cartList, function(i, cartList) {
                     let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + cartList.thumbnailImageName;
                     listHTML += '<input type="hidden" id="sellID" name="sellID" value="' + cartList.sellID + '">';
@@ -72,6 +73,7 @@
                     listHTML += '<a class="header">' + cartList.name + '</a>';
                     listHTML += '<div class="description">';
                     listHTML += '<p>' + cartList.price + "</p>";
+                    listHTML += '<button type="button" onclick="dumbCart(this.id)" value="'+ cartList.sellID +'"></button>';
                     listHTML += '</div>';
                     listHTML += '</div>';
                     listHTML += '</div>';
@@ -79,8 +81,26 @@
                 })
 
                 $('#list').html(listHTML);
+                $('#totalPrice').html(stringHTML);
+            }
+        })
+    }
 
+    function dumbCart(sellID) {
+        let postObj = {
+            'sellID':sellID
+        };
 
+        $.ajax({
+            url: '${pageContext.request.contextPath}/purchase/cart/dump',
+            method: 'post',
+            dataType: 'json',
+            data: JSON.stringify(postObj),
+            contentType: 'application/json; charset=utf-8',
+            success: function(pageResponse) {
+                let stringHTML = pageResponse.totalPrice;
+                $('#totalPrice').html(stringHTML);
+                printList();
             }
         })
     }

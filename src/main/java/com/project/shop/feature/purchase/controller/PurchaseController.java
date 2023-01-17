@@ -104,13 +104,13 @@ public class PurchaseController {
     @PostMapping("/cart")
     public PostCartListResponse postCartList(HttpSession session) {
         ArrayList<Cart> cartList = (ArrayList<Cart>)session.getAttribute("cartList");
-
+        int totalPrice = 0;
         if(cartList == null) {
 
-        }
-        int totalPrice = 0;
-        for(Cart cart : cartList) {
-            totalPrice += Integer.parseInt(cart.getPrice()) * cart.getQuantity();
+        } else {
+            for(Cart cart : cartList) {
+                totalPrice += Integer.parseInt(cart.getPrice()) * cart.getQuantity();
+            }
         }
         return new PostCartListResponse(cartList, totalPrice);
     }
@@ -119,11 +119,12 @@ public class PurchaseController {
     @PostMapping("/cart/dump")
     public PostDumpCartResponse postDumpCart(@RequestBody PostDumpCart postDumpCart, HttpSession session) {
         ArrayList<Cart> cartList = (ArrayList<Cart>)session.getAttribute("cartList");
-        cartList.remove(postDumpCart.getSellID());
-        int totalPrice = postDumpCart.getTotalPrice();
 
+        int totalPrice = postDumpCart.getTotalPrice();
         totalPrice -= Integer.parseInt(cartList.get(postDumpCart.getSellID()).getPrice()) * cartList.get(postDumpCart.getSellID()).getQuantity();
 
-        return new PostDumpCartResponse(cartList, totalPrice);
+        cartList.remove(postDumpCart.getSellID());
+
+        return new PostDumpCartResponse(totalPrice);
     }
 }
