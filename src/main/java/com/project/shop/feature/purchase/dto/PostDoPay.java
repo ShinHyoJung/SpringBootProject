@@ -10,6 +10,7 @@ import java.util.List;
 public class PostDoPay {
     private String name;
     private String price;
+    private int quantity;
     private String address;
     private int sellID;
     private int idx;
@@ -20,6 +21,7 @@ public class PostDoPay {
         Purchase purchase = new Purchase();
         purchase.setName(this.name);
         purchase.setPrice(this.price);
+        purchase.setQuantity(this.quantity);
         purchase.setAddress(this.address);
         purchase.setImpUid(this.impUid);
         purchase.setSellID(this.sellID);

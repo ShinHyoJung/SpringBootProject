@@ -1,5 +1,6 @@
 package com.project.shop.feature.purchase.service.impl;
 
+import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.purchase.dao.PurchaseDAO;
 import com.project.shop.feature.purchase.entity.Purchase;
 import com.project.shop.feature.purchase.service.PurchaseService;
@@ -19,8 +20,8 @@ public class DefaultPurchaseService implements PurchaseService {
     }
 
     @Override
-    public List<Purchase> selectByIdx(int idx) {
-        return purchaseDAO.selectByIdx(idx);
+    public List<Purchase> selectByIdx(int idx, Paging paging) {
+        return purchaseDAO.selectByIdx(idx, paging);
     }
 
     @Override
@@ -36,5 +37,15 @@ public class DefaultPurchaseService implements PurchaseService {
     @Override
     public int selectMaxPurchaseID() {
         return purchaseDAO.selectMaxPurchaseID();
+    }
+
+    @Override
+    public void updateOrderStatus(String orderStatus, int purchaseID) {
+        purchaseDAO.updateOrderStatus(orderStatus, purchaseID);
+    }
+
+    @Override
+    public int count(int idx) {
+        return purchaseDAO.count(idx);
     }
 }

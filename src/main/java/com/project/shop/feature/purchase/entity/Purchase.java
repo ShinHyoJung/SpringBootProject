@@ -9,6 +9,7 @@ public class Purchase {
     private int purchaseID;
     private String name;
     private String price;
+    private int quantity;
     private String address;
     private String thumbnailImageName;
     private String impUid;

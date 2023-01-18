@@ -18,7 +18,9 @@ import java.util.List;
  */
 @Data
 public class PostCartListResponse {
-    List<Cart> cartList;
-    Member member;
-    int totalPrice;
+    private List<Cart> cartList;
+    private Member member;
+    private int totalPrice;
+    private String code;
+    private String message;
 }

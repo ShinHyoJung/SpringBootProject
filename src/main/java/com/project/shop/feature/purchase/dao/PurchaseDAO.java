@@ -1,5 +1,6 @@
 package com.project.shop.feature.purchase.dao;
 
+import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.purchase.entity.Purchase;
 import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,26 +23,27 @@ public class PurchaseDAO {
     }
 
     public void insert(List<Purchase> purchaseList) {
-        String sql = "INSERT INTO purchase (name, price, address, thumbnail_image_name, imp_uid, sell_id, idx, order_status, purchase_date)" +
-                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO purchase (name, price, quantity, address, thumbnail_image_name, imp_uid, " +
+                "sell_id, idx, order_status, purchase_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         for(Purchase purchase : purchaseList) {
-            jdbcTemplate.update(sql, purchase.getName(), purchase.getPrice(), purchase.getAddress(),
+            jdbcTemplate.update(sql, purchase.getName(), purchase.getPrice(), purchase.getQuantity(), purchase.getAddress(),
                     purchase.getThumbnailImageName(), purchase.getImpUid(), purchase.getSellID(), purchase.getIdx(),
                     purchase.getOrderStatus(), Timestamp.valueOf(LocalDateTime.now()));
         }
     }
 
-    public List<Purchase> selectByIdx(int idx) {
-        String sql = "SELECT * FROM purchase WHERE idx = ?";
+    public List<Purchase> selectByIdx(int idx, Paging paging) {
+        String sql = "SELECT * FROM purchase WHERE idx = ? LIMIT ?, ?";
 
-        List<Purchase> purchaseList = jdbcTemplate.query(sql, new Object[]{idx}, new RowMapper<Purchase>() {
+        List<Purchase> purchaseList = jdbcTemplate.query(sql, new Object[]{idx, paging.getSkip(), paging.getCountPerPage()}, new RowMapper<Purchase>() {
             @Override
             public Purchase mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Purchase purchase = new Purchase();
                 purchase.setPurchaseID(rs.getInt("purchase_id"));
                 purchase.setName(rs.getString("name"));
                 purchase.setPrice(rs.getString("price"));
+                purchase.setQuantity(rs.getInt("quantity"));
                 purchase.setAddress(rs.getString("address"));
                 purchase.setThumbnailImageName(rs.getString("thumbnail_image_name"));
                 purchase.setImpUid(rs.getString("imp_uid"));
@@ -91,5 +93,16 @@ public class PurchaseDAO {
                 "FROM purchase";
         int maxSellID = jdbcTemplate.queryForObject(sql, Integer.class);
         return maxSellID;
+    }
+
+    public void updateOrderStatus(String orderStatus, int purchaseID) {
+        String sql = "UPDATE purchase SET order_status = ? WHERE 1=1 AND purchase_id = ?";
+        jdbcTemplate.update(sql, orderStatus, purchaseID);
+    }
+
+    public int count(int idx) {
+        String sql = "SELECT COUNT(*) FROM purchase WHERE 1=1 AND idx = ?";
+        int total = jdbcTemplate.queryForObject(sql, new Object[]{idx}, Integer.class);
+        return total;
     }
 }

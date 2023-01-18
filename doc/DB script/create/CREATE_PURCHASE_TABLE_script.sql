@@ -2,6 +2,7 @@ CREATE TABLE purchase(
     purchase_id int not null auto_increment,
     name varchar(300),
     price varchar(200),
+    quantity int,
     address varchar(400),
     thumbnail_image_name varchar(300),
     imp_uid varchar(500),

@@ -6,12 +6,15 @@ import com.project.shop.feature.image.sellimage.entity.SellImage;
 import com.project.shop.feature.image.sellimage.service.SellImageService;
 import com.project.shop.feature.manage.category.dto.PostAdd;
 import com.project.shop.feature.member.service.MemberService;
+import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.parcel.dto.PostAddParcel;
+import com.project.shop.feature.parcel.entity.Parcel;
 import com.project.shop.feature.parcel.service.ParcelService;
 import com.project.shop.feature.purchase.dto.*;
 import com.project.shop.feature.purchase.entity.Purchase;
 import com.project.shop.feature.purchase.service.PurchaseService;
 import com.project.shop.feature.sell.service.SellService;
+import com.project.shop.feature.util.DateUtils;
 import com.project.shop.feature.web.rest.client.pay.service.PayService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
@@ -24,10 +27,7 @@ import com.project.shop.feature.sell.entity.Sell;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/purchase")
@@ -59,13 +59,19 @@ public class PurchaseController {
         purchaseService.insert(postDoPay.toEntity());
 
         int purchaseID = purchaseService.selectMaxPurchaseID();
+        String waybillNumber = parcelService.makeWaybillNumber();
+        Purchase purchase = purchaseService.selectByPurchaseID(purchaseID);
 
         PostAddParcel postAddParcel = new PostAddParcel();
+        postAddParcel.setName(postDoPay.getName());
         postAddParcel.setIdx(postDoPay.getIdx());
         postAddParcel.setAddress(postDoPay.getAddress());
+        postAddParcel.setQuantity(postDoPay.getQuantity());
         postAddParcel.setStatus(0);
         postAddParcel.setSellID(postDoPay.getSellID());
         postAddParcel.setPurchaseID(purchaseID);
+        postAddParcel.setPurchaseDate(purchase.getPurchaseDate());
+        postAddParcel.setWaybillNumber(waybillNumber);
 
         parcelService.insert(postAddParcel.toEntity());
 
@@ -75,14 +81,58 @@ public class PurchaseController {
     }
 
     @GetMapping("/ordered")
-    public String getOrdered(Model model, HttpSession session) {
-        int idx = (int)session.getAttribute("idx");
-        List<Purchase> purchaseList = purchaseService.selectByIdx(idx);
-
+    public String getOrdered(Model model) {
         model.addAttribute("menu", "user");
-        model.addAttribute("purchaseList", purchaseList);
         model.addAttribute("main", VIEW_PREFIX + "ordered");
         return "view";
+    }
+
+    @ResponseBody
+    @PostMapping("/ordered/list")
+    public PostOrderedListResponse postOrderedList(@RequestBody PostOrderedList postOrderedList, HttpSession session) {
+        PostOrderedListResponse pageResponse = new PostOrderedListResponse();
+        try {
+            int idx = (int) session.getAttribute("idx");
+            int total = purchaseService.count(idx);
+            Paging paging = new Paging(postOrderedList.getCurrentPage(), 5, total);
+            List<Purchase> purchaseList = purchaseService.selectByIdx(idx, paging);
+
+            if (purchaseList != null) {
+                for (Purchase purchase : purchaseList) {
+                    Date purchaseDate = purchase.getPurchaseDate();
+                    long diffDays = DateUtils.getDayDifference(purchaseDate, new Date());
+
+                    if (diffDays > 30) {
+                        purchaseService.delete(purchase.getPurchaseID());
+                    } else {
+                        if (diffDays == 0) {
+                            purchase.setOrderStatus("paymentComplete");
+                            purchaseService.updateOrderStatus("paymentComplete", purchase.getPurchaseID());
+                        } else if (diffDays == 1) {
+                            purchase.setOrderStatus("preparingForDelivery");
+                            purchaseService.updateOrderStatus("preparingForDelivery", purchase.getPurchaseID());
+                        } else if (diffDays == 2) {
+                            purchase.setOrderStatus("shipping");
+                            purchaseService.updateOrderStatus("shipping", purchase.getPurchaseID());
+                        } else if (diffDays == 3) {
+                            purchase.setOrderStatus("deliveryCompleted");
+                            purchaseService.updateOrderStatus("deliveryCompleted", purchase.getPurchaseID());
+                        }
+                    }
+                }
+                pageResponse.setCode("SUCCESS");
+                pageResponse.setMessage("주문내역이 있습니다.");
+                pageResponse.setPurchaseList(purchaseList);
+                pageResponse.setPaging(paging);
+            } else {
+                pageResponse.setCode("FAIL");
+                pageResponse.setMessage("주문내역이 없습니다.");
+            }
+        } catch (Exception e) {
+            pageResponse.setCode("FAIL");
+            pageResponse.setMessage("주문내역이 없습니다.");
+        }
+        return pageResponse;
     }
 
     @ResponseBody
@@ -96,6 +146,7 @@ public class PurchaseController {
 
             payService.paymentCancel(purchase.getImpUid(), accessToken, amount, "관리자 취소");
             purchaseService.delete(postCancelOrdered.getPurchaseID());
+            parcelService.deleteByPurchaseID(postCancelOrdered.getPurchaseID());
             pageResponse.setCode("SUCCESS");
             pageResponse.setMessage("주문이 취소되었습니다.");
         } catch (Exception e) {
@@ -148,13 +199,21 @@ public class PurchaseController {
         ArrayList<Cart> cartList = (ArrayList<Cart>)session.getAttribute("cartList");
         int totalPrice = 0;
 
-        for(Cart cart : cartList) {
-            totalPrice += Integer.parseInt(cart.getPrice()) * cart.getQuantity();
+        if(cartList != null) {
+            for(Cart cart : cartList) {
+                totalPrice += Integer.parseInt(cart.getPrice()) * cart.getQuantity();
+            }
+
+            pageResponse.setCartList(cartList);
+            pageResponse.setMember(member);
+            pageResponse.setTotalPrice(totalPrice);
+            pageResponse.setCode("SUCCESS");
+            pageResponse.setMessage("장바구니 목록이 있습니다.");
+        } else {
+            pageResponse.setCode("FAIL");
+            pageResponse.setMessage("장바구니가 비었습니다.");
         }
 
-        pageResponse.setCartList(cartList);
-        pageResponse.setMember(member);
-        pageResponse.setTotalPrice(totalPrice);
         return pageResponse;
     }
 

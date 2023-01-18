@@ -1,6 +1,7 @@
 package com.project.shop.feature.parcel.dao;
 
 import com.project.shop.feature.parcel.entity.Parcel;
+import org.springframework.cglib.core.Local;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -8,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -28,10 +32,10 @@ public class ParcelDAO {
     }
 
     public void insert(Parcel parcel) {
-        String sql = "INSERT INTO parcel (name, address, status," +
-                "waybill_number, purchase_id, sell_id, idx) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, parcel.getName(), parcel.getAddress(), parcel.getStatus(), parcel.getWaybillNumber(),
-                parcel.getPurchaseID(), parcel.getSellID(), parcel.getIdx());
+        String sql = "INSERT INTO parcel (name, address, quantity, status, " +
+                "waybill_number, purchase_id, sell_id, idx, purchase_date, ship_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, parcel.getName(), parcel.getAddress(), parcel.getQuantity(), parcel.getStatus(), parcel.getWaybillNumber(),
+                parcel.getPurchaseID(), parcel.getSellID(), parcel.getIdx(), parcel.getPurchaseDate(), Timestamp.valueOf(LocalDateTime.now()));
     }
 
     public List<Parcel> select(int idx) {
@@ -44,17 +48,35 @@ public class ParcelDAO {
                 parcel.setParcelID(rs.getInt("parcel_id"));
                 parcel.setName(rs.getString("name"));
                 parcel.setAddress(rs.getString("address"));
+                parcel.setQuantity(rs.getInt("quantity"));
                 parcel.setStatus(rs.getInt("status"));
                 parcel.setWaybillNumber(rs.getString("waybill_number"));
                 parcel.setPurchaseID(rs.getInt("purchase_id"));
                 parcel.setProductID(rs.getInt("product_id"));
                 parcel.setSellID(rs.getInt("sell_id"));
                 parcel.setIdx(rs.getInt("idx"));
+                parcel.setPurchaseDate(rs.getDate("purchase_date"));
+                parcel.setShipDate(rs.getDate("ship_date"));
                 return parcel;
             }
         });
         return parcelList;
     }
 
+    public void deleteByPurchaseID(int purchaseID) {
+        String sql = "DELETE FROM parcel WHERE 1=1 AND purchase_id = ?";
 
+        jdbcTemplate.update(sql, purchaseID);
+    }
+
+    public void deleteByParcelID(int parcelID) {
+        String sql = "DELETE FROM parcel WHERE 1=1 AND parcel_id = ?";
+
+        jdbcTemplate.update(sql, parcelID);
+    }
+
+    public void updateStatus(int status, int parcelID) {
+        String sql = "UPDATE parcel SET status = ? WHERE 1=1 AND parcel_id = ?";
+        jdbcTemplate.update(sql, status, parcelID);
+    }
 }

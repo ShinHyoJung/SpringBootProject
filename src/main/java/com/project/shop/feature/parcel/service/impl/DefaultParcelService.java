@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * <pre>
@@ -31,5 +32,31 @@ public class DefaultParcelService implements ParcelService {
     @Override
     public List<Parcel> select(int idx) {
         return parcelDAO.select(idx);
+    }
+
+    @Override
+    public void deleteByPurchaseID(int purchaseID) {
+        parcelDAO.deleteByPurchaseID(purchaseID);
+    }
+
+    @Override
+    public void deleteByParcelID(int parcelID) {
+        parcelDAO.deleteByParcelID(parcelID);
+    }
+
+    @Override
+    public void updateStatus(int status, int parcelID) {
+        parcelDAO.updateStatus(status, parcelID);
+    }
+
+    public String makeWaybillNumber() {
+        Random rand = new Random();
+        StringBuilder numStr = new StringBuilder();
+        for(int i = 0; i < 13; i++) {
+            String ran = Integer.toString(rand.nextInt(10));
+            numStr.append(ran);
+        }
+        String code = numStr.toString();
+        return code;
     }
 }

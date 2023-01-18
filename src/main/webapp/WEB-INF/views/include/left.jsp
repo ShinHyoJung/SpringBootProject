@@ -39,7 +39,7 @@
         <a class="item" href="${pageContext.request.contextPath}/purchase/cart">
             장바구니
         </a>
-        <a class="item" href="${pageContext.request.contextPath}/parcel/">
+        <a class="item" href="${pageContext.request.contextPath}/parcel/delivery-tracking">
             배송조회
         </a>
         <a class="item">

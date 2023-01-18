@@ -41,7 +41,7 @@
 </form>
 <div class="ui divider"></div>
 <p class="subtitle"> 상세 정보 </p>
-<img src="${pageContext.request.contextPath}/static/images/resize/${getDetailResponse.sell.detailImageName}"/> <br>
+<img src="${pageContext.request.contextPath}/static/images/${getDetailResponse.sell.detailImageName}"/> <br>
 <br>
 ${getDetailResponse.sell.content} <br>
 <br>

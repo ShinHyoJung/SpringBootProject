@@ -15,7 +15,7 @@
 <form class="ui form" id="form" name="payForm" method="post" action="${pageContext.request.contextPath}/purchase/do" style="width: 50%;">
 </form>
 <br>
-<button class="ui button" type="button" onclick="payCard()" style="margin-top: 30px;"><i class="credit card icon"></i>결제</button>
+
 <script>
     function printList() {
         $.ajax({
@@ -27,9 +27,7 @@
                 let stringHTML = '';
                 let emptyMsg = '장바구니가 비었습니다.';
 
-                if(pageResponse.cartList == 0) {
-                    $('#form').html(emptyMsg);
-                } else {
+                if(pageResponse.code == 'SUCCESS') {
                     stringHTML += '<input type="hidden" id="idx" name="idx" value="'+ pageResponse.member.idx + '">';
                     stringHTML += '<input type="hidden" id="price" name="price" value="' + pageResponse.totalPrice +'">';
                     $.each(pageResponse.cartList, function(i, cartList) {
@@ -67,10 +65,12 @@
 
                     stringHTML += '<div class="ui divider">';
                     stringHTML += '<p style="font-size: 20px; margin-top: 30px;" > 계산 금액: ' +  pageResponse.totalPrice + '원 </p><br>';
-                //    stringHTML += '<button class="ui button" type="button" onclick="' + payCard() + '" style="margin-top: 30px;">구매</button>';
+                    stringHTML += '<button class="ui button" type="button" id="payBtn" onclick="payCard()" style="margin-top: 30px;"><i class="credit card icon"></i>결제</button>';
                     stringHTML += '</div>';
 
                     $('#form').html(stringHTML);
+                } else {
+                    alert(pageResponse.message);
                 }
             }
         });
@@ -85,7 +85,7 @@
         IMP.request_pay({
             pg: 'html5_inicis',
             pay_method: 'card',
-            merchant_uid : 'merchant_'+new Date().getTime(),
+            merchant_uid : 'merchant_' + new Date().getTime(),
             name : '결제테스트',
             amount : price,
             buyer_email: '${member.mail}',
@@ -114,6 +114,7 @@
             data: JSON.stringify(postObj),
             contentType: 'application/json; charset=utf-8',
             success: function(pageResponse) {
+                alert(pageResponse.message);
                 let stringHTML = pageResponse.totalPrice;
                 $('#totalPrice').html(stringHTML);
                 printList();

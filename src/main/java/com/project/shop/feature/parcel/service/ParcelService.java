@@ -18,4 +18,11 @@ public interface ParcelService {
     void insert(Parcel parcel);
 
     List<Parcel> select(int idx);
+
+    void deleteByPurchaseID(int purchaseID);
+
+    void deleteByParcelID(int parcelID);
+
+    void updateStatus(int status, int parcelID);
+    String makeWaybillNumber();
 }
