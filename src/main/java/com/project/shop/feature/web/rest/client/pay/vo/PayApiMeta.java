@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter
 public class PayApiMeta {
-    @Value("${spring.pay.apiKey}")
+    @Value("${spring.pay.key.apiKey}")
     private String apiKey;
-    @Value("${spring.pay.apiSecretKey}")
+    @Value("${spring.pay.key.apiSecretKey}")
     private String apiSecretKey;
 }

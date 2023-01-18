@@ -14,6 +14,6 @@ import lombok.NonNull;
  */
 @Data
 public class PostCancelOrderedResponse {
-    @NonNull
     private String code;
+    private String message;
 }

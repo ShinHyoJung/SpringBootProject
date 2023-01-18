@@ -18,10 +18,7 @@ import java.util.List;
  */
 @Data
 public class PostCartListResponse {
-    @NonNull
     List<Cart> cartList;
-    @NonNull
     Member member;
-    @NonNull
     int totalPrice;
 }

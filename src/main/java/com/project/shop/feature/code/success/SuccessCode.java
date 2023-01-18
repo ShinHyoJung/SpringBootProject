@@ -2,16 +2,13 @@ package com.project.shop.feature.code.success;
 
 import com.project.shop.feature.code.Code;
 import com.project.shop.feature.code.CodeType;
-import com.project.shop.feature.spring.config.yml.YamlPropertySourceFactory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ConfigurationProperties(prefix = "success")
-@PropertySource(value = {"/message/success_code_message.yml"}, factory = YamlPropertySourceFactory.class)
 @Data
 public class SuccessCode {
 

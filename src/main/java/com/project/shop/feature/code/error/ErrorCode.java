@@ -2,7 +2,6 @@ package com.project.shop.feature.code.error;
 
 import com.project.shop.feature.code.Code;
 import com.project.shop.feature.code.CodeType;
-import com.project.shop.feature.spring.config.yml.YamlPropertySourceFactory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @ConfigurationProperties(prefix = "error")
-@PropertySource(value = {"/message/error_code_message.yml"}, factory = YamlPropertySourceFactory.class)
 @Data
 public class ErrorCode {
     ;

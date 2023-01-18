@@ -13,6 +13,7 @@ public class PostDoPay {
     private String address;
     private int sellID;
     private int idx;
+    private String impUid;
 
     public List<Purchase> toEntity() {
         List<Purchase> purchaseList = new ArrayList<>();
@@ -20,6 +21,7 @@ public class PostDoPay {
         purchase.setName(this.name);
         purchase.setPrice(this.price);
         purchase.setAddress(this.address);
+        purchase.setImpUid(this.impUid);
         purchase.setSellID(this.sellID);
         purchase.setIdx(this.idx);
         purchase.setOrderStatus("paymentComplete");

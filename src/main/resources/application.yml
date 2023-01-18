@@ -40,7 +40,13 @@ spring:
     apiKey: NCSC4PBSVBEEAKPQ
     apiSecret: QDQVVJIAJOE4OCHIXN1MDPQTFFKMGZXM
   pay:
-    apiKey: 2101734355174268
-    apiSecretKey: f7VWu9wmMtInrcEYo3wtwCJ9PDsvxrLlHSUiz9Mxg1ZW0i9iAbQK3JYJr4euL00Bn0qVzUNYPlwG8Y1H
+    key:
+      apiKey: 2101734355174268
+      apiSecretKey: f7VWu9wmMtInrcEYo3wtwCJ9PDsvxrLlHSUiz9Mxg1ZW0i9iAbQK3JYJr4euL00Bn0qVzUNYPlwG8Y1H
+    url:
+      getToken: https://api.iamport.kr/users/getToken
+      paymentInfo: https://api.iamport.kr/payments/
+      paymentCancel: https://api.iamport.kr/payments/cancel
+
 
 

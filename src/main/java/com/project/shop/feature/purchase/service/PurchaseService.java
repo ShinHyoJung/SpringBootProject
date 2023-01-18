@@ -8,7 +8,11 @@ public interface PurchaseService {
 
     void insert(List<Purchase> purchaseList);
 
-    List<Purchase> select(int idx);
+    List<Purchase> selectByIdx(int idx);
 
     void delete(int purchaseID);
+
+    Purchase selectByPurchaseID(int purchaseID);
+
+    int selectMaxPurchaseID();
 }

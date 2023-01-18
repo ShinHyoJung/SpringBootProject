@@ -59,38 +59,42 @@
                 let pageHTML= '';
                 let listHTML = '';
 
-                if(pageResponse.paging.prev) {
-                    pageHTML += '<a class="item"> < </a>';
-                }
-
-                for(let i = pageResponse.paging.startPage; i <= pageResponse.paging.endPage; i++) {
-                    if(currentPage == i) {
-                        pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
-                    } else {
-                        pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
+                if(pageResponse.sellList == 0) {
+                    $('#pagination').css('display', 'none');
+                } else {
+                    if(pageResponse.paging.prev) {
+                        pageHTML += '<a class="item"> < </a>';
                     }
+
+                    for(let i = pageResponse.paging.startPage; i <= pageResponse.paging.endPage; i++) {
+                        if(currentPage == i) {
+                            pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
+                        } else {
+                            pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
+                        }
+                    }
+
+                    if(pageResponse.paging.next) {
+                        pageHTML += '<a class="item"> > </a>';
+                    }
+
+                    $.each(pageResponse.sellList, function(i, sellList) {
+                        let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + sellList.thumbnailImageName;
+                        let detailSrc = '${pageContext.request.contextPath}/sell/detail/' + sellList.sellID;
+                        listHTML += '<div class="card">';
+                        listHTML += '<input type="hidden" id="sellID" name="sellID" value="' + sellList.sellID + '"/>';
+                        listHTML += '<img src="' + imgSrc +'"/>';
+                        listHTML += '<div class="extra">';
+                        listHTML += '<a class="header" href="' + detailSrc + '" name="' + sellList.title + '">' + sellList.title + '</a>';
+                        listHTML += '<div class="description" style="margin-top: 20px;">';
+                        listHTML +=  sellList.price + '원 </div>';
+                        listHTML += '</div>';
+                        listHTML += '</div>';
+                    });
+
+                    $('#pagination').html(pageHTML);
+                    $('#cards').html(listHTML);
                 }
-
-                if(pageResponse.paging.next) {
-                    pageHTML += '<a class="item"> > </a>';
-                }
-
-                $.each(pageResponse.sellList, function(i, sellList) {
-                    let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + sellList.thumbnailImageName;
-                    let detailSrc = '${pageContext.request.contextPath}/sell/detail/' + sellList.sellID;
-                    listHTML += '<div class="card">';
-                    listHTML += '<input type="hidden" id="sellID" name="sellID" value="' + sellList.sellID + '"/>';
-                    listHTML += '<img src="' + imgSrc +'"/>';
-                    listHTML += '<div class="extra">';
-                    listHTML += '<a class="header" href="' + detailSrc + '" name="' + sellList.title + '">' + sellList.title + '</a>';
-                    listHTML += '<div class="description" style="margin-top: 20px;">';
-                    listHTML +=  sellList.price + '원 </div>';
-                    listHTML += '</div>';
-                    listHTML += '</div>';
-                });
-
-                $('#pagination').html(pageHTML);
-                $('#cards').html(listHTML);
             }
         })
     }

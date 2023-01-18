@@ -4,6 +4,7 @@ CREATE TABLE purchase(
     price varchar(200),
     address varchar(400),
     thumbnail_image_name varchar(300),
+    imp_uid varchar(500),
     product_id int,
     sell_id int,
     idx int,

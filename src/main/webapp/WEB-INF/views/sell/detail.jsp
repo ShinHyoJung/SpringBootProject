@@ -12,7 +12,7 @@
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/sell/update/${getDetailResponse.sell.sellID}'"><i class="alternate pencil icon"></i></button>
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/sell/delete/${getDetailResponse.sell.sellID}'"><i class="trash alternate icon"></i></button>
 <br>
-${getDetailResponse.sell.title} <br>
+<p style="margin-top: 20px; font-size: 30px;">${getDetailResponse.sell.title}</p> <br>
 <form method="post" action="${pageContext.request.contextPath}/purchase/pay" name="purchaseForm">
     <input type="hidden" id="sellID" name="sellID" value="${getDetailResponse.sell.sellID}">
     <input type="hidden" id="name" name="name" value="${getDetailResponse.sell.name}">
@@ -22,7 +22,7 @@ ${getDetailResponse.sell.title} <br>
         <a class="ui small sellImage">
             <img src="${pageContext.request.contextPath}/static/images/cut/${getDetailResponse.sell.titleImageName}"/>
         </a>
-        <div class="content">
+        <div class="content" style="margin-left: 20px;">
             <a class="header">${getDetailResponse.sell.name}</a>
             <div class="ui right labeled input">
                 <input type="text" id="quantity" name="quantity" value="1" placeholder="수량">
@@ -39,14 +39,15 @@ ${getDetailResponse.sell.title} <br>
     <button class="ui button" type="button" onclick="purchase()">구매</button>
     <button class="ui button" type="button" onclick="addCart()"><i class="cart arrow down icon"></i></button>
 </form>
-<div class="ui divider">
+<div class="ui divider"></div>
 <p class="subtitle"> 상세 정보 </p>
 <img src="${pageContext.request.contextPath}/static/images/resize/${getDetailResponse.sell.detailImageName}"/> <br>
+<br>
 ${getDetailResponse.sell.content} <br>
+<br>
 작성날짜: <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${getDetailResponse.sell.createDate}"/> <br>
 수정날짜: <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${getDetailResponse.sell.updateDate}"/> <br>
 <button class="ui button" style="margin-top: 20px;" onclick="location.href='${pageContext.request.contextPath}/sell/'"><i class="list icon"></i></button>
-</div>
 <script>
     function purchase() {
         let form = document.purchaseForm;
@@ -73,7 +74,7 @@ ${getDetailResponse.sell.content} <br>
             data: JSON.stringify(postObj),
             contentType: 'application/json; charset=utf-8',
             success: function(pageResponse) {
-
+                alert(pageResponse.message);
             }
         })
     }

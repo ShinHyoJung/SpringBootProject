@@ -9,13 +9,14 @@
 <html>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
 <body>
-<p class="subtitle">결제</p>
+<p class="subtitle">주문</p>
 
 <form class="ui form" method="post" name="payForm" action="${pageContext.request.contextPath}/purchase/do" style="width: 50%;">
     <input type="hidden" id="idx" name="idx" value="${member.idx}">
     <input type="hidden" id="sellID" name="sellID" value="${sell.sellID}">
     <input type="hidden" id="name" name="name" value="${sell.name}">
     <input type="hidden" id="price" name="price" value="">
+    <input type="hidden" id="impUid" name="impUid" value="">
     <div class="ui items">
         <div class="item">
             <div class="image">
@@ -50,7 +51,7 @@
         </div>${quantity} = 계산 금액 <span id="calculatedPrice"></span> 원
             <button class="ui button" type="button" onclick="modifyQuantity()">변경</button>
     </div>
-    <button class="ui button" type="button" onclick="payCard();">카드 결제</button>
+    <button class="ui button" type="button" onclick="payCard();" style="margin-top: 30px;"><i class="credit card icon"></i>결제</button>
 </form>
 <script>
     $(document).ready(function () {
@@ -92,6 +93,7 @@
             buyer_addr : '${member.address}',
         }, function(rsp) {
             if(rsp.success) {
+                document.getElementById('impUid').value = rsp.imp_uid;
                 let form = document.payForm;
                 form.submit();
             } else {

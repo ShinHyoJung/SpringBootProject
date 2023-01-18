@@ -16,13 +16,12 @@
         <div class="ui item">
          <!-- <img class="ui image" src="${pageContext.request.contextPath}/static/images/cut/${purchaseList.thumbnailImageName}"/> -->
           <div class="content">
-            <div class="header">${purchaseList.name}
-            <div class="description">${purchaseList.price}</div>
+            제품 명 ${purchaseList.name}
+            <div class="description">수량 ${purchaseList.price}</div>
             <div class="description">${purchaseList.orderStatus}</div>
             <div class="description"> <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${purchaseList.purchaseDate}"/></div>
               <button class="ui button" onclick="cancel(this.value)" value="${purchaseList.purchaseID}">주문 취소</button>
               <button class="ui button">배송 조회</button>
-            </div>
           </div>
         </div>
       </c:forEach>

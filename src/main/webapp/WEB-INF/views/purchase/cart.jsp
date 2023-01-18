@@ -14,6 +14,8 @@
 <p class="subtitle">장바구니</p>
 <form class="ui form" id="form" name="payForm" method="post" action="${pageContext.request.contextPath}/purchase/do" style="width: 50%;">
 </form>
+<br>
+<button class="ui button" type="button" onclick="payCard()" style="margin-top: 30px;"><i class="credit card icon"></i>결제</button>
 <script>
     function printList() {
         $.ajax({
@@ -33,7 +35,7 @@
                     $.each(pageResponse.cartList, function(i, cartList) {
                         let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + cartList.thumbnailImageName;
                         stringHTML += '<input type="hidden" id="sellID" name="sellID" value="' + cartList.sellID + '">';
-                        stringHTML += '<input type="hidden" id="name" name="name" value="' + cartList.name + '">';
+                        stringHTML += '<input type="hidden" name="name" value="' + cartList.name + '">';
                         stringHTML += '<div class="ui items">';
                         stringHTML += '<div class="item">';
                         stringHTML += '<div class="image">';
@@ -48,11 +50,11 @@
                         stringHTML += '</div>';
                         stringHTML += '</div>';
                         stringHTML += '</div>';
-                    })
+                    });
                     stringHTML += '<p class="subtitle"> 배송정보 </p>';
                     stringHTML += '<div class="field">';
                     stringHTML += '<label>이름</label>';
-                    stringHTML += '<input type="text" id="name" name="name" value="' + pageResponse.member.name + '">';
+                    stringHTML += '<input type="text" id="name" value="' + pageResponse.member.name + '">';
                     stringHTML += '</div>';
                     stringHTML += '<div class="field">';
                     stringHTML += '<label>전화번호</label>';
@@ -64,22 +66,19 @@
                     stringHTML += '</div>';
 
                     stringHTML += '<div class="ui divider">';
-                    stringHTML += '계산 금액' +  pageResponse.totalPrice + '원 <br>';
-                    stringHTML += '<button class="ui button" type="button" onclick="' + payCard() + '" style="margin-top: 30px;">구매</button>';
+                    stringHTML += '<p style="font-size: 20px; margin-top: 30px;" > 계산 금액: ' +  pageResponse.totalPrice + '원 </p><br>';
+                //    stringHTML += '<button class="ui button" type="button" onclick="' + payCard() + '" style="margin-top: 30px;">구매</button>';
                     stringHTML += '</div>';
+
                     $('#form').html(stringHTML);
                 }
             }
-        })
+        });
     }
 
     function payCard() {
-        let name = document.getElementById('name').value;
-        let mail = document.getElementById('mail').value;
-        let mobile = document.getElementById('mobile').value;
-        let address = document.getElementById('address').value;
         let price = document.getElementById('price').value;
-        var IMP = window.IMP;
+        let IMP = window.IMP;
 
         IMP.init('imp31116588');
 
@@ -89,10 +88,10 @@
             merchant_uid : 'merchant_'+new Date().getTime(),
             name : '결제테스트',
             amount : price,
-            buyer_email : mail,
-            buyer_name : name,
-            buyer_tel : mobile,
-            buyer_addr : address,
+            buyer_email: '${member.mail}',
+            buyer_name : '${member.name}',
+            buyer_tel : '${member.mobile}',
+            buyer_addr : '${member.address}',
         }, function(rsp) {
             if(rsp.success) {
                 let form = document.payForm;

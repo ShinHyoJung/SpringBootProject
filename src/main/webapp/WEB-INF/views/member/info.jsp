@@ -10,7 +10,7 @@
 <html>
 <body>
 <p class="subtitle">내 정보</p>
-<form class="ui form" action="${pageContext.request.contextPath}/member/info/update" method="post" style="width: 50%;">
+<form class="ui form" action="${pageContext.request.contextPath}/member/info/update" method="post" style="width: 30%;">
     <div class="field">
         <label> 이름  </label>
             <input type="text" id="name" name="name" value = "${getInfoResponse.name}">

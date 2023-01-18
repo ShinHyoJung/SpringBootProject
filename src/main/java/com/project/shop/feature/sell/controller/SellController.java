@@ -84,7 +84,7 @@ public class SellController {
 
             ImageUtils.cutImage(sellImageList.get(0).getStoredName(), 150, 100);
             ImageUtils.cutImage(sellImageList.get(1).getStoredName(), 300, 300);
-            ImageUtils.resizeImage(sellImageList.get(2).getStoredName(), 500, 500);
+            ImageUtils.resizeImage(sellImageList.get(2).getStoredName(), 1000, 1000);
 
             sellImageService.insert(sellImageList);
         }

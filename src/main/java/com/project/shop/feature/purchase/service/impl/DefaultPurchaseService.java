@@ -19,12 +19,22 @@ public class DefaultPurchaseService implements PurchaseService {
     }
 
     @Override
-    public List<Purchase> select(int idx) {
-        return purchaseDAO.select(idx);
+    public List<Purchase> selectByIdx(int idx) {
+        return purchaseDAO.selectByIdx(idx);
     }
 
     @Override
     public void delete(int purchaseID) {
         purchaseDAO.delete(purchaseID);
+    }
+
+    @Override
+    public Purchase selectByPurchaseID(int purchaseID) {
+        return purchaseDAO.selectByPurchaseID(purchaseID);
+    }
+
+    @Override
+    public int selectMaxPurchaseID() {
+        return purchaseDAO.selectMaxPurchaseID();
     }
 }
