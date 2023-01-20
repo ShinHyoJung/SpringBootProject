@@ -9,18 +9,43 @@
 <html>
 <body>
 <p class="subtitle"> 로그인 </p>
-  <form class="ui form" method="post" action="${pageContext.request.contextPath}/member/login" style="width: 30%;">
+<form class="ui form" name="loginForm" method="post" action="${pageContext.request.contextPath}/member/login" style="width: 30%;">
     <div class="field">
         <label>아이디 </label>
-            <input type="text" id="id" name="id">
+        <input type="text" id="id" name="id" onkeyup="enterLogin()">
     </div>
     <div class="field">
-      <label> 비밀번호</label>
-        <input type="password" id="password" name="password">
+        <label> 비밀번호</label>
+        <input type="password" id="password" name="password" onkeyup="enterLogin()">
     </div>
-      <button class="ui button" type="submit">로그인</button>
-  </form>
-    <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/member/id/find'" style="margin-left: 270px; float:left;">아이디 찾기</button>
-    <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/member/password/find'" style="">비밀번호 찾기/변경</button>
+    <button class="ui button" type="button" onclick="login();">로그인</button>
+</form>
+<button class="ui button" onclick="location.href='${pageContext.request.contextPath}/member/id/find'" style="margin-left: 270px; float:left;">아이디 찾기</button>
+<button class="ui button" onclick="location.href='${pageContext.request.contextPath}/member/password/find'" style="">비밀번호 찾기/변경</button>
 </body>
+<script>
+    function login() {
+        let loginID = document.getElementById('id').value;
+        let password = document.getElementById('password').value;
+
+        if(!loginID) {
+            alert("로그인 아이디를 입력해주세요.");
+            return false;
+        }
+
+        if(!password) {
+            alert("비밀번호를 입력해주세요.");
+            return false;
+        }
+
+        let form = document.loginForm;
+        form.submit();
+    }
+
+    function enterLogin() {
+        if(window.event.keyCode == 13) {
+            login();
+        }
+    }
+</script>
 </html>

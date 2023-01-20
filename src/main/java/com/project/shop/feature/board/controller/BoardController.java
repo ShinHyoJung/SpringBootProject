@@ -46,13 +46,13 @@ public class BoardController {
         int idx = (int)session.getAttribute("idx");
 
         if(Integer.valueOf(idx) != null) {
-            String memberID = session.getAttribute("loggedIn").toString();
+            String loginID = session.getAttribute("loggedIn").toString();
 
-            Member member = memberService.select(idx);
+            Member member = memberService.selectByIdx(idx);
 
             GetWriteResponse pageResponse = new GetWriteResponse();
             pageResponse.setIdx(idx);
-            pageResponse.setMemberID(memberID);
+            pageResponse.setLoginID(loginID);
             pageResponse.setWriter(member.getName());
 
             model.addAttribute("getWriteResponse", pageResponse);

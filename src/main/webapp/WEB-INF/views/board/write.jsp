@@ -15,7 +15,7 @@
   <textarea id="content" name="content"></textarea> <br>
   <input type="hidden" id="writer" name="writer" value="${getWriteResponse.writer}"> <br>
   <input type="hidden" id="idx" name="idx" value="${getWriteResponse.idx}"> <br>
-  <input type="hidden" id="memberID" name="memberID" value="${getWriteResponse.memberID}">
+  <input type="hidden" id="loginID" name="loginID" value="${getWriteResponse.loginID}">
   <button type="submit">등록</button>
 </form>
 </body>

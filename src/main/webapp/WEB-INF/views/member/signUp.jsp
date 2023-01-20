@@ -11,9 +11,13 @@
 <body>
 <p class="subtitle"> 회원가입 </p>
    <form class="ui form" action="${pageContext.request.contextPath}/member/signUp" method="post" name="signUpForm" style="width: 30%;">
+         <input type="hidden" id="loginID" name="loginID" value="">
          <div class="field">
             <label> 아이디 </label>
-               <input type="text" id="memberID" name="memberID" placeholder="아이디">
+               <input type="text" id="inputLoginID" placeholder="아이디">
+         </div>
+         <div class="field">
+           <button class="ui button" type="button" onclick="checkDuplicate()">아이디 중복체크</button>
          </div>
          <div class="field">
             <label> 비밀번호 </label>
@@ -25,15 +29,15 @@
          </div>
          <div class="field">
             <label> 생년월일 </label>
-               <input type="text" id="birth" name="birth" placeholder="생년월일">
+               <input type="text" id="birth" name="birth" placeholder="생년월일 8자리">
          </div>
          <div class="field">
             <label> 휴대폰번호 </label>
-               <input type="text" id="mobile" name="mobile" placeholder="휴대폰번호">
+               <input type="text" id="phone" name="phone" placeholder="휴대폰번호">
          </div>
          <div class="field">
             <label> 이메일  </label>
-               <input type="text" id="mail" name="mail" placeholder="이메일">
+               <input type="text" id="email" name="email" placeholder="이메일">
          </div>
        <div class="field">
            <label> 우편번호 </label> <button class="ui button" type="button" onclick="searchZipCode();">우편번호 찾기</button>
@@ -49,21 +53,21 @@
        </div>
       <button class="ui button" type="button" onclick="signUp()">가입</button>
    </form>
-<input type="hidden" id="isVerified" value="">
 <script>
-   $(document).ready(function(){
-      document.getElementById('isVerified').value = false;
-   })
+    let idVal = /^[a-z][0-9a-z]{4,9}$/;
+    let pwdVal = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]).{10,20}$/;
+    let emailVal = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    let phoneVal = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
 
    function sendEmail() {
-      let mail = document.getElementById('mail').value;
-      let subject = '본인인증';
-      let templateName = 'self-authentication';
+      let email = document.getElementById('email').value;
+     // let subject = '본인인증';
+      //let templateName = 'self-authentication';
 
       let postObj = {
-         'mail':mail,
-         'subject':subject,
-         'templateName':templateName
+         'mail':email,
+      //   'subject':subject,
+    //     'templateName':templateName
       };
 
       $.ajax({
@@ -76,6 +80,40 @@
             alert(pageResponse.message);
          }
       })
+   }
+
+   function checkDuplicate() {
+       let loginID = document.getElementById('inputLoginID').value;
+
+       if(!loginID) {
+           alert("아이디를 입력해주세요.");
+           return false;
+       }
+
+       if(!idVal.test(loginID)) {
+           alert("아이디는 영문소문자와 숫자로 5~10자리로 입력해주세요.");
+           return false;
+       }
+
+       let postObj = {
+           'loginID':loginID
+       };
+
+       $.ajax({
+           url: '${pageContext.request.contextPath}/member/check-duplicate',
+           method: 'post',
+           dataType: 'json',
+           data: JSON.stringify(postObj),
+           contentType: 'application/json; charset=utf-8',
+           success: function(pageResponse) {
+               alert(pageResponse.message);
+
+               if(pageResponse.code == 'SUCCESS') {
+                   document.getElementById('loginID').value = document.getElementById('inputLoginID').value;
+                   document.getElementById('inputLoginID').disabled = true;
+               }
+           }
+       })
    }
 
    function searchZipCode() {
@@ -116,29 +154,73 @@
    }
 
    function signUp() {
-      let memberID = document.getElementById('memberID').value;
       let password = document.getElementById('password').value;
       let name = document.getElementById('name').value;
-      const isVerified = document.getElementById('isVerified').value;
+      let birth = document.getElementById('birth').value;
+      let phone = document.getElementById('phone').value;
+      let email = document.getElementById('email').value;
+      let zipCode = document.getElementById('zipCode').value;
+      let address = document.getElementById('address').value;
+      let detailAddress = document.getElementById('detailAddress').value;
 
-      if(memberID == "") {
-         alert("아이디를 입력해주세요.");
-         return false;
+      if(!document.getElementById('inputLoginID').disabled) {
+          alert("아이디 중복체크를 해주세요.");
+          return false;
       }
 
-      if(password == ""){
+      if(!password){
          alert("비밀번호를 입력해주세요.");
          return false;
       }
 
-      if(name == "") {
+      if(!pwdVal.test(password)) {
+          alert("비밀번호는 영문대소문자와 숫자, 특수문자 포함하여 10~20자리로 입력해주세요.");
+          return false;
+      }
+
+      if(!name) {
          alert("이름을 입력해주세요.");
          return false;
       }
 
-      if(!isVerified) {
-         alert("본인인증을 해주세요.");
-         return false;
+      if(!birth) {
+          alert("생년월일 8자리를 입력해주세요.");
+          return false;
+      }
+
+      if(!phone) {
+          alert("휴대폰 번호를 입력해주세요.");
+          return false;
+      }
+
+      if(!email) {
+          alert("이메일을 입력해주세요.");
+          return false;
+      }
+
+      if(!phoneVal.test(phone)) {
+          alert("휴대폰 번호 형식이 맞지 않습니다. 다시 입력해주세요.");
+          return false;
+      }
+
+      if(!emailVal.test(email)) {
+          alert("이메일 형식이 맞지 않습니다. 다시 입력해주세요.");
+          return false;
+      }
+
+      if(!zipCode) {
+          alert("우편번호를 입력해주세요.");
+          return false;
+      }
+
+      if(!address) {
+          alert("주소를 입력해주세요.");
+          return false;
+      }
+
+      if(!detailAddress) {
+          alert("상세 주소를 입력해주세요.");
+          return false;
       }
 
      let form = document.signUpForm;

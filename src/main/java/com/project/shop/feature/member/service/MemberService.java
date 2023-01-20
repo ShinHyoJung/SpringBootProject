@@ -10,10 +10,17 @@ public interface MemberService {
 
     boolean isValidateIDPWD(PostLogin postLogin);
 
-    Member select(String memberID);
-    Member select(int idx);
+    Member selectByLoginID(String loginID);
+
+    Member selectByIdx(int idx);
+
     GetInfoResponse selectInfo(Member member);
 
     void update(Member member);
+
     void delete(int idx);
+
+    Member selectByNameAndBirth(String name, String birth);
+
+    boolean validateLoginID(String loginID);
 }

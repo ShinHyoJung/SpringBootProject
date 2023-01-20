@@ -11,14 +11,14 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <body>
 <p class="subtitle">내 정보</p>
-<form class="ui form" action="${pageContext.request.contextPath}/member/info/update" method="post" style="width: 30%;">
+<form class="ui form" name="infoForm" action="${pageContext.request.contextPath}/member/info/update" method="post" style="width: 30%;">
     <div class="field">
         <label> 이름  </label>
             <input type="text" id="name" name="name" value = "${getInfoResponse.name}">
     </div>
     <div class="field">
         <label> 아이디  </label>
-        ${getInfoResponse.memberID}
+        ${getInfoResponse.loginID}
     </div>
     <div class="field">
         <label> 비밀번호 </label>
@@ -30,11 +30,11 @@
     </div>
     <div class="field">
         <label> 휴대폰번호 </label>
-            <input type="text" id="mobile" name="mobile" value="${getInfoResponse.mobile}">
+            <input type="text" id="phone" name="phone" value="${getInfoResponse.phone}">
     </div>
     <div class="field">
         <label> 이메일 </label>
-            <input type="text" id="mail" name="mail" value="${getInfoResponse.mail}">
+            <input type="text" id="email" name="email" value="${getInfoResponse.email}">
     </div>
     <div class="field">
         <label> 우편번호 </label> <button class="ui button" type="button" onclick="searchZipCode();">우편번호 찾기</button>
@@ -57,15 +57,17 @@
         <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${getInfoResponse.updateDate}"/>
     </div>
         <input type="hidden" id="idx" name="idx" value="${getInfoResponse.idx}">
-        <button class="ui button" type="submit"><i class="save icon"></i></button>
+        <button class="ui button" type="button" onclick="updateInfo();"><i class="save icon"></i></button>
 </form>
-
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/member/info/download?idx=${idx}'">
     <i class="download icon"></i>엑셀파일 다운로드</button>
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}'">메인으로 가기</button>
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/member/withdrawal'">회원 탈퇴</button>
-
 <script>
+    let pwdVal = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]).{10,20}$/;
+    let emailVal = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    let phoneVal = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+
     function searchZipCode() {
         new daum.Postcode({
             oncomplete: function(data) {
@@ -101,6 +103,23 @@
                 document.getElementById('address').focus();
             }
         }).open();
+    }
+
+    function updateInfo() {
+        let password = document.getElementById('password').value;
+
+        if(!password) {
+            alert("비밀번호를 입력해주세요.");
+            return false;
+        }
+
+        if(!pwdVal.test(password)) {
+            alert("비밀번호는 영문대소문자와 숫자, 특수문자 포함하여 10~20자리로 입력해주세요.");
+            return false;
+        }
+
+        let form = document.infoForm;
+        form.submit();
     }
 </script>
 </body>

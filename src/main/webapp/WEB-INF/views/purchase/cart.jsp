@@ -57,7 +57,7 @@
                     stringHTML += '</div>';
                     stringHTML += '<div class="field">';
                     stringHTML += '<label>전화번호</label>';
-                    stringHTML += '<input type="text" id="mobile" name="mobile" value="' + pageResponse.member.mobile + '">';
+                    stringHTML += '<input type="text" id="mobile" name="mobile" value="' + pageResponse.member.phone + '">';
                     stringHTML += '</div>';
                     stringHTML += '<div class="field">';
                     stringHTML += '<label>우편 번호</label> <button class="ui button" type="button" onclick="searchZipCode();">우편번호 찾기</button>';
@@ -133,9 +133,9 @@
             merchant_uid : 'merchant_' + new Date().getTime(),
             name : '결제테스트',
             amount : price,
-            buyer_email: '${member.mail}',
+            buyer_email: '${member.email}',
             buyer_name : '${member.name}',
-            buyer_tel : '${member.mobile}',
+            buyer_tel : '${member.phone}',
             buyer_addr : '${member.address}',
         }, function(rsp) {
             if(rsp.success) {

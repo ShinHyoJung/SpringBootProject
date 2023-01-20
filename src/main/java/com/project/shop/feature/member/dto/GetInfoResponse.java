@@ -10,13 +10,13 @@ public class GetInfoResponse {
     @NonNull
     private int idx;
     @NonNull
-    private String memberID;
+    private String loginID;
     @NonNull
     private String name;
 
     private String birth;
-    private String mobile;
-    private String mail;
+    private String phone;
+    private String email;
     private String address;
     private String detailAddress;
     private String zipCode;

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class PostWrite {
-    private String memberID;
+    private String loginID;
     private String title;
     private String content;
     private String writer;
@@ -13,7 +13,7 @@ public class PostWrite {
 
     public Board toEntity() {
         Board board = new Board();
-        board.setMemberID(this.memberID);
+        board.setLoginID(this.loginID);
         board.setTitle(this.title);
         board.setContent(this.content);
         board.setWriter(this.writer);

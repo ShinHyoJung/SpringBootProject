@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class GetWriteResponse {
-    private String memberID;
+    private String loginID;
     private String writer;
     private int idx;
 }

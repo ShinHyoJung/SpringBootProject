@@ -47,7 +47,7 @@ public class PurchaseController {
     @PostMapping("/pay")
     public String getPay(Model model, PostPayment postPayment,  HttpSession session) throws SQLException {
         int idx = (int) session.getAttribute("idx");
-        Member member = memberService.select(idx);
+        Member member = memberService.selectByIdx(idx);
         Sell sell = sellService.select(postPayment.getSellID());
 
         List<Category> categoryList = categoryService.selectAll();
@@ -191,7 +191,7 @@ public class PurchaseController {
     @GetMapping("/cart")
     public String getCart(Model model, HttpSession session) {
         int idx = (int)session.getAttribute("idx");
-        Member member = memberService.select(idx);
+        Member member = memberService.selectByIdx(idx);
 
         model.addAttribute("member", member);
         model.addAttribute("menu", "user");
@@ -204,7 +204,7 @@ public class PurchaseController {
     public PostCartListResponse postCartList(HttpSession session) {
         PostCartListResponse pageResponse = new PostCartListResponse();
         int idx = (int)session.getAttribute("idx");
-        Member member = memberService.select(idx);
+        Member member = memberService.selectByIdx(idx);
         ArrayList<Cart> cartList = (ArrayList<Cart>)session.getAttribute("cartList");
         int totalPrice = 0;
 

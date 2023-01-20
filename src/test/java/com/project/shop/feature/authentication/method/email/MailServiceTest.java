@@ -1,7 +1,7 @@
-package com.project.shop.feature.authentication.method.mail;
+package com.project.shop.feature.authentication.method.email;
 
-import com.project.shop.feature.authentication.method.mail.service.MailService;
-import com.project.shop.feature.authentication.method.mail.vo.Mail;
+import com.project.shop.feature.authentication.method.email.service.MailService;
+import com.project.shop.feature.authentication.method.email.vo.Mail;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

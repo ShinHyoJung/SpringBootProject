@@ -2,10 +2,10 @@ package com.project.shop.feature.authentication.controller;
 
 import com.project.shop.feature.authentication.dto.PostCheckAuth;
 import com.project.shop.feature.authentication.dto.PostCheckAuthResponse;
-import com.project.shop.feature.authentication.method.mail.dto.PostSendMail;
-import com.project.shop.feature.authentication.method.mail.dto.PostSendMailResponse;
-import com.project.shop.feature.authentication.method.mail.service.MailService;
-import com.project.shop.feature.authentication.method.mail.vo.Mail;
+import com.project.shop.feature.authentication.method.email.dto.PostSendEmail;
+import com.project.shop.feature.authentication.method.email.dto.PostSendEmailResponse;
+import com.project.shop.feature.authentication.method.email.service.MailService;
+import com.project.shop.feature.authentication.method.email.vo.Mail;
 import com.project.shop.feature.authentication.method.sms.dto.PostSendSms;
 import com.project.shop.feature.authentication.method.sms.dto.PostSendSmsResponse;
 import com.project.shop.feature.authentication.method.sms.service.SmsService;
@@ -13,7 +13,6 @@ import com.project.shop.feature.authentication.method.sms.vo.Sms;
 import com.project.shop.feature.authentication.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,9 +34,9 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @ResponseBody
-    @PostMapping("/send-mail")
-    public PostSendMailResponse sendMail(@RequestBody PostSendMail postSendMail, HttpSession session) throws MessagingException {
-        PostSendMailResponse pageResponse = new PostSendMailResponse();
+    @PostMapping("/send-email")
+    public PostSendEmailResponse sendEMail(@RequestBody PostSendEmail postSendEMail, HttpSession session) throws MessagingException {
+        PostSendEmailResponse pageResponse = new PostSendEmailResponse();
         String authCode = authenticationService.createAuthCode();
         session.setAttribute("authCode", authCode);
 
@@ -45,18 +44,18 @@ public class AuthenticationController {
         variables.put("authCode", authCode);
 
         Mail mail = new Mail();
-        mail.setSubject(postSendMail.getSubject());
-        mail.setTemplateName(postSendMail.getTemplateName());
-        mail.setText(postSendMail.getText());
-        mail.setTo(postSendMail.getMail());
+        mail.setSubject(postSendEMail.getSubject());
+        mail.setTemplateName(postSendEMail.getTemplateName());
+        mail.setText(postSendEMail.getText());
+        mail.setTo(postSendEMail.getEmail());
         mail.setVariables(variables);
 
         try {
             mailService.send(mail);
-            pageResponse.setCode("0000");
+            pageResponse.setCode("SUCCESS");
             pageResponse.setMessage("인증번호가 전송되었습니다.");
         } catch (Exception e) {
-            pageResponse.setCode("0001");
+            pageResponse.setCode("FAIL");
             pageResponse.setMessage("인증번호 전송을 실패하였습니다.");
         }
         return pageResponse;
@@ -97,10 +96,10 @@ public class AuthenticationController {
 
         if(code.equals(authCode)) {
             session.removeAttribute("authCode");
-            pageResponse.setCode("0000");
+            pageResponse.setCode("SUCCESS");
             pageResponse.setMessage("인증 성공했습니다.");
         } else {
-            pageResponse.setCode("0001");
+            pageResponse.setCode("FAIL");
             pageResponse.setMessage("인증 실패했습니다 다시 시도해주세요.");
         }
         return pageResponse;

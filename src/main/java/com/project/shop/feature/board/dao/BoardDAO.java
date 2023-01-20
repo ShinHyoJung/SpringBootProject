@@ -31,13 +31,13 @@ public class BoardDAO {
     }
 
     public void insert(Board board) {
-        String sql = "INSERT INTO board (member_id, title, content, writer, create_date, update_date, idx)" +
+        String sql = "INSERT INTO board (login_id, title, content, writer, create_date, update_date, idx)" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         Date now = new Date();
         long nowDate = now.getDate();
 
-        jdbcTemplate.update(sql, board.getMemberID(), board.getTitle(), board.getContent(), board.getWriter(),
+        jdbcTemplate.update(sql, board.getLoginID(), board.getTitle(), board.getContent(), board.getWriter(),
                 new java.sql.Date(nowDate), Timestamp.valueOf(LocalDateTime.now()), board.getIdx());
     }
 
@@ -73,7 +73,6 @@ public class BoardDAO {
                 board.setCreateDate(rs.getDate("create_date"));
                 board.setUpdateDate(rs.getDate("update_date"));
                 board.setIdx(rs.getInt("idx"));
-                board.setMemberID(rs.getString("member_id"));
                 return board;
             }
         });

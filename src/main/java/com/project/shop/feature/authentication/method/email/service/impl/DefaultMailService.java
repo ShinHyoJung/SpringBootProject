@@ -1,8 +1,8 @@
-package com.project.shop.feature.authentication.method.mail.service.impl;
+package com.project.shop.feature.authentication.method.email.service.impl;
 
-import com.project.shop.feature.authentication.method.mail.service.MailService;
-import com.project.shop.feature.authentication.method.mail.vo.Mail;
-import com.project.shop.feature.authentication.method.mail.vo.MailMeta;
+import com.project.shop.feature.authentication.method.email.service.MailService;
+import com.project.shop.feature.authentication.method.email.vo.Mail;
+import com.project.shop.feature.authentication.method.email.vo.MailMeta;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;

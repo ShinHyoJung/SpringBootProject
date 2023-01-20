@@ -27,7 +27,7 @@ public class DefaultMemberService implements MemberService {
     public boolean isValidateIDPWD(PostLogin postLogin) {
         boolean isValidate;
 
-        Member member = memberDAO.selectByMemberID(postLogin.getId());
+        Member member = memberDAO.selectByLoginID(postLogin.getId());
         if(member == null) {
             isValidate = false;
         } else {
@@ -38,32 +38,32 @@ public class DefaultMemberService implements MemberService {
     }
 
     @Override
-    public Member select(String memberID) {
-        return memberDAO.selectByMemberID(memberID);
+    public Member selectByLoginID(String loginID) {
+        return memberDAO.selectByLoginID(loginID);
     }
 
     @Override
-    public Member select(int idx) {
+    public Member selectByIdx(int idx) {
         return memberDAO.select(idx);
     }
 
     @Override
     public GetInfoResponse selectInfo(Member member) {
-        GetInfoResponse getInfoResponse = new GetInfoResponse(member.getIdx(), member.getMemberID(), member.getName());
+        GetInfoResponse getInfoResponse = new GetInfoResponse(member.getIdx(), member.getLoginID(), member.getName());
 
         if(StringUtils.isNotEmpty(member.getBirth())) {
             String birth = member.getBirth();
             getInfoResponse.setBirth(birth);
         }
 
-        if(StringUtils.isNotEmpty(member.getMobile())) {
-            String mobile = member.getMobile();
-            getInfoResponse.setMobile(mobile);
+        if(StringUtils.isNotEmpty(member.getPhone())) {
+            String phone = member.getPhone();
+            getInfoResponse.setPhone(phone);
         }
 
-        if(StringUtils.isNotEmpty(member.getMail())) {
-            String mail = member.getMail();
-            getInfoResponse.setMail(mail);
+        if(StringUtils.isNotEmpty(member.getEmail())) {
+            String email = member.getEmail();
+            getInfoResponse.setEmail(email);
         }
 
         if(StringUtils.isNotEmpty(member.getAddress())) {
@@ -97,5 +97,22 @@ public class DefaultMemberService implements MemberService {
     @Override
     public void delete(int idx) {
         memberDAO.delete(idx);
+    }
+
+    @Override
+    public Member selectByNameAndBirth(String name, String birth) {
+        return memberDAO.selectByNameAndBirth(name, birth);
+    }
+
+    @Override
+    public boolean validateLoginID(String loginID) {
+        boolean isDuplicate;
+        try {
+            memberDAO.validateLoginID(loginID);
+            isDuplicate = true;
+        } catch (Exception e) {
+            isDuplicate = false;
+        }
+        return isDuplicate;
     }
 }

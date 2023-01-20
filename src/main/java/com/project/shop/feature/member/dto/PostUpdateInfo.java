@@ -9,8 +9,8 @@ public class PostUpdateInfo {
     private String name;
     private String password;
     private String birth;
-    private String mobile;
-    private String mail;
+    private String phone;
+    private String email;
     private String address;
     private String detailAddress;
     private String zipCode;
@@ -21,8 +21,8 @@ public class PostUpdateInfo {
         member.setName(this.name);
         member.setPassword(password);
         member.setBirth(this.birth);
-        member.setMobile(this.mobile);
-        member.setMail(this.mail);
+        member.setPhone(this.phone);
+        member.setEmail(this.email);
         member.setAddress(this.address);
         member.setDetailAddress(this.detailAddress);
         member.setZipCode(this.zipCode);

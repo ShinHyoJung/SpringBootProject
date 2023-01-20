@@ -1,5 +1,6 @@
 package com.project.shop.feature.member.controller;
 
+import com.project.shop.feature.authentication.method.email.dto.PostSendEmailResponse;
 import com.project.shop.feature.code.error.ErrorCode;
 import com.project.shop.feature.code.success.SuccessCode;
 import com.project.shop.feature.manage.category.entity.Category;
@@ -47,12 +48,32 @@ public class MemberController {
 
     @PostMapping("/signUp") // 회원가입
     public String postSignUp(Model model, PostSignUp postSignUp) {
-        String password = postSignUp.getPassword();
-        String encryptPassword = bCryptPasswordEncoder.encode(password);
-        memberService.insert(postSignUp.toEntity(encryptPassword));
+        try {
+            String password = postSignUp.getPassword();
+            String encryptPassword = bCryptPasswordEncoder.encode(password);
+            memberService.insert(postSignUp.toEntity(encryptPassword));
+        } catch (Exception e) {
 
+        }
         model.addAttribute("main", "main/default");
         return "view";
+    }
+
+    @ResponseBody
+    @PostMapping("/check-duplicate")
+    public PostCheckDuplicateResponse postCheckDuplicate(@RequestBody PostCheckDuplicate postCheckDuplicate) {
+        PostCheckDuplicateResponse pageResponse = new PostCheckDuplicateResponse();
+
+        boolean isDuplicate = memberService.validateLoginID(postCheckDuplicate.getLoginID());
+
+        if(isDuplicate) {
+            pageResponse.setCode("FAIL");
+            pageResponse.setMessage("사용중인 아이디 입니다.");
+        } else {
+            pageResponse.setCode("SUCCESS");
+            pageResponse.setMessage("사용가능한 아이디 입니다.");
+        }
+        return pageResponse;
     }
 
     @GetMapping("/login")
@@ -70,7 +91,7 @@ public class MemberController {
 
         if(isValidate) {
             if(StringUtils.isNotEmpty(postLogin.getId())) {
-                Member member = memberService.select(postLogin.getId());
+                Member member = memberService.selectByLoginID(postLogin.getId());
                 int idx = member.getIdx();
                 session.setAttribute("idx", idx);
                 session.setAttribute("loggedIn", postLogin.getId());
@@ -90,7 +111,7 @@ public class MemberController {
     @GetMapping("/info")
     public String getInfo(Model model, HttpSession session) {
         int idx = (int) session.getAttribute("idx");
-        Member member = memberService.select(idx);
+        Member member = memberService.selectByIdx(idx);
 
         GetInfoResponse getInfoResponse = memberService.selectInfo(member);
         model.addAttribute("menu", "user");
@@ -132,13 +153,13 @@ public class MemberController {
         headerRow.createCell(4).setCellValue("이메일");
         headerRow.createCell(5).setCellValue("주소");
 
-        Member member = memberService.select(getDownloadInfo.getIdx());
+        Member member = memberService.selectByIdx(getDownloadInfo.getIdx());
         Row row = sheet.createRow(rowNo++);
-        row.createCell(0).setCellValue(member.getMemberID());
+        row.createCell(0).setCellValue(member.getLoginID());
         row.createCell(1).setCellValue(member.getName());
         row.createCell(2).setCellValue(member.getBirth());
-        row.createCell(3).setCellValue(member.getMobile());
-        row.createCell(4).setCellValue(member.getMail());
+        row.createCell(3).setCellValue(member.getPhone());
+        row.createCell(4).setCellValue(member.getEmail());
         row.createCell(5).setCellValue(member.getAddress());
 
         response.setContentType("ms-vnd/excel");
@@ -172,25 +193,81 @@ public class MemberController {
     }
 
     @GetMapping("/id/find")
-    public String getIdFind(Model model) {
+    public String getFindId(Model model) {
+        List<Category> categoryList = categoryService.selectAll();
+
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("menu", "sell");
         model.addAttribute("main", VIEW_PREFIX + "id/find");
         return "view";
     }
 
+    @ResponseBody
+    @PostMapping("/validate")
+    public PostValidateMemberResponse postValidateMember(@RequestBody PostValidateMember postValidateMember) {
+        PostValidateMemberResponse pageResponse = new PostValidateMemberResponse();
+        try {
+            Member member = memberService.selectByNameAndBirth(postValidateMember.getName(), postValidateMember.getBirth());
+
+            if(postValidateMember.getEmail().equals(member.getEmail())) {
+                pageResponse.setCode("SUCCESS");
+                pageResponse.setMessage("본인인증이 완료되었습니다.");
+                pageResponse.setIdx(member.getIdx());
+            } else {
+                pageResponse.setCode("FAIL");
+                pageResponse.setMessage("본인인증을 실패하였습니다. 다시 시도해주세요.");
+            }
+        } catch (Exception e) {
+            pageResponse.setCode("FAIL");
+            pageResponse.setMessage("본인인증을 실패하였습니다. 다시 시도해주세요.");
+        }
+        return pageResponse;
+    }
+
+    @ResponseBody
+    @PostMapping("/id/find")
+    public PostFindIdResponse postFindId(@RequestBody PostFindId postFindId) {
+        PostFindIdResponse pageResponse = new PostFindIdResponse();
+        Member member = memberService.selectByIdx(postFindId.getIdx());
+
+        if(member == null) {
+            pageResponse.setCode("FAIL");
+            pageResponse.setMessage("아이디 찾기를 실패하였습니다.");
+        } else {
+            pageResponse.setCode("SUCCESS");
+            pageResponse.setMessage("아이디 찾기를 성공하였습니다.");
+            pageResponse.setLoginID(member.getLoginID());
+        }
+        return pageResponse;
+    }
+
     @GetMapping("/id/found")
-    public String getIdFound(Model model) {
+    public String getFoundId(Model model, @ModelAttribute GetFoundId getFoundId) {
+        List<Category> categoryList = categoryService.selectAll();
+
+        model.addAttribute("loginID", getFoundId.getLoginID());
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("menu", "sell");
         model.addAttribute("main", VIEW_PREFIX + "id/found");
         return "view";
     }
 
     @GetMapping("/password/find")
-    public String getPwdFind(Model model) {
+    public String getFindPwd(Model model) {
+        List<Category> categoryList = categoryService.selectAll();
+
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("menu", "sell");
         model.addAttribute("main", VIEW_PREFIX + "password/find");
         return "view";
     }
 
     @GetMapping("/password/change")
-    public String getPwdChange(Model model) {
+    public String getChangePwd(Model model) {
+        List<Category> categoryList = categoryService.selectAll();
+
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("menu", "sell");
         model.addAttribute("main", VIEW_PREFIX + "password/found");
         return "view";
     }

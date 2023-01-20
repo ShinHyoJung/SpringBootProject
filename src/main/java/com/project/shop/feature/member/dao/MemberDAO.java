@@ -34,19 +34,19 @@ public class MemberDAO {
 
     public void insert(Member member) {
         String sql = "INSERT INTO member(" +
-                "member_id, password, name, birth, address, detail_address, zip_code, mobile, mail, create_date, update_date) " +
+                "login_id, password, name, birth, address, detail_address, zip_code, phone, email, create_date, update_date) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        jdbcTemplate.update(sql, member.getMemberID(), member.getPassword(), member.getName(), member.getBirth(),
-                member.getAddress(), member.getDetailAddress(), member.getZipCode(), member.getMobile(),
+        jdbcTemplate.update(sql, member.getLoginID(), member.getPassword(), member.getName(), member.getBirth(),
+                member.getAddress(), member.getDetailAddress(), member.getZipCode(), member.getPhone(), member.getEmail(),
                 Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
     }
 
-    public Member selectByMemberID(String memberID) {
+    public Member selectByLoginID(String loginID) {
         String sql = "SELECT idx AS idx, password AS password \n" +
-                "FROM member WHERE 1=1 AND member_id = ?";
+                "FROM member WHERE 1=1 AND login_id = ?";
 
-        Member member = jdbcTemplate.queryForObject(sql, new Object[]{memberID}, new RowMapper<Member>() {
+        Member member = jdbcTemplate.queryForObject(sql, new Object[]{loginID}, new RowMapper<Member>() {
             @Override
             public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Member member = new Member();
@@ -65,11 +65,11 @@ public class MemberDAO {
             public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Member member = new Member();
                 member.setIdx(rs.getInt("idx"));
-                member.setMemberID(rs.getString("member_id"));
+                member.setLoginID(rs.getString("login_id"));
                 member.setPassword(rs.getString("password"));
                 member.setName(rs.getString("name"));
-                member.setMobile(rs.getString("mobile"));
-                member.setMail(rs.getString("mail"));
+                member.setPhone(rs.getString("phone"));
+                member.setEmail(rs.getString("email"));
                 member.setBirth(rs.getString("birth"));
                 member.setAddress(rs.getString("address"));
                 member.setDetailAddress(rs.getString("detail_address"));
@@ -84,12 +84,12 @@ public class MemberDAO {
 
     public void update(Member member) {
         String sql = "UPDATE member SET " +
-                "password = ?, name = ?, birth = ?, mobile = ?, " +
-                "mail = ?, address = ?, detail_address = ?, zip_code = ?, update_date = ? WHERE 1=1 " +
+                "password = ?, name = ?, birth = ?, phone = ?, " +
+                "email = ?, address = ?, detail_address = ?, zip_code = ?, update_date = ? WHERE 1=1 " +
                 "AND idx = ?";
 
-         jdbcTemplate.update(sql, member.getPassword(), member.getName(), member.getBirth(), member.getMobile(),
-                member.getMail(), member.getAddress(), member.getDetailAddress(), member.getZipCode(),
+         jdbcTemplate.update(sql, member.getPassword(), member.getName(), member.getBirth(), member.getPhone(),
+                member.getEmail(), member.getAddress(), member.getDetailAddress(), member.getZipCode(),
                 Timestamp.valueOf(LocalDateTime.now()), member.getIdx());
     }
 
@@ -98,4 +98,25 @@ public class MemberDAO {
         jdbcTemplate.update(sql, new Object[]{idx});
     }
 
+    public Member selectByNameAndBirth(String name, String birth) {
+        String sql = "SELECT * FROM member WHERE 1=1 AND name = ? AND birth = ?";
+
+        Member member = jdbcTemplate.queryForObject(sql, new Object[]{name, birth}, new RowMapper<Member>() {
+            @Override
+            public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Member member = new Member();
+                member.setIdx(rs.getInt("idx"));
+                member.setEmail(rs.getString("email"));
+                return member;
+            }
+        });
+        return member;
+    }
+
+    public boolean validateLoginID(String loginID) {
+        String sql = "SELECT 1 FROM member WHERE 1=1 AND login_id = ?";
+
+        boolean isDuplicate = jdbcTemplate.queryForObject(sql, new Object[]{loginID}, Boolean.class);
+        return isDuplicate;
+    }
 }

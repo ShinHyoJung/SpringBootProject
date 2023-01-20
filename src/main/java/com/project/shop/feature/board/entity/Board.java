@@ -7,7 +7,7 @@ import java.util.Date;
 @Data
 public class Board {
     private int boardID;
-    private String memberID;
+    private String loginID;
     private String title;
     private String content;
     private String writer;
