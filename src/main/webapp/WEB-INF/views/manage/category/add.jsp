@@ -9,7 +9,7 @@
 <html>
 <body>
 <p class="subtitle"> 카테고리 추가 </p>
-  <form class="ui form" method="post" action="${pageContext.request.contextPath}/manage/category/add" style="width: 50%;">
+  <form class="ui form" method="post" action="${pageContext.request.contextPath}/manage/category/add" style="width: 30%;">
     <div class="field">
       <input type="text" id="name" name="name" placeholder="카테고리 이름">
     </div>

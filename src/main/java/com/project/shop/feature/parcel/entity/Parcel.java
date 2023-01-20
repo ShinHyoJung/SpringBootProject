@@ -18,6 +18,8 @@ public class Parcel {
     private int parcelID;
     private String name;
     private String address;
+    private String detailAddress;
+    private String zipCode;
     private int quantity;
     private int status;
     private String waybillNumber;

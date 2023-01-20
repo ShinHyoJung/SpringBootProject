@@ -71,6 +71,16 @@ public class DefaultMemberService implements MemberService {
             getInfoResponse.setAddress(address);
         }
 
+        if(StringUtils.isNotEmpty(member.getDetailAddress())) {
+            String detailAddress = member.getDetailAddress();
+            getInfoResponse.setDetailAddress(detailAddress);
+        }
+
+        if(StringUtils.isNotEmpty(member.getZipCode())) {
+            String zipCode = member.getZipCode();
+            getInfoResponse.setZipCode(zipCode);
+        }
+
         Date createDate = member.getCreateDate();
         Date updateDate = member.getUpdateDate();
         getInfoResponse.setCreateDate(createDate);

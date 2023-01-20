@@ -12,9 +12,11 @@ public class PostDoPay {
     private String price;
     private int quantity;
     private String address;
+    private String detailAddress;
+    private String zipCode;
+    private String impUid;
     private int sellID;
     private int idx;
-    private String impUid;
 
     public List<Purchase> toEntity() {
         List<Purchase> purchaseList = new ArrayList<>();
@@ -23,6 +25,8 @@ public class PostDoPay {
         purchase.setPrice(this.price);
         purchase.setQuantity(this.quantity);
         purchase.setAddress(this.address);
+        purchase.setDetailAddress(this.detailAddress);
+        purchase.setZipCode(this.zipCode);
         purchase.setImpUid(this.impUid);
         purchase.setSellID(this.sellID);
         purchase.setIdx(this.idx);

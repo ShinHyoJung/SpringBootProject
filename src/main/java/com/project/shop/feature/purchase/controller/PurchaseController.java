@@ -5,6 +5,8 @@ import com.project.shop.feature.cart.service.CartService;
 import com.project.shop.feature.image.sellimage.entity.SellImage;
 import com.project.shop.feature.image.sellimage.service.SellImageService;
 import com.project.shop.feature.manage.category.dto.PostAdd;
+import com.project.shop.feature.manage.category.entity.Category;
+import com.project.shop.feature.manage.category.service.CategoryService;
 import com.project.shop.feature.member.service.MemberService;
 import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.parcel.dto.PostAddParcel;
@@ -40,6 +42,7 @@ public class PurchaseController {
     private final PurchaseService purchaseService;
     private final PayService payService;
     private final ParcelService parcelService;
+    private final CategoryService categoryService;
 
     @PostMapping("/pay")
     public String getPay(Model model, PostPayment postPayment,  HttpSession session) throws SQLException {
@@ -47,6 +50,10 @@ public class PurchaseController {
         Member member = memberService.select(idx);
         Sell sell = sellService.select(postPayment.getSellID());
 
+        List<Category> categoryList = categoryService.selectAll();
+
+        model.addAttribute("menu", "sell");
+        model.addAttribute("categoryList", categoryList);
         model.addAttribute("quantity", postPayment.getQuantity());
         model.addAttribute("sell", sell);
         model.addAttribute("member", member);
@@ -66,6 +73,8 @@ public class PurchaseController {
         postAddParcel.setName(postDoPay.getName());
         postAddParcel.setIdx(postDoPay.getIdx());
         postAddParcel.setAddress(postDoPay.getAddress());
+        postAddParcel.setDetailAddress(postDoPay.getDetailAddress());
+        postAddParcel.setZipCode(postDoPay.getZipCode());
         postAddParcel.setQuantity(postDoPay.getQuantity());
         postAddParcel.setStatus(0);
         postAddParcel.setSellID(postDoPay.getSellID());

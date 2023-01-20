@@ -11,7 +11,7 @@
 <html>
 <body onload="printList()">
 <p class="subtitle">주문 내역</p>
-    <div class="ui relaxed divided list" id="list">
+    <div class="ui very basic table" id="table" style="width: 70%;">
     <!--<c:forEach items="${purchaseList}" var="purchaseList">
         <div class="ui item">
              <img class="ui image" src="${pageContext.request.contextPath}/static/images/cut/${purchaseList.thumbnailImageName}"/>
@@ -26,7 +26,7 @@
         </div>
       </c:forEach>-->
     </div>
-<div id="pagination" class="ui pagination menu"></div>
+<div id="pagination" class="ui pagination menu" style="margin-top: 100px; margin-left: 200px;"></div>
 <script>
 function printList(currentPage) {
     if(!currentPage) {
@@ -55,7 +55,7 @@ function printList(currentPage) {
 
                 for (let i = pageResponse.paging.startPage; i <= pageResponse.paging.endPage; i++) {
                     if (currentPage == i) {
-                        pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
+                        pageHTML += '<a class="active item" onclick="printList(' + i + ')">' + i + '</a>';
                     } else {
                         pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
                     }
@@ -65,22 +65,37 @@ function printList(currentPage) {
                     pageHTML += '<a class="item"> > </a>';
                 }
 
+                listHTML += '<thead>';
+                listHTML += '<tr>';
+                listHTML += '<th class="two wide" style="width:40px;">주문 번호</th>';
+                listHTML += '<th class="three wide">제품 명</th>';
+                listHTML += '<th class="two wide"> 수량 </th>';
+                listHTML += '<th class="two wide"> 가격 </th>';
+                listHTML += '<th class="two wide"> 주문 상태 </th>';
+                listHTML += '<th class="three wide"> 주문일시 </th>';
+                listHTML += '<th class="two wide"></th>';
+                listHTML += '</tr>';
+                listHTML += '</thead>';
+                listHTML += '<tbody>';
+
                 $.each(pageResponse.purchaseList, function(i, purchaseList) {
-                    listHTML += '<div class="ui item">';
-                    listHTML += '<div class="description">주문 번호: ' + purchaseList.purchaseID + '</div>';
-                    listHTML += '<div class="description">제품 명: ' + purchaseList.name + '</div>';
-                    listHTML += '<div class="description">수량: ' + purchaseList.quantity + '</div>';
-                    listHTML += '<div class="description">가격 : ' + purchaseList.price + '</div>';
-                    listHTML += '<div class="description">주문 상태: ' + purchaseList.orderStatus + '</div>';
-                    listHTML += '<div class="description">주문 일시: ' + purchaseList.purchaseDate + '</div>';
-                    listHTML += '<button class="ui button" type="button" onclick="cancel('+ purchaseList.purchaseID + ')">주문취소</button>';
-                    listHTML += '</div>';
+                    listHTML += '<tr>';
+                    listHTML += '<td>' + purchaseList.purchaseID + '</td>';
+                    listHTML += '<td>' + purchaseList.name + '</td>';
+                    listHTML += '<td>' + purchaseList.quantity + '</td>';
+                    listHTML += '<td>' + purchaseList.price + '원</td>';
+                    listHTML += '<td>' + purchaseList.orderStatus + '</td>';
+                    listHTML += '<td>' + purchaseList.purchaseDate + '</td>';
+                    listHTML += '<td><button class="ui button" type="button" onclick="cancel('+ purchaseList.purchaseID + ')">주문취소</button></td>';
+                    listHTML += '</tr>';
                 });
 
-                $('#list').html(listHTML);
+                listHTML += '</tbody>';
+
+                $('#table').html(listHTML);
                 $('#pagination').html(pageHTML);
             } else {
-                $('#list').css('display', 'none');
+                $('#table').css('display', 'none');
                 $('#pagination').css('display', 'none');
                 alert(pageResponse.message);
             }
@@ -100,6 +115,7 @@ function cancel(purchaseID) {
       data: JSON.stringify(postObj),
       contentType: 'application/json; charset=utf-8',
       success: function(pageResponse) {
+          alert(pageResponse.message);
           location.reload();
       }
     });

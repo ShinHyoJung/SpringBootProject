@@ -21,7 +21,7 @@
     <input type="text" id="keyword" onkeyup="enter()" placeholder="Search...">
     <i class="search icon"></i>
 </div>
-<div class="ui six cards" id="cards" style="margin-top: 20px;">
+<div class="ui five cards" id="cards" style="margin-top: 20px;">
 </div>
 <div id="pagination" class="ui pagination menu" style="margin-top: 30px; margin-left: 500px;">
 </div>
@@ -68,7 +68,7 @@
 
                     for(let i = pageResponse.paging.startPage; i <= pageResponse.paging.endPage; i++) {
                         if(currentPage == i) {
-                            pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
+                            pageHTML += '<a class="active item" onclick="printList(' + i + ')">' + i + '</a>';
                         } else {
                             pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
                         }
@@ -81,7 +81,7 @@
                     $.each(pageResponse.sellList, function(i, sellList) {
                         let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + sellList.thumbnailImageName;
                         let detailSrc = '${pageContext.request.contextPath}/sell/detail/' + sellList.sellID;
-                        listHTML += '<div class="card">';
+                        listHTML += '<div class="card" style="width:15%;">';
                         listHTML += '<input type="hidden" id="sellID" name="sellID" value="' + sellList.sellID + '"/>';
                         listHTML += '<img src="' + imgSrc +'"/>';
                         listHTML += '<div class="extra">';

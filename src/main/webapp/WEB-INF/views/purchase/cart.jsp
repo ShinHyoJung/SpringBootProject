@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: ShinHyoJung
@@ -7,15 +6,16 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <!-- iamport.payment.js -->
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <body onload="printList()">
 <p class="subtitle">장바구니</p>
 <form class="ui form" id="form" name="payForm" method="post" action="${pageContext.request.contextPath}/purchase/do" style="width: 50%;">
 </form>
 <br>
-
 <script>
     function printList() {
         $.ajax({
@@ -25,11 +25,11 @@
             success: function(pageResponse) {
                 console.log(pageResponse);
                 let stringHTML = '';
-                let emptyMsg = '장바구니가 비었습니다.';
 
                 if(pageResponse.code == 'SUCCESS') {
                     stringHTML += '<input type="hidden" id="idx" name="idx" value="'+ pageResponse.member.idx + '">';
                     stringHTML += '<input type="hidden" id="price" name="price" value="' + pageResponse.totalPrice +'">';
+                    stringHTML += '<input type="hidden" id="impUid" name="impUid" value="">';
                     $.each(pageResponse.cartList, function(i, cartList) {
                         let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + cartList.thumbnailImageName;
                         stringHTML += '<input type="hidden" id="sellID" name="sellID" value="' + cartList.sellID + '">';
@@ -42,7 +42,8 @@
                         stringHTML += '<div class="content">';
                         stringHTML += '<a class="header">' + cartList.name + '</a>';
                         stringHTML += '<div class="description">';
-                        stringHTML += '<p>' + cartList.price + "</p>";
+                        stringHTML += '<p>' + cartList.price + '원</p>';
+                        stringHTML += '<p>수량: ' + cartList.quantity +'</p>';
                         stringHTML += '<button class="ui button" type="button" onclick="dumbCart(this.id)" value="'+ cartList.sellID +'">삭제</button>';
                         stringHTML += '</div>';
                         stringHTML += '</div>';
@@ -59,13 +60,20 @@
                     stringHTML += '<input type="text" id="mobile" name="mobile" value="' + pageResponse.member.mobile + '">';
                     stringHTML += '</div>';
                     stringHTML += '<div class="field">';
-                    stringHTML += '<label>배송지 주소</label>';
+                    stringHTML += '<label>우편 번호</label> <button class="ui button" type="button" onclick="searchZipCode();">우편번호 찾기</button>';
+                    stringHTML += '<input type="text" id="zipCode" name="zipCode" value="' + pageResponse.member.zipCode + '" style="margin-top: 20px;">';
+                    stringHTML += '</div>';
+                    stringHTML += '<div class="field">';
+                    stringHTML += '<label>주소</label>';
                     stringHTML += '<input type="text" id="address" name="address" value="' + pageResponse.member.address + '">';
                     stringHTML += '</div>';
-
+                    stringHTML += '<div class="field">';
+                    stringHTML += '<label>상세 주소</label>';
+                    stringHTML += '<input type="text" id="detailAddress" name="detailAddress" value="' + pageResponse.member.detailAddress + '">';
+                    stringHTML += '</div>';
                     stringHTML += '<div class="ui divider">';
                     stringHTML += '<p style="font-size: 20px; margin-top: 30px;" > 계산 금액: ' +  pageResponse.totalPrice + '원 </p><br>';
-                    stringHTML += '<button class="ui button" type="button" id="payBtn" onclick="payCard()" style="margin-top: 30px;"><i class="credit card icon"></i>결제</button>';
+                    stringHTML += '<button class="ui button" type="button" id="payBtn" onclick="payCard()" style="margin-top: 10px;"><i class="credit card icon"></i>결제</button>';
                     stringHTML += '</div>';
 
                     $('#form').html(stringHTML);
@@ -74,6 +82,43 @@
                 }
             }
         });
+    }
+
+    function searchZipCode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                let addr = '';
+                let extraAddr = '';
+
+                if(data.roadAddress !== '') {
+                    addr = data.roadAddress;
+                } else if(data.jibunAddress !== '') {
+                    addr = data.jibunAddress;
+                }
+
+                if(data.userSelectType === 'R') {
+                    if(data.bname !== ''&&/[동][로][가]$/g.test(data.bname)) {
+                        extraAddr += data.bname;
+                    }
+
+                    if(data.buildingName !== ''&& data.apartment === 'Y') {
+                        extraAddr += (extraAddr !== ''? ',' + data.buildingName : data.buildingName);
+                    }
+
+                    if(extraAddr !== '') {
+                        extraAddr = '(' + extraAddr + ')';
+                    }
+                    document.getElementById('address').value = extraAddr;
+                } else {
+                    document.getElementById('address').value = '';
+                }
+
+                document.getElementById('zipCode').value = data.zonecode;
+                document.getElementById('address').value = addr;
+
+                document.getElementById('address').focus();
+            }
+        }).open();
     }
 
     function payCard() {
@@ -94,6 +139,8 @@
             buyer_addr : '${member.address}',
         }, function(rsp) {
             if(rsp.success) {
+                alert(rsp.imp_uid);
+                document.getElementById('impUid').value = rsp.imp_uid;
                 let form = document.payForm;
                 form.submit();
             } else {

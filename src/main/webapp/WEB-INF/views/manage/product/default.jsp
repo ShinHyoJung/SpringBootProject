@@ -67,7 +67,7 @@
 
                     for (let i = pageResponse.paging.startPage; i <= pageResponse.paging.endPage; i++) {
                         if (currentPage == i) {
-                            pageHTML += '<a class="item active" onclick="printList(' + i + ')">' + i + '</a>';
+                            pageHTML += '<a class="active item" onclick="printList(' + i + ')">' + i + '</a>';
                         } else {
                             pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
                         }
@@ -129,7 +129,7 @@
                     contentType: 'application/json; charset=utf-8',
                     success: function(pageResponse) {
                         console.log(pageResponse);
-                        if(pageResponse.code == '성공') {
+                        if(pageResponse.code == 'SUCCESS') {
                             location.reload();
                         }
                     }

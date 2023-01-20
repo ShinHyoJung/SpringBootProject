@@ -10,7 +10,7 @@
 <html>
 <body>
 <p class="subtitle">제품 상세</p>
-<form class="ui form" method="post" action="${pageContext.request.contextPath}/product/detail/update" style="width: 50%;">
+<form class="ui form" method="post" action="${pageContext.request.contextPath}/manage/product/detail/update" style="width: 50%;">
     <input type="hidden" id="productID" name="productID" value="${getDetailResponse.product.productID}">
     <div class="field">
         <label>제품 이름</label>

@@ -7,10 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
-    <title>Title</title>
-</head>
 <body>
-
+<p class="subtitle"> 비밀번호 찾기/변경 </p>
 </body>
 </html>

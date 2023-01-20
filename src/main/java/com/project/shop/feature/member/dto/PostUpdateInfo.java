@@ -12,6 +12,8 @@ public class PostUpdateInfo {
     private String mobile;
     private String mail;
     private String address;
+    private String detailAddress;
+    private String zipCode;
 
     public Member toEntity(String password) {
         Member member = new Member();
@@ -22,7 +24,8 @@ public class PostUpdateInfo {
         member.setMobile(this.mobile);
         member.setMail(this.mail);
         member.setAddress(this.address);
-
+        member.setDetailAddress(this.detailAddress);
+        member.setZipCode(this.zipCode);
         return member;
     }
 }

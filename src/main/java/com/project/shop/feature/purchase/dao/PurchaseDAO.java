@@ -2,7 +2,6 @@ package com.project.shop.feature.purchase.dao;
 
 import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.purchase.entity.Purchase;
-import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -23,13 +22,13 @@ public class PurchaseDAO {
     }
 
     public void insert(List<Purchase> purchaseList) {
-        String sql = "INSERT INTO purchase (name, price, quantity, address, thumbnail_image_name, imp_uid, " +
-                "sell_id, idx, order_status, purchase_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO purchase (name, price, quantity, address, detail_address, zip_code, thumbnail_image_name, imp_uid, " +
+                "sell_id, idx, order_status, purchase_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         for(Purchase purchase : purchaseList) {
             jdbcTemplate.update(sql, purchase.getName(), purchase.getPrice(), purchase.getQuantity(), purchase.getAddress(),
-                    purchase.getThumbnailImageName(), purchase.getImpUid(), purchase.getSellID(), purchase.getIdx(),
-                    purchase.getOrderStatus(), Timestamp.valueOf(LocalDateTime.now()));
+                    purchase.getDetailAddress(), purchase.getZipCode(), purchase.getThumbnailImageName(), purchase.getImpUid(),
+                    purchase.getSellID(), purchase.getIdx(), purchase.getOrderStatus(), Timestamp.valueOf(LocalDateTime.now()));
         }
     }
 
@@ -45,6 +44,8 @@ public class PurchaseDAO {
                 purchase.setPrice(rs.getString("price"));
                 purchase.setQuantity(rs.getInt("quantity"));
                 purchase.setAddress(rs.getString("address"));
+                purchase.setDetailAddress(rs.getString("detail_address"));
+                purchase.setZipCode(rs.getString("zip_code"));
                 purchase.setThumbnailImageName(rs.getString("thumbnail_image_name"));
                 purchase.setImpUid(rs.getString("imp_uid"));
                 purchase.setProductID(rs.getInt("product_id"));
@@ -75,6 +76,8 @@ public class PurchaseDAO {
                 purchase.setName(rs.getString("name"));
                 purchase.setPrice(rs.getString("price"));
                 purchase.setAddress(rs.getString("address"));
+                purchase.setDetailAddress(rs.getString("detail_address"));
+                purchase.setZipCode(rs.getString("zip_code"));
                 purchase.setThumbnailImageName(rs.getString("thumbnail_image_name"));
                 purchase.setImpUid(rs.getString("imp_uid"));
                 purchase.setProductID(rs.getInt("product_id"));

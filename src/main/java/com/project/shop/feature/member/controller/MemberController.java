@@ -2,6 +2,8 @@ package com.project.shop.feature.member.controller;
 
 import com.project.shop.feature.code.error.ErrorCode;
 import com.project.shop.feature.code.success.SuccessCode;
+import com.project.shop.feature.manage.category.entity.Category;
+import com.project.shop.feature.manage.category.service.CategoryService;
 import com.project.shop.feature.member.dto.*;
 import com.project.shop.feature.member.entity.Member;
 import com.project.shop.feature.member.service.MemberService;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,8 +33,14 @@ public class MemberController {
     private static final String VIEW_PREFIX = "member/";
     private final MemberService memberService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final CategoryService categoryService;
+
     @GetMapping("/signUp") // 회원가입 페이지
     public String getSignUp(Model model) {
+        List<Category> categoryList = categoryService.selectAll();
+
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("menu", "sell");
         model.addAttribute("main", VIEW_PREFIX + "signUp");
         return "view";
     }
@@ -48,6 +57,10 @@ public class MemberController {
 
     @GetMapping("/login")
     public String getLogin(Model model) {
+        List<Category> categoryList = categoryService.selectAll();
+
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("menu", "sell");
         model.addAttribute("main", VIEW_PREFIX + "login");
         return "view";
     }
@@ -155,6 +168,30 @@ public class MemberController {
             pageResponse.setMessage(ErrorCode.member.withdrawalMember.getMessageKey());
         }
         model.addAttribute("main", "main/default");
+        return "view";
+    }
+
+    @GetMapping("/id/find")
+    public String getIdFind(Model model) {
+        model.addAttribute("main", VIEW_PREFIX + "id/find");
+        return "view";
+    }
+
+    @GetMapping("/id/found")
+    public String getIdFound(Model model) {
+        model.addAttribute("main", VIEW_PREFIX + "id/found");
+        return "view";
+    }
+
+    @GetMapping("/password/find")
+    public String getPwdFind(Model model) {
+        model.addAttribute("main", VIEW_PREFIX + "password/find");
+        return "view";
+    }
+
+    @GetMapping("/password/change")
+    public String getPwdChange(Model model) {
+        model.addAttribute("main", VIEW_PREFIX + "password/found");
         return "view";
     }
 }

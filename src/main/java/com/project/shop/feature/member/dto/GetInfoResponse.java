@@ -18,6 +18,8 @@ public class GetInfoResponse {
     private String mobile;
     private String mail;
     private String address;
+    private String detailAddress;
+    private String zipCode;
     private Date createDate;
     private Date updateDate;
 }

@@ -34,11 +34,12 @@ public class MemberDAO {
 
     public void insert(Member member) {
         String sql = "INSERT INTO member(" +
-                "member_id, password, name, birth, address, mobile, mail, create_date, update_date) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "member_id, password, name, birth, address, detail_address, zip_code, mobile, mail, create_date, update_date) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        jdbcTemplate.update(sql, member.getMemberID(), member.getPassword(), member.getName(),
-                member.getBirth(), member.getAddress(), member.getMobile(), Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
+        jdbcTemplate.update(sql, member.getMemberID(), member.getPassword(), member.getName(), member.getBirth(),
+                member.getAddress(), member.getDetailAddress(), member.getZipCode(), member.getMobile(),
+                Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
     }
 
     public Member selectByMemberID(String memberID) {
@@ -71,6 +72,8 @@ public class MemberDAO {
                 member.setMail(rs.getString("mail"));
                 member.setBirth(rs.getString("birth"));
                 member.setAddress(rs.getString("address"));
+                member.setDetailAddress(rs.getString("detail_address"));
+                member.setZipCode(rs.getString("zip_code"));
                 member.setCreateDate(rs.getDate("create_date"));
                 member.setUpdateDate(rs.getDate("update_date"));
                 return member;
@@ -81,12 +84,13 @@ public class MemberDAO {
 
     public void update(Member member) {
         String sql = "UPDATE member SET " +
-                "password = ?, name = ?, birth = ?, mobile = ?" +
-                "mail = ?, address = ?, update_date = ? WHERE 1=1" +
+                "password = ?, name = ?, birth = ?, mobile = ?, " +
+                "mail = ?, address = ?, detail_address = ?, zip_code = ?, update_date = ? WHERE 1=1 " +
                 "AND idx = ?";
 
-        jdbcTemplate.update(sql, member.getPassword(), member.getName(), member.getBirth(),
-                member.getMail(), member.getAddress(), Timestamp.valueOf(LocalDateTime.now()));
+         jdbcTemplate.update(sql, member.getPassword(), member.getName(), member.getBirth(), member.getMobile(),
+                member.getMail(), member.getAddress(), member.getDetailAddress(), member.getZipCode(),
+                Timestamp.valueOf(LocalDateTime.now()), member.getIdx());
     }
 
     public void delete(int idx) {

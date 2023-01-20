@@ -30,7 +30,7 @@ public class ProductImageDAO {
     }
 
     public List<ProductImage> select(int productID) {
-        String sql = "SELECT * FROM product_image WHERE 1=1 AND product_id = ? WHERE delete_yn = ?";
+        String sql = "SELECT * FROM product_image WHERE 1=1 AND product_id = ? AND delete_yn = ?";
 
         List<ProductImage> productImageList = jdbcTemplate.query(sql, new Object[]{productID, "N"}, new RowMapper<ProductImage>() {
             @Override

@@ -94,7 +94,10 @@ public class SellController {
     @GetMapping("/detail/{sellID}")
     public String getDetail(@PathVariable int sellID, Model model) throws SQLException {
         Sell sell = sellService.select(sellID);
+        List<Category> categoryList = categoryService.selectAll();
 
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("menu", "sell");
         model.addAttribute("getDetailResponse", new GetDetailResponse(sell));
         model.addAttribute("main", VIEW_PREFIX + "detail");
         return "view";

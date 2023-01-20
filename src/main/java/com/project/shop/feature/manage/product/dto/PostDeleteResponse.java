@@ -14,6 +14,6 @@ import lombok.NonNull;
  */
 @Data
 public class PostDeleteResponse {
-    @NonNull
     private String code;
+    private String message;
 }

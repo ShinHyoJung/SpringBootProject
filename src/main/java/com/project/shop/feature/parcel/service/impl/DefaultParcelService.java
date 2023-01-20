@@ -1,5 +1,6 @@
 package com.project.shop.feature.parcel.service.impl;
 
+import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.parcel.dao.ParcelDAO;
 import com.project.shop.feature.parcel.entity.Parcel;
 import com.project.shop.feature.parcel.service.ParcelService;
@@ -30,8 +31,8 @@ public class DefaultParcelService implements ParcelService {
     }
 
     @Override
-    public List<Parcel> select(int idx) {
-        return parcelDAO.select(idx);
+    public List<Parcel> select(int idx, Paging paging) {
+        return parcelDAO.select(idx, paging);
     }
 
     @Override
@@ -58,5 +59,10 @@ public class DefaultParcelService implements ParcelService {
         }
         String code = numStr.toString();
         return code;
+    }
+
+    @Override
+    public int count(int idx) {
+        return parcelDAO.count(idx);
     }
 }

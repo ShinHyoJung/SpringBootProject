@@ -9,7 +9,7 @@
 <html>
 <body>
 <p class="subtitle"> 로그인 </p>
-  <form class="ui form" method="post" action="${pageContext.request.contextPath}/member/login" style="width: 50%;">
+  <form class="ui form" method="post" action="${pageContext.request.contextPath}/member/login" style="width: 30%;">
     <div class="field">
         <label>아이디 </label>
             <input type="text" id="id" name="id">
@@ -19,7 +19,8 @@
         <input type="password" id="password" name="password">
     </div>
       <button class="ui button" type="submit">로그인</button>
-    </div>
   </form>
+    <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/member/id/find'" style="margin-left: 270px; float:left;">아이디 찾기</button>
+    <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/member/password/find'" style="">비밀번호 찾기/변경</button>
 </body>
 </html>

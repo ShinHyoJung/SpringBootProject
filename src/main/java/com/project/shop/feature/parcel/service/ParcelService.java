@@ -1,5 +1,6 @@
 package com.project.shop.feature.parcel.service;
 
+import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.parcel.entity.Parcel;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface ParcelService {
 
     void insert(Parcel parcel);
 
-    List<Parcel> select(int idx);
+    List<Parcel> select(int idx, Paging paging);
 
     void deleteByPurchaseID(int purchaseID);
 
@@ -25,4 +26,6 @@ public interface ParcelService {
 
     void updateStatus(int status, int parcelID);
     String makeWaybillNumber();
+
+    int count(int idx);
 }

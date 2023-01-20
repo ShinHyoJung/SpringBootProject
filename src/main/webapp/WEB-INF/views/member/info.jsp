@@ -1,4 +1,3 @@
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: ShinHyoJung
@@ -7,7 +6,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <body>
 <p class="subtitle">내 정보</p>
 <form class="ui form" action="${pageContext.request.contextPath}/member/info/update" method="post" style="width: 30%;">
@@ -36,8 +37,16 @@
             <input type="text" id="mail" name="mail" value="${getInfoResponse.mail}">
     </div>
     <div class="field">
+        <label> 우편번호 </label> <button class="ui button" type="button" onclick="searchZipCode();">우편번호 찾기</button>
+            <input type="text" id="zipCode" name="zipCode" value="${getInfoResponse.zipCode}" style="margin-top: 10px;">
+    </div>
+    <div class="field">
         <label> 주소 </label>
-            <input type="text" id="address" name="address" value="${getInfoResponse.address}">
+        <input type="text" id="address" name="address" value="${getInfoResponse.address}">
+    </div>
+    <div class="field">
+        <label> 상세 주소 </label>
+        <input type="text" id="detailAddress" name="detailAddress" value="${getInfoResponse.detailAddress}">
     </div>
     <div class="field">
         <label> 생성일시 </label>
@@ -55,5 +64,44 @@
     <i class="download icon"></i>엑셀파일 다운로드</button>
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}'">메인으로 가기</button>
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/member/withdrawal'">회원 탈퇴</button>
+
+<script>
+    function searchZipCode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                let addr = '';
+                let extraAddr = '';
+
+                if(data.roadAddress !== '') {
+                    addr = data.roadAddress;
+                } else if(data.jibunAddress !== '') {
+                    addr = data.jibunAddress;
+                }
+
+                if(data.userSelectType === 'R') {
+                    if(data.bname !== ''&&/[동][로][가]$/g.test(data.bname)) {
+                        extraAddr += data.bname;
+                    }
+
+                    if(data.buildingName !== ''&& data.apartment === 'Y') {
+                        extraAddr += (extraAddr !== ''? ',' + data.buildingName : data.buildingName);
+                    }
+
+                    if(extraAddr !== '') {
+                        extraAddr = '(' + extraAddr + ')';
+                    }
+                    document.getElementById('address').value = extraAddr;
+                } else {
+                    document.getElementById('address').value = '';
+                }
+
+                document.getElementById('zipCode').value = data.zonecode;
+                document.getElementById('address').value = addr;
+
+                document.getElementById('address').focus();
+            }
+        }).open();
+    }
+</script>
 </body>
 </html>

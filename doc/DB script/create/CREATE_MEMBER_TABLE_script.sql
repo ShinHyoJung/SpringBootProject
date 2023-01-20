@@ -4,6 +4,8 @@ CREATE TABLE member (
     password varchar(200) not null,
     name varchar(200) not null,
     address varchar(300),
+    detail_address varchar(300),
+    zip_code varchar(200),
     mail varchar(300),
     birth varchar(200),
     mobile varchar(300),

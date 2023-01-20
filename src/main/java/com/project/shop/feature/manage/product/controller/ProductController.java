@@ -61,6 +61,7 @@ public class ProductController {
     public String getAddProduct(Model model) {
         List<Category> categoryList = categoryService.selectAll();
         model.addAttribute("categoryList", categoryList);
+        model.addAttribute("menu", "manage");
         model.addAttribute("main", VIEW_PREFIX + "add");
         return "view";
     }
@@ -86,9 +87,16 @@ public class ProductController {
     @ResponseBody
     @PostMapping("/delete")
     public PostDeleteResponse postDeleteProduct(@RequestBody PostDelete postDelete) {
-        productService.delete(postDelete.getProductID());
-        String code = "성공";
-        return new PostDeleteResponse(code);
+        PostDeleteResponse pageResponse = new PostDeleteResponse();
+        try {
+            productService.delete(postDelete.getProductID());
+            pageResponse.setCode("SUCCESS");
+            pageResponse.setMessage("상품이 삭제되었습니다.");
+        } catch (Exception e) {
+            pageResponse.setCode("FAIL");
+            pageResponse.setMessage("상품 삭제를 실패하였습니다.");
+        }
+        return pageResponse;
     }
 
     @GetMapping("/detail/{productID}")
@@ -98,14 +106,14 @@ public class ProductController {
 
         model.addAttribute("productImageList", productImageList);
         model.addAttribute("getDetailResponse", new GetDetailResponse(product));
+        model.addAttribute("menu", "manage");
         model.addAttribute("main", VIEW_PREFIX + "detail");
         return "view";
     }
 
     @PostMapping("/detail/update")
     public String postUpdateDetailProduct(PostDetailUpdate postDetailUpdate) {
-        int productID = postDetailUpdate.getProductID();
         productService.update(postDetailUpdate.toEntity());
-        return "redirect:/manage/product/detail/" + productID;
+        return "redirect:/manage/product/";
     }
 }

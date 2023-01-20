@@ -15,6 +15,8 @@ public class PostSignUp {
     private String mobile;
     private String mail;
     private String address;
+    private String detailAddress;
+    private String zipCode;
     private Date createDate;
     private Date updateDate;
 
@@ -28,6 +30,8 @@ public class PostSignUp {
         member.setMobile(this.mobile);
         member.setMail(this.mail);
         member.setAddress(this.address);
+        member.setDetailAddress(this.detailAddress);
+        member.setZipCode(this.zipCode);
         member.setCreateDate(this.createDate);
         member.setUpdateDate(this.updateDate);
 

@@ -18,6 +18,8 @@ import java.util.Date;
 public class PostAddParcel {
     private String name;
     private String address;
+    private String detailAddress;
+    private String zipCode;
     private int quantity;
     private int status;
     private String waybillNumber;
@@ -31,6 +33,8 @@ public class PostAddParcel {
         Parcel parcel = new Parcel();
         parcel.setName(this.name);
         parcel.setAddress(this.address);
+        parcel.setDetailAddress(this.detailAddress);
+        parcel.setZipCode(this.zipCode);
         parcel.setQuantity(this.quantity);
         parcel.setStatus(this.status);
         parcel.setWaybillNumber(this.waybillNumber);

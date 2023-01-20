@@ -8,9 +8,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <body>
 <p class="subtitle">주문</p>
-
 <form class="ui form" method="post" name="payForm" action="${pageContext.request.contextPath}/purchase/do" style="width: 50%;">
     <input type="hidden" id="idx" name="idx" value="${member.idx}">
     <input type="hidden" id="sellID" name="sellID" value="${sell.sellID}">
@@ -40,8 +40,16 @@
         <input type="text" value="${member.mobile}">
     </div>
     <div class="field">
-        <label>배송지 주소</label>
+        <label>우편 번호</label> <button class="ui button" type="button" onclick="searchZipCode();">우편번호 찾기</button>
+        <input type="text" name="zipCode" value="${member.zipCode}" style="margin-top: 10px;">
+    </div>
+    <div class="field">
+        <label>주소</label>
         <input type="text" name="address" value="${member.address}">
+    </div>
+    <div class="field">
+        <label>상세 주소</label>
+        <input type="text" name="detailAddress" value="${member.detailAddress}">
     </div>
     <div class="ui divider">
         ${sell.price} X
@@ -76,6 +84,43 @@
         document.getElementById('price').value = result;
     }
 
+    function searchZipCode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                let addr = '';
+                let extraAddr = '';
+
+                if(data.roadAddress !== '') {
+                    addr = data.roadAddress;
+                } else if(data.jibunAddress !== '') {
+                    addr = data.jibunAddress;
+                }
+
+                if(data.userSelectType === 'R') {
+                    if(data.bname !== ''&&/[동][로][가]$/g.test(data.bname)) {
+                        extraAddr += data.bname;
+                    }
+
+                    if(data.buildingName !== ''&& data.apartment === 'Y') {
+                        extraAddr += (extraAddr !== ''? ',' + data.buildingName : data.buildingName);
+                    }
+
+                    if(extraAddr !== '') {
+                        extraAddr = '(' + extraAddr + ')';
+                    }
+                    document.getElementById('address').value = extraAddr;
+                } else {
+                    document.getElementById('address').value = '';
+                }
+
+                document.getElementById('zipCode').value = data.zonecode;
+                document.getElementById('address').value = addr;
+
+                document.getElementById('address').focus();
+            }
+        }).open();
+    }
+
     function payCard() {
         let price = document.getElementById('price').value;
         var IMP = window.IMP;
@@ -101,7 +146,6 @@
             }
         });
     }
-
 
 </script>
 </body>

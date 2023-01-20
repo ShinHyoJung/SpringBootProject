@@ -11,6 +11,8 @@ public class Purchase {
     private String price;
     private int quantity;
     private String address;
+    private String detailAddress;
+    private String zipCode;
     private String thumbnailImageName;
     private String impUid;
     private int productID;
