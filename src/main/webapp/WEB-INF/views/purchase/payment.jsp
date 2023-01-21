@@ -14,6 +14,7 @@
 <form class="ui form" method="post" name="payForm" action="${pageContext.request.contextPath}/purchase/do" style="width: 50%;">
     <input type="hidden" id="idx" name="idx" value="${member.idx}">
     <input type="hidden" id="sellID" name="sellID" value="${sell.sellID}">
+    <input type="hidden" id="productID" name="productID" value="${sell.productID}">
     <input type="hidden" id="name" name="name" value="${sell.name}">
     <input type="hidden" id="price" name="price" value="">
     <input type="hidden" id="impUid" name="impUid" value="">

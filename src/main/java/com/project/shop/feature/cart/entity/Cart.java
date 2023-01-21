@@ -18,5 +18,6 @@ public class Cart {
     private String price;
     private int quantity;
     private int sellID;
+    private int productID;
     private String thumbnailImageName;
 }

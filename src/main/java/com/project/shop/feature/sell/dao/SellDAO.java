@@ -39,11 +39,11 @@ public class SellDAO {
 
     public void insert(Sell sell) {
         String sql = "INSERT INTO sell (name, title, content, price, category, thumbnail_image_name, " +
-                "title_image_name, detail_image_name, create_date, update_date) VALUES (" +
-                "?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "title_image_name, detail_image_name, product_id, create_date, update_date) VALUES (" +
+                "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, sell.getName(), sell.getTitle(), sell.getContent(),
         sell.getPrice(), sell.getCategory(), sell.getThumbnailImageName(), sell.getTitleImageName(), sell.getDetailImageName(),
-                Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
+                sell.getProductID(), Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
     }
 
     public List<Sell> selectAll(Paging paging, String category, String searchOption, String keyword) {
@@ -75,9 +75,11 @@ public class SellDAO {
                 sell.setTitle(rs.getString("title"));
                 sell.setContent(rs.getString("content"));
                 sell.setPrice(rs.getString("price"));
+                sell.setCategory(rs.getString("category"));
                 sell.setThumbnailImageName(rs.getString("thumbnail_image_name"));
                 sell.setTitleImageName(rs.getString("title_image_name"));
                 sell.setDetailImageName(rs.getString("detail_image_name"));
+                sell.setProductID(rs.getInt("product_id"));
                 sell.setCreateDate(rs.getDate("create_date"));
                 sell.setUpdateDate(rs.getDate("update_date"));
                 return sell;
@@ -101,12 +103,12 @@ public class SellDAO {
     }
 
     public void update(Sell sell) {
-        String sql = "UPDATE sell SET title = ?, content = ?, " +
-                "price = ?, update_date = ?" +
+        String sql = "UPDATE sell SET title = ?, name = ?, content = ?, " +
+                "price = ?, thumbnail_image_name = ?, title_image_name = ?, detail_image_name = ?, update_date = ?" +
                 "WHERE 1=1 AND sell_id = ?";
 
-        jdbcTemplate.update(sql, new Object[]{sell.getTitle(), sell.getContent(),
-                sell.getPrice(), Timestamp.valueOf(LocalDateTime.now())});
+        jdbcTemplate.update(sql, new Object[]{sell.getTitle(), sell.getName(), sell.getContent(), sell.getPrice(),
+                sell.getThumbnailImageName(), sell.getTitleImageName(), sell.getDetailImageName(), Timestamp.valueOf(LocalDateTime.now())});
     }
 
     public int selectMaxSellID() {

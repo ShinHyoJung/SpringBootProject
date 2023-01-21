@@ -8,7 +8,6 @@ CREATE TABLE product (
      info longtext,
      category varchar(300),
      thumbnail_image_name varchar(300),
-     detail_image_name varchar(300),
      register_date datetime,
      update_date datetime,
      primary key(product_id)

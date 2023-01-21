@@ -16,6 +16,7 @@ public class PostDoPay {
     private String zipCode;
     private String impUid;
     private int sellID;
+    private int productID;
     private int idx;
 
     public List<Purchase> toEntity() {
@@ -29,6 +30,7 @@ public class PostDoPay {
         purchase.setZipCode(this.zipCode);
         purchase.setImpUid(this.impUid);
         purchase.setSellID(this.sellID);
+        purchase.setProductID(this.productID);
         purchase.setIdx(this.idx);
         purchase.setOrderStatus("paymentComplete");
         purchaseList.add(purchase);

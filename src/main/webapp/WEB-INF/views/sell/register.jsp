@@ -13,21 +13,21 @@
 <form class="ui form" method="post" action="${pageContext.request.contextPath}/sell/register" enctype="multipart/form-data" style="width: 50%;">
     <input type="file" name="sellImage" multiple="multiple">
     <input type="file" name="sellImage" multiple="multiple">
+    <input type="hidden" id="name" name="name">
     <div class="field">
         <input type="text" id="title" name="title" placeholder="글 제목">
     </div>
     <div class="field">
-        <input type="text" id="name" name="name" placeholder="제품 이름">
-    </div>
-    <div class="field">
-        <input type="text" id="productCode" name="productCode" placeholder="제품 코드">
-    </div>
-    <div class="field">
-        <select class="ui dropdown" name="category">
+        <select class="ui dropdown" name="category" id="category" onchange="selectCategory(this.value);">
             <option value="">카테고리</option>
             <c:forEach items="${categoryList}" var="categoryList">
-                <option value="${categoryList.code}">${categoryList.name}</option>
+                <option id="${categoryList.code}" value="${categoryList.name}">${categoryList.name}</option>
             </c:forEach>
+        </select>
+    </div>
+    <div class="field" >
+        <select class="ui dropdown" id="productList" name="productID">
+            <option value="" >제품</option>
         </select>
     </div>
     <div class="field">
@@ -39,5 +39,43 @@
     <input type="file" name="sellImage" multiple="multiple">
     <button class="ui button" type="submit"><i class="save icon"></i></button>
 </form>
+
+<script>
+    let selectCategory = function(value) {
+        printProductList(value);
+    }
+
+    $("select[name=productID]").change(function() {
+        document.getElementById('name').value = $('select[name = productID] option:selected').attr('id');
+    });
+
+    function printProductList(category) {
+        let postObj = {
+            'category':category
+        }
+
+        $.ajax({
+            url: '${pageContext.request.contextPath}/sell/search/product',
+            method: 'post',
+            dataType: 'json',
+            data: JSON.stringify(postObj),
+            contentType: 'application/json; charset=utf-8',
+            success: function(pageResponse) {
+                console.log(pageResponse);
+                let listHTML = '';
+
+                if(pageResponse.productList == 0) {
+                     listHTML += '카테고리에 해당되는 상품이 없습니다.';
+                } else {
+                    $.each(pageResponse.productList, function(i, productList) {
+                        listHTML += '<option id = "' + productList.name + '" value="' + productList.productID + '">' + productList.name + '</option>';
+                    });
+                }
+
+                $('#productList').html(listHTML);
+            }
+        });
+    }
+</script>
 </body>
 </html>

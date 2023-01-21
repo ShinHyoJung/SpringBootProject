@@ -32,7 +32,9 @@
                     stringHTML += '<input type="hidden" id="impUid" name="impUid" value="">';
                     $.each(pageResponse.cartList, function(i, cartList) {
                         let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + cartList.thumbnailImageName;
+                        stringHTML += '<input type="hidden" id="quantity" name="quantity" value="' + cartList.quantity +'">';
                         stringHTML += '<input type="hidden" id="sellID" name="sellID" value="' + cartList.sellID + '">';
+                        stringHTML += '<input type="hidden" id="productID" name="productID" value="' + cartList.productID + '">';
                         stringHTML += '<input type="hidden" name="name" value="' + cartList.name + '">';
                         stringHTML += '<div class="ui items">';
                         stringHTML += '<div class="item">';

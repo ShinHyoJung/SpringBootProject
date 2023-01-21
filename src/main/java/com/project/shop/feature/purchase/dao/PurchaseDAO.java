@@ -23,12 +23,12 @@ public class PurchaseDAO {
 
     public void insert(List<Purchase> purchaseList) {
         String sql = "INSERT INTO purchase (name, price, quantity, address, detail_address, zip_code, thumbnail_image_name, imp_uid, " +
-                "sell_id, idx, order_status, purchase_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "sell_id, product_id, idx, order_status, purchase_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         for(Purchase purchase : purchaseList) {
             jdbcTemplate.update(sql, purchase.getName(), purchase.getPrice(), purchase.getQuantity(), purchase.getAddress(),
                     purchase.getDetailAddress(), purchase.getZipCode(), purchase.getThumbnailImageName(), purchase.getImpUid(),
-                    purchase.getSellID(), purchase.getIdx(), purchase.getOrderStatus(), Timestamp.valueOf(LocalDateTime.now()));
+                    purchase.getSellID(), purchase.getProductID(), purchase.getIdx(), purchase.getOrderStatus(), Timestamp.valueOf(LocalDateTime.now()));
         }
     }
 
@@ -50,6 +50,7 @@ public class PurchaseDAO {
                 purchase.setImpUid(rs.getString("imp_uid"));
                 purchase.setProductID(rs.getInt("product_id"));
                 purchase.setSellID(rs.getInt("sell_id"));
+                purchase.setProductID(rs.getInt("product_id"));
                 purchase.setIdx(rs.getInt("idx"));
                 purchase.setOrderStatus(rs.getString("order_status"));
                 purchase.setPurchaseDate(rs.getDate("purchase_date"));

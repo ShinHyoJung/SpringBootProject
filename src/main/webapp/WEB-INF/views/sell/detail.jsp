@@ -15,6 +15,7 @@
 <p style="margin-top: 20px; font-size: 30px;">${getDetailResponse.sell.title}</p> <br>
 <form method="post" action="${pageContext.request.contextPath}/purchase/pay" name="purchaseForm">
     <input type="hidden" id="sellID" name="sellID" value="${getDetailResponse.sell.sellID}">
+    <input type="hidden" id="productID" name="productID" value="${getDetailResponse.sell.productID}">
     <input type="hidden" id="name" name="name" value="${getDetailResponse.sell.name}">
     <input type="hidden" id="price" name="price" value="${getDetailResponse.sell.price}">
 <div class="ui items">

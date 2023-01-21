@@ -2,6 +2,7 @@ package com.project.shop.feature.sell.controller;
 
 import com.project.shop.feature.image.sellimage.entity.SellImage;
 import com.project.shop.feature.manage.category.service.CategoryService;
+import com.project.shop.feature.manage.product.entity.Product;
 import com.project.shop.feature.manage.product.service.ProductService;
 import com.project.shop.feature.sell.dto.*;
 import com.project.shop.feature.image.sellimage.service.SellImageService;
@@ -60,11 +61,12 @@ public class SellController {
 
     @GetMapping("/register")
     public String getRegister(Model model) throws SQLException {
-       // int total = productService.count("title", "");
-       // Paging paging = new Paging(1, total, total);
-        //List<Product> productList = productService.selectAll(paging, "", "");
-        //model.addAttribute("productList", productList);
+        int total = productService.count("name", "");
+        Paging paging = new Paging(1, total, total);
+        List<Product> productList = productService.selectAll(paging, "name", "");
         List<Category> categoryList = categoryService.selectAll();
+
+        model.addAttribute("productList", productList);
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("main", VIEW_PREFIX + "register");
         return "view";
@@ -110,15 +112,45 @@ public class SellController {
         return "redirect:/sell/";
     }
 
-    @GetMapping("/update/")
-    public String getUpdate(PostUpdate postUpdate) throws SQLException {
-        sellService.update(postUpdate.toEntity());
+    @GetMapping("/update/{sellID}")
+    public String getUpdate(Model model, @PathVariable int sellID) throws SQLException {
+        Sell sell = sellService.select(sellID);
+        List<Category> categoryList = categoryService.selectAll();
+
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("sell", sell);
+        model.addAttribute("main", VIEW_PREFIX + "update");
+        return "view";
+    }
+
+    @PostMapping("/update")
+    public String postUpdate(PostUpdate postUpdate, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException, InterruptedException, SQLException {
+        List<SellImage> sellImageList = FileUtils.parseSellImage(multipartHttpServletRequest);
+        sellService.update(postUpdate.toEntity(sellImageList.get(0).getStoredName(), sellImageList.get(1).getStoredName(),
+                sellImageList.get(2).getStoredName()));
+
+        if(sellImageList != null) {
+            for(SellImage sellImage : sellImageList) {
+                sellImage.setSellID(postUpdate.getSellID());
+            }
+
+            ImageUtils.cutImage(sellImageList.get(0).getStoredName(), 150, 100);
+            ImageUtils.cutImage(sellImageList.get(1).getStoredName(), 300, 300);
+            ImageUtils.resizeImage(sellImageList.get(2).getStoredName(), 1000, 1000);
+
+            sellImageService.insert(sellImageList);
+        }
 
         return "redirect:/sell/";
     }
 
-    @PostMapping("/update")
-    public String postUpdate(PostUpdate postUpdate, MultipartHttpServletRequest multipartHttpServletRequest) {
-        return "redirect:/sell/";
+    @ResponseBody
+    @PostMapping("/search/product")
+    public PostSearchProductResponse postSearchProduct(@RequestBody PostSearchProduct postSearchProduct) throws SQLException {
+        int total = productService.count("category", postSearchProduct.getCategory());
+        Paging paging = new Paging(1, total, total);
+        List<Product> productList = productService.selectAll(paging, "category", postSearchProduct.getCategory());
+
+        return new PostSearchProductResponse(productList);
     }
 }

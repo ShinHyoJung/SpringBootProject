@@ -10,11 +10,13 @@ public class PostDetailUpdate {
     private int fullQuantity;
     private String info;
 
-    public Product toEntity() {
+    public Product toEntity(int soldQuantity, int leftQuantity) {
         Product product = new Product();
         product.setProductID(this.productID);
         product.setName(this.name);
         product.setFullQuantity(this.fullQuantity);
+        product.setSoldQuantity(soldQuantity);
+        product.setLeftQuantity(leftQuantity);
         product.setInfo(this.info);
         return product;
     }

@@ -15,6 +15,7 @@ public class Sell {
     private String thumbnailImageName;
     private String titleImageName;
     private String detailImageName;
+    private int productID;
     private Date createDate;
     private Date updateDate;
 }

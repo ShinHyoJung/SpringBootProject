@@ -112,8 +112,11 @@ public class ProductController {
     }
 
     @PostMapping("/detail/update")
-    public String postUpdateDetailProduct(PostDetailUpdate postDetailUpdate) {
-        productService.update(postDetailUpdate.toEntity());
+    public String postUpdateDetailProduct(PostDetailUpdate postDetailUpdate) throws SQLException {
+        Product product = productService.select(postDetailUpdate.getProductID());
+        int leftQuantity = postDetailUpdate.getFullQuantity() - product.getSoldQuantity();
+
+        productService.update(postDetailUpdate.toEntity(product.getSoldQuantity(), leftQuantity));
         return "redirect:/manage/product/";
     }
 }

@@ -1,16 +1,14 @@
 package com.project.shop.feature.purchase.controller;
 
 import com.project.shop.feature.cart.entity.Cart;
-import com.project.shop.feature.cart.service.CartService;
-import com.project.shop.feature.image.sellimage.entity.SellImage;
-import com.project.shop.feature.image.sellimage.service.SellImageService;
-import com.project.shop.feature.manage.category.dto.PostAdd;
 import com.project.shop.feature.manage.category.entity.Category;
 import com.project.shop.feature.manage.category.service.CategoryService;
+import com.project.shop.feature.manage.product.dto.PostUpdateQuantity;
+import com.project.shop.feature.manage.product.entity.Product;
+import com.project.shop.feature.manage.product.service.ProductService;
 import com.project.shop.feature.member.service.MemberService;
 import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.parcel.dto.PostAddParcel;
-import com.project.shop.feature.parcel.entity.Parcel;
 import com.project.shop.feature.parcel.service.ParcelService;
 import com.project.shop.feature.purchase.dto.*;
 import com.project.shop.feature.purchase.entity.Purchase;
@@ -43,6 +41,7 @@ public class PurchaseController {
     private final PayService payService;
     private final ParcelService parcelService;
     private final CategoryService categoryService;
+    private final ProductService productService;
 
     @PostMapping("/pay")
     public String getPay(Model model, PostPayment postPayment,  HttpSession session) throws SQLException {
@@ -62,8 +61,19 @@ public class PurchaseController {
     }
 
     @PostMapping("/do")
-    public String postDoPay(Model model, PostDoPay postDoPay, HttpSession session) throws ParseException, IOException {
+    public String postDoPay(Model model, PostDoPay postDoPay, HttpSession session) throws ParseException, IOException, SQLException {
         purchaseService.insert(postDoPay.toEntity());
+
+        Product product = productService.select(postDoPay.getProductID());
+        int soldQuantity = product.getSoldQuantity();
+        int leftQuantity = product.getLeftQuantity();
+
+        soldQuantity += postDoPay.getQuantity();
+        leftQuantity -= postDoPay.getQuantity();
+
+        product.setSoldQuantity(soldQuantity);
+        product.setLeftQuantity(leftQuantity);
+        productService.update(product);
 
         int purchaseID = purchaseService.selectMaxPurchaseID();
         String waybillNumber = parcelService.makeWaybillNumber();
@@ -77,8 +87,9 @@ public class PurchaseController {
         postAddParcel.setZipCode(postDoPay.getZipCode());
         postAddParcel.setQuantity(postDoPay.getQuantity());
         postAddParcel.setStatus(0);
-        postAddParcel.setSellID(postDoPay.getSellID());
         postAddParcel.setPurchaseID(purchaseID);
+        postAddParcel.setSellID(postDoPay.getSellID());
+        postAddParcel.setProductID(postDoPay.getProductID());
         postAddParcel.setPurchaseDate(purchase.getPurchaseDate());
         postAddParcel.setWaybillNumber(waybillNumber);
 
@@ -222,7 +233,6 @@ public class PurchaseController {
             pageResponse.setCode("FAIL");
             pageResponse.setMessage("장바구니가 비었습니다.");
         }
-
         return pageResponse;
     }
 

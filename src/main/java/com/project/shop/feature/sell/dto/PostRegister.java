@@ -11,6 +11,7 @@ public class PostRegister {
 
     private String category;
     private String price;
+    private int productID;
 
     public Sell toEntity(String thumbnailImageName, String titleImageName, String detailImageName) {
         Sell sell = new Sell();
@@ -22,6 +23,7 @@ public class PostRegister {
         sell.setThumbnailImageName(thumbnailImageName);
         sell.setTitleImageName(titleImageName);
         sell.setDetailImageName(detailImageName);
+        sell.setProductID(this.productID);
         return sell;
     }
 }

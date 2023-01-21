@@ -21,7 +21,7 @@
     <select class="ui dropdown" name="category">
       <option value="">카테고리</option>
       <c:forEach items="${categoryList}" var="categoryList">
-        <option value="${categoryList.code}">${categoryList.name}</option>
+        <option id="${categoryList.code}" value="${categoryList.name}">${categoryList.name}</option>
       </c:forEach>
     </select>
   </div>

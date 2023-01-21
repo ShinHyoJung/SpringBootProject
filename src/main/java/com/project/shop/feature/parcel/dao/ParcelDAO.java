@@ -32,10 +32,10 @@ public class ParcelDAO {
 
     public void insert(Parcel parcel) {
         String sql = "INSERT INTO parcel (name, address, detail_address, zip_code, quantity, status, " +
-                "waybill_number, purchase_id, sell_id, idx, purchase_date, ship_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "waybill_number, purchase_id, product_id, sell_id, idx, purchase_date, ship_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, parcel.getName(), parcel.getAddress(), parcel.getDetailAddress(), parcel.getZipCode(),
-                parcel.getQuantity(), parcel.getStatus(), parcel.getWaybillNumber(),
-                parcel.getPurchaseID(), parcel.getSellID(), parcel.getIdx(), parcel.getPurchaseDate(), Timestamp.valueOf(LocalDateTime.now()));
+                parcel.getQuantity(), parcel.getStatus(), parcel.getWaybillNumber(), parcel.getPurchaseID(),
+                parcel.getProductID(), parcel.getSellID(), parcel.getIdx(), parcel.getPurchaseDate(), Timestamp.valueOf(LocalDateTime.now()));
     }
 
     public List<Parcel> select(int idx, Paging paging) {

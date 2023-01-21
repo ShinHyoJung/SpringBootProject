@@ -13,10 +13,10 @@
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/manage/product/add'"><i class="plus icon"></i></button>
 <button class="ui button" onclick="location.reload()"><i class="undo icon"></i></button>
 <button class="ui button" onclick="remove()"><i class="trash alternate icon"></i></button>
-<button class="ui button" onclick="save()"><i class="save icon"></i></button>
 <select class="ui dropdown" id="searchOption">
     <option value="name">제품 명</option>
     <option value="code">제품 코드</option>
+    <option value="category">카테고리</option>
 </select>
 <div class="ui icon input">
     <input type="text" id="keyword" onkeyup="printList();" placeholder="Search...">
@@ -81,6 +81,7 @@
                     listHTML += '<tr>';
                     listHTML += '<th class="one wide" style="width:40px;"></th>';
                     listHTML += '<th class="one wide">제품 번호</th>';
+                    listHTML += '<th class="one wide">카테고리</th>';
                     listHTML += '<th class="two wide"> 제품 이미지 </th>';
                     listHTML += '<th> 제품 이름 </th>';
                     listHTML += '<th> 제품 코드 </th>';
@@ -97,12 +98,13 @@
                         listHTML += '<tr>';
                         listHTML += '<td><input type="checkbox" name="productID" value="' + productList.productID + '"></td>';
                         listHTML += '<td>'+ productList.productID +'</td>';
+                        listHTML += '<td>' + productList.category + '</td>';
                         listHTML += '<td height="100"><img src="'+ imgSrc + '"/></td>';
                         listHTML += '<td><a href="'+ detailSrc + '">' + productList.name + '</a></td>';
                         listHTML += '<td>' + productList.code + '</td>';
                         listHTML += '<td>' + productList.fullQuantity + '</td>';
-                        listHTML += '<td><input type="text" style="width:60px;" value="' + productList.soldQuantity + '"/></td>';
-                        listHTML += '<td><input type="text" style="width:60px;" value="' + productList.leftQuantity + '"/></td>';
+                        listHTML += '<td>' + productList.soldQuantity + '</td>';
+                        listHTML += '<td>' + productList.leftQuantity + '</td>';
                         listHTML += '</tr>';
                     });
                     listHTML += '</tbody>';
