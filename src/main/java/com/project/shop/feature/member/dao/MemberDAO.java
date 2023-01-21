@@ -95,7 +95,7 @@ public class MemberDAO {
 
     public void delete(int idx) {
         String sql = "DELETE FROM member WHERE 1=1 AND idx = ?";
-        jdbcTemplate.update(sql, new Object[]{idx});
+        jdbcTemplate.update(sql, idx);
     }
 
     public Member selectByNameAndBirth(String name, String birth) {
@@ -113,10 +113,16 @@ public class MemberDAO {
         return member;
     }
 
-    public boolean validateLoginID(String loginID) {
+    public boolean isValidateLoginID(String loginID) {
         String sql = "SELECT 1 FROM member WHERE 1=1 AND login_id = ?";
 
-        boolean isDuplicate = jdbcTemplate.queryForObject(sql, new Object[]{loginID}, Boolean.class);
-        return isDuplicate;
+        boolean isValidate = jdbcTemplate.queryForObject(sql, new Object[]{loginID}, Boolean.class);
+        return isValidate;
+    }
+
+    public void updatePassword(String password, int idx) {
+        String sql = "UPDATE member SET password = ? WHERE 1=1 AND idx = ?";
+
+        jdbcTemplate.update(sql, password, idx);
     }
 }

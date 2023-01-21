@@ -64,7 +64,7 @@ public class MemberController {
     public PostCheckDuplicateResponse postCheckDuplicate(@RequestBody PostCheckDuplicate postCheckDuplicate) {
         PostCheckDuplicateResponse pageResponse = new PostCheckDuplicateResponse();
 
-        boolean isDuplicate = memberService.validateLoginID(postCheckDuplicate.getLoginID());
+        boolean isDuplicate = memberService.isDuplicateLoginID(postCheckDuplicate.getLoginID());
 
         if(isDuplicate) {
             pageResponse.setCode("FAIL");
@@ -207,7 +207,7 @@ public class MemberController {
     public PostValidateMemberResponse postValidateMember(@RequestBody PostValidateMember postValidateMember) {
         PostValidateMemberResponse pageResponse = new PostValidateMemberResponse();
         try {
-            Member member = memberService.selectByNameAndBirth(postValidateMember.getName(), postValidateMember.getBirth());
+            Member member = memberService.validateMember(postValidateMember.getName(), postValidateMember.getBirth());
 
             if(postValidateMember.getEmail().equals(member.getEmail())) {
                 pageResponse.setCode("SUCCESS");
@@ -215,11 +215,11 @@ public class MemberController {
                 pageResponse.setIdx(member.getIdx());
             } else {
                 pageResponse.setCode("FAIL");
-                pageResponse.setMessage("본인인증을 실패하였습니다. 다시 시도해주세요.");
+                pageResponse.setMessage("등록된 사용자의 이메일이 아닙니다. 다시 입력해주세요.");
             }
         } catch (Exception e) {
             pageResponse.setCode("FAIL");
-            pageResponse.setMessage("본인인증을 실패하였습니다. 다시 시도해주세요.");
+            pageResponse.setMessage("등록된 사용자가 존재하지 않습니다. 다시 시도해주세요.");
         }
         return pageResponse;
     }
@@ -252,6 +252,22 @@ public class MemberController {
         return "view";
     }
 
+    @ResponseBody
+    @PostMapping("/id/validate")
+    public PostValidateLoginIDResponse postValidateLoginID(@RequestBody PostValidateLoginID postValidateLoginID) {
+        PostValidateLoginIDResponse pageResponse = new PostValidateLoginIDResponse();
+        boolean isExist = memberService.isExistLoginID(postValidateLoginID.getLoginID());
+
+        if(isExist) {
+            pageResponse.setCode("SUCCESS");
+            pageResponse.setMessage("아이디 검증을 완료했습니다.");
+        } else {
+            pageResponse.setCode("FAIL");
+            pageResponse.setMessage("존재하지 않는 아이디 입니다.");
+        }
+        return pageResponse;
+    }
+
     @GetMapping("/password/find")
     public String getFindPwd(Model model) {
         List<Category> categoryList = categoryService.selectAll();
@@ -263,12 +279,38 @@ public class MemberController {
     }
 
     @GetMapping("/password/change")
-    public String getChangePwd(Model model) {
+    public String getChangePwd(Model model, @ModelAttribute GetChangePassword getChangePassword) {
         List<Category> categoryList = categoryService.selectAll();
 
+        model.addAttribute("idx", getChangePassword.getIdx());
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("menu", "sell");
         model.addAttribute("main", VIEW_PREFIX + "password/found");
         return "view";
+    }
+
+    @ResponseBody
+    @PostMapping("/password/change")
+    public PostChangePasswordResponse postChangePwd(@RequestBody PostChangePassword postChangePassword) {
+        PostChangePasswordResponse pageResponse = new PostChangePasswordResponse();
+        try {
+            Member member = memberService.selectByIdx(postChangePassword.getIdx());
+
+            String password = postChangePassword.getPassword();
+
+            if(!bCryptPasswordEncoder.matches(password, member.getPassword())) {
+                String encryptPassword = bCryptPasswordEncoder.encode(password);
+                memberService.updatePassword(encryptPassword, postChangePassword.getIdx());
+                pageResponse.setCode("SUCCESS");
+                pageResponse.setMessage("비밀번호 변경을 완료하였습니다. 다시 로그인해주세요.");
+            } else {
+                pageResponse.setCode("FAIL");
+                pageResponse.setMessage("이전과 동일한 비밀번호를 사용할 수 없습니다. 다른 비밀번호로 설정해 주세요.");
+            }
+        } catch (Exception e) {
+            pageResponse.setCode("FAIL");
+            pageResponse.setMessage("비밀번호 변경을 실패하였습니다. 다시 시도해주세요.");
+        }
+        return pageResponse;
     }
 }

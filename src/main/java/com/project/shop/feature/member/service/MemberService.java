@@ -20,7 +20,11 @@ public interface MemberService {
 
     void delete(int idx);
 
-    Member selectByNameAndBirth(String name, String birth);
+    Member validateMember(String name, String birth);
 
-    boolean validateLoginID(String loginID);
+    boolean isDuplicateLoginID(String loginID);
+
+    boolean isExistLoginID(String loginID);
+
+    void updatePassword(String password, int idx);
 }

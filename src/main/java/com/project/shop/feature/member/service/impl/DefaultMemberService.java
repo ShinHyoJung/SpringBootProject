@@ -27,12 +27,12 @@ public class DefaultMemberService implements MemberService {
     public boolean isValidateIDPWD(PostLogin postLogin) {
         boolean isValidate;
 
-        Member member = memberDAO.selectByLoginID(postLogin.getId());
-        if(member == null) {
-            isValidate = false;
-        } else {
+        try {
+            Member member = memberDAO.selectByLoginID(postLogin.getId());
             String password = member.getPassword();
             isValidate = bCryptPasswordEncoder.matches(postLogin.getPassword(), password);
+        } catch (Exception e) {
+            isValidate = false;
         }
         return isValidate;
     }
@@ -100,19 +100,37 @@ public class DefaultMemberService implements MemberService {
     }
 
     @Override
-    public Member selectByNameAndBirth(String name, String birth) {
+    public Member validateMember(String name, String birth) {
         return memberDAO.selectByNameAndBirth(name, birth);
     }
 
     @Override
-    public boolean validateLoginID(String loginID) {
+    public boolean isDuplicateLoginID(String loginID) {
         boolean isDuplicate;
         try {
-            memberDAO.validateLoginID(loginID);
+            memberDAO.isValidateLoginID(loginID);
             isDuplicate = true;
         } catch (Exception e) {
             isDuplicate = false;
         }
         return isDuplicate;
     }
+
+    @Override
+    public boolean isExistLoginID(String loginID) {
+        boolean isExist;
+        try {
+            memberDAO.isValidateLoginID(loginID);
+            isExist = true;
+        } catch (Exception e) {
+            isExist = false;
+        }
+        return isExist;
+    }
+
+    @Override
+    public void updatePassword(String password, int idx) {
+        memberDAO.updatePassword(password, idx);
+    }
+
 }

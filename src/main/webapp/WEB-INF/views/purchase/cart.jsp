@@ -139,7 +139,6 @@
             buyer_addr : '${member.address}',
         }, function(rsp) {
             if(rsp.success) {
-                alert(rsp.imp_uid);
                 document.getElementById('impUid').value = rsp.imp_uid;
                 let form = document.payForm;
                 form.submit();
