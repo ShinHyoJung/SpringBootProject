@@ -106,7 +106,14 @@
     }
 
     function updateInfo() {
-        let password = document.getElementById('password').value;
+        let password = document.getElementById('password').value.trim();
+        let name = document.getElementById('name').value.trim();
+        let birth = document.getElementById('birth').value.trim();
+        let phone = document.getElementById('phone').value.trim();
+        let email = document.getElementById('email').value.trim();
+        let zipCode = document.getElementById('zipCode').value.trim();
+        let address = document.getElementById('address').value.trim();
+        let detailAddress = document.getElementById('detailAddress').value.trim();
 
         if(!password) {
             alert("비밀번호를 입력해주세요.");
@@ -115,6 +122,51 @@
 
         if(!pwdVal.test(password)) {
             alert("비밀번호는 영문대소문자와 숫자, 특수문자 포함하여 10~20자리로 입력해주세요.");
+            return false;
+        }
+
+        if(!name) {
+            alert("이름을 입력해주세요.");
+            return false;
+        }
+
+        if(!birth) {
+            alert("생년월일 8자리를 입력해주세요.");
+            return false;
+        }
+
+        if(!phone) {
+            alert("휴대폰 번호를 입력해주세요.");
+            return false;
+        }
+
+        if(!email) {
+            alert("이메일을 입력해주세요.");
+            return false;
+        }
+
+        if(!phoneVal.test(phone)) {
+            alert("휴대폰 번호 형식이 맞지 않습니다. 다시 입력해주세요.");
+            return false;
+        }
+
+        if(!emailVal.test(email)) {
+            alert("이메일 형식이 맞지 않습니다. 다시 입력해주세요.");
+            return false;
+        }
+
+        if(!zipCode) {
+            alert("우편번호를 입력해주세요.");
+            return false;
+        }
+
+        if(!address) {
+            alert("주소를 입력해주세요.");
+            return false;
+        }
+
+        if(!detailAddress) {
+            alert("상세 주소를 입력해주세요.");
             return false;
         }
 

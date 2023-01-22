@@ -21,6 +21,7 @@ public class PostAddCart {
     private String price;
     private int quantity;
     private int sellID;
+    private int productID;
 
     public Cart toEntity(String thumbnailImageName) {
         Cart cart = new Cart();
@@ -28,6 +29,7 @@ public class PostAddCart {
         cart.setPrice(this.price);
         cart.setQuantity(this.quantity);
         cart.setSellID(this.getSellID());
+        cart.setProductID(this.productID);
         cart.setThumbnailImageName(thumbnailImageName);
         return cart;
     }

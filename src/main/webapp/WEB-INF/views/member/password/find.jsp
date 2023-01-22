@@ -46,10 +46,10 @@
     let display = $('#timeout');
 
     function sendEmail() {
-        let loginID = document.getElementById('loginID').value;
-        let name = document.getElementById('name').value;
-        let birth = document.getElementById('birth').value;
-        let email = document.getElementById('email').value;
+        let loginID = document.getElementById('loginID').value.trim();
+        let name = document.getElementById('name').value.trim();
+        let birth = document.getElementById('birth').value.trim();
+        let email = document.getElementById('email').value.trim();
 
         if(!loginID) {
             alert("아이디를 입력해주세요.");
@@ -118,11 +118,8 @@
                                     data: JSON.stringify(postObj),
                                     contentType: 'application/json; charset=utf-8',
                                     success: function(pageResponse) {
+                                        setTimer();
                                         alert(pageResponse.message);
-
-                                        if(pageResponse.code == 'SUCCESS') {
-                                            setTimer();
-                                        }
                                     }
                                 })
 

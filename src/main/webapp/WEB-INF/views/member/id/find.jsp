@@ -40,11 +40,11 @@
     let timer = null;
     let isRunning = false;
     let display = $('#timeout');
-
+=
     function sendEmail() {
-        let name = document.getElementById('name').value;
-        let birth = document.getElementById('birth').value;
-        let email = document.getElementById('email').value;
+        let name = document.getElementById('name').value.trim();
+        let birth = document.getElementById('birth').value.trim();
+        let email = document.getElementById('email').value.trim();
 
         if(!name) {
             alert("이름을 입력해주세요.");
@@ -97,8 +97,8 @@
                         data: JSON.stringify(postObj),
                         contentType: 'application/json; charset=utf-8',
                         success: function(pageResponse) {
-                            alert(pageResponse.message);
                             setTimer();
+                            alert(pageResponse.message);
                         }
                     })
                 } else {

@@ -37,4 +37,14 @@ public class DefaultCategoryService implements CategoryService {
     public void delete(int categoryID) {
         categoryDAO.delete(categoryID);
     }
+
+    @Override
+    public String convertCodeToName(String code) {
+        return categoryDAO.convertCodeToName(code);
+    }
+
+    @Override
+    public String convertNameToCode(String name) {
+        return categoryDAO.convertNameToCode(name);
+    }
 }

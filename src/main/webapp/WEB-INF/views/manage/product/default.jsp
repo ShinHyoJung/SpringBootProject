@@ -81,7 +81,7 @@
                     listHTML += '<tr>';
                     listHTML += '<th class="one wide" style="width:40px;"></th>';
                     listHTML += '<th class="one wide">제품 번호</th>';
-                    listHTML += '<th class="one wide">카테고리</th>';
+                    listHTML += '<th class="two wide">카테고리</th>';
                     listHTML += '<th class="two wide"> 제품 이미지 </th>';
                     listHTML += '<th> 제품 이름 </th>';
                     listHTML += '<th> 제품 코드 </th>';
@@ -130,7 +130,7 @@
                     data: JSON.stringify(postObj),
                     contentType: 'application/json; charset=utf-8',
                     success: function(pageResponse) {
-                        console.log(pageResponse);
+                        alert(pageResponse.message);
                         if(pageResponse.code == 'SUCCESS') {
                             location.reload();
                         }

@@ -9,8 +9,10 @@ import com.project.shop.feature.manage.product.dto.*;
 import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.manage.product.entity.Product;
 import com.project.shop.feature.manage.product.service.ProductService;
+import com.project.shop.feature.sell.service.SellService;
 import com.project.shop.feature.util.FileUtils;
 import com.project.shop.feature.util.ImageUtils;
+import com.project.shop.feature.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,6 +41,7 @@ public class ProductController {
     private final ProductService productService;
     private final ProductImageService productImageService;
     private final CategoryService categoryService;
+    private final SellService sellService;
 
     @GetMapping("/")
     public String manage(Model model) {
@@ -50,9 +53,22 @@ public class ProductController {
     @ResponseBody
     @PostMapping("/list")
     public PostPrintListResponse manageList(@RequestBody PostPrintList postPrintList) throws SQLException {
+        if(postPrintList.getSearchOption().equals("category")) {
+            if(StringUtils.isNotEmpty(postPrintList.getKeyword())) {
+                String name = postPrintList.getKeyword();
+                String code = categoryService.convertNameToCode(name);
+                postPrintList.setKeyword(code);
+            }
+        }
+
         int total = productService.count(postPrintList.getSearchOption(), postPrintList.getKeyword());
         Paging paging = new Paging(postPrintList.getCurrentPage(), 5, total);
         List<Product> productList = productService.selectAll(paging, postPrintList.getSearchOption(), postPrintList.getKeyword());
+
+        for(Product product : productList) {
+            String name = categoryService.convertCodeToName(product.getCategory());
+            product.setCategory(name);
+        }
 
         return new PostPrintListResponse(paging, productList);
     }
@@ -60,6 +76,7 @@ public class ProductController {
     @GetMapping("/add")
     public String getAddProduct(Model model) {
         List<Category> categoryList = categoryService.selectAll();
+
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("menu", "manage");
         model.addAttribute("main", VIEW_PREFIX + "add");
@@ -90,6 +107,8 @@ public class ProductController {
         PostDeleteResponse pageResponse = new PostDeleteResponse();
         try {
             productService.delete(postDelete.getProductID());
+            sellService.deleteByProductID(postDelete.getProductID());
+
             pageResponse.setCode("SUCCESS");
             pageResponse.setMessage("상품이 삭제되었습니다.");
         } catch (Exception e) {

@@ -21,7 +21,7 @@
         <select class="ui dropdown" name="category" id="category" onchange="selectCategory(this.value);">
             <option value="">카테고리</option>
             <c:forEach items="${categoryList}" var="categoryList">
-                <option id="${categoryList.code}" value="${categoryList.name}">${categoryList.name}</option>
+                <option value="${categoryList.code}">${categoryList.name}</option>
             </c:forEach>
         </select>
     </div>
@@ -41,12 +41,21 @@
 </form>
 
 <script>
+    $(document).ready(function() {
+        document.getElementById('category').options[0].selected = true;
+        printProductList($('#category option:eq(0)').attr('value'));
+        document.getElementById('productList').options[0].selected = true;
+        document.getElementById('name').value = $("#productList option:selected").attr('id');
+    });
+
     let selectCategory = function(value) {
         printProductList(value);
+        document.getElementById('productList').options[0].selected = true;
+        document.getElementById('name').value = $("#productList option:selected").attr('id');
     }
 
     $("select[name=productID]").change(function() {
-        document.getElementById('name').value = $('select[name = productID] option:selected').attr('id');
+        document.getElementById('name').value = $("select[name=productID] option:selected").attr('id');
     });
 
     function printProductList(category) {

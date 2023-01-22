@@ -14,14 +14,20 @@
         <label>새 비밀번호 입력</label>
         <input type="password" id="password" name="password" placeholder="변경할 비밀번호 입력">
     </div>
+    <div class="field">
+        <label>비밀번호 확인</label>
+        <input type="password" id="passwordConfirm" placeholder="비밀번호 확인">
+    </div>
     <button class="ui button" type="button" onclick="change()">변경하기</button>
 </form>
 <input type="hidden" id="idx" value="${idx}">
 <script>
     let pwdVal = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]).{10,20}$/;
+    let blankVal = /^.*( ).*$/;
 
     function change() {
-        let password = document.getElementById('password').value;
+        let password = document.getElementById('password').value.trim();
+        let passwordConfirm = document.getElementById('passwordConfirm').value.trim();
         let idx = document.getElementById('idx').value;
 
         if(!password) {
@@ -29,8 +35,18 @@
             return false;
         }
 
-        if(!pwdVal.test(password)) {
-            alert("비밀번호는 영문대소문자와 숫자, 특수문자 포함하여 10~20자리로 입력해주세요.");
+        if(!pwdVal.test(password) || blankVal.test(password)) {
+            alert("비밀번호는 공백없이 영문대소문자와 숫자, 특수문자 포함하여 10~20자리로 입력해주세요.");
+            return false;
+        }
+
+        if(!passwordConfirm) {
+            alert("비밀번호를 한번 더 입력해주세요.");
+            return false;
+        }
+
+        if(password != passwordConfirm) {
+            alert("비밀번호가 서로 다릅니다. 다시 입력해주세요.");
             return false;
         }
 

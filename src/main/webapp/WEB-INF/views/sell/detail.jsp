@@ -56,16 +56,18 @@ ${getDetailResponse.sell.content} <br>
     }
 
     function addCart() {
-        let sellID = document.getElementById('sellID').value;
         let name = document.getElementById('name').value;
         let price = document.getElementById('price').value;
         let quantity = document.getElementById('quantity').value;
+        let sellID = document.getElementById('sellID').value;
+        let productID = document.getElementById('productID').value;
 
         let postObj = {
-            'sellID':sellID,
             'name': name,
             'price':price,
-            'quantity':quantity
+            'quantity':quantity,
+            'sellID':sellID,
+            'productID':productID
         };
 
         $.ajax({

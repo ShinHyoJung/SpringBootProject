@@ -55,6 +55,7 @@ public class CategoryDAO {
         });
         return category;
     }
+
     public void update(Category category) {
         String sql = "UPDATE category SET name = ?, code = ? WHERE 1=1 AND category_id = ?";
 
@@ -65,5 +66,18 @@ public class CategoryDAO {
         String sql = "DELETE FROM category WHERE 1=1 AND category_id = ?";
 
         jdbcTemplate.update(sql, categoryID);
+    }
+
+    public String convertCodeToName(String code) {
+        String sql = "SELECT name FROM category WHERE 1=1 AND  code = ?";
+
+        String name = jdbcTemplate.queryForObject(sql, new Object[]{code}, String.class);
+        return name;
+    }
+
+    public String convertNameToCode(String name) {
+        String sql = "SELECT code FROM category WHERE 1=1 AND name = ?";
+        String code = jdbcTemplate.queryForObject(sql, new Object[]{name}, String.class);
+        return code;
     }
 }

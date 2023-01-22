@@ -21,4 +21,6 @@ public interface SellService {
     void update(Sell sell);
 
     int selectMaxSellID();
+
+    void deleteByProductID(int productID);
 }

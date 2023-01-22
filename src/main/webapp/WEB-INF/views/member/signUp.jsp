@@ -24,6 +24,10 @@
                <input type="password" id="password" name="password" placeholder="비밀번호">
          </div>
          <div class="field">
+            <label> 비밀번호 확인</label>
+            <input type="password" id="passwordConfirm" placeholder="비밀번호 확인">
+         </div>
+         <div class="field">
             <label> 이름 </label>
                <input type="text" id="name" name="name" placeholder="이름">
          </div>
@@ -58,6 +62,7 @@
     let pwdVal = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]).{10,20}$/;
     let emailVal = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     let phoneVal = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+    let blankVal = /^.*( ).*$/;
 
    function sendEmail() {
       let email = document.getElementById('email').value;
@@ -83,15 +88,15 @@
    }
 
    function checkDuplicate() {
-       let loginID = document.getElementById('inputLoginID').value;
+       let loginID = document.getElementById('inputLoginID').value.trim();
 
        if(!loginID) {
            alert("아이디를 입력해주세요.");
            return false;
        }
 
-       if(!idVal.test(loginID)) {
-           alert("아이디는 영문소문자와 숫자로 5~10자리로 입력해주세요.");
+       if(!idVal.test(loginID) || blankVal.test(loginID)) {
+           alert("아이디는 공백없이 영문소문자와 숫자로 5~10자리로 입력해주세요.");
            return false;
        }
 
@@ -154,14 +159,15 @@
    }
 
    function signUp() {
-      let password = document.getElementById('password').value;
-      let name = document.getElementById('name').value;
-      let birth = document.getElementById('birth').value;
-      let phone = document.getElementById('phone').value;
-      let email = document.getElementById('email').value;
-      let zipCode = document.getElementById('zipCode').value;
-      let address = document.getElementById('address').value;
-      let detailAddress = document.getElementById('detailAddress').value;
+      let password = document.getElementById('password').value.trim();
+      let passwordConfirm = document.getElementById('passwordConfirm').value.trim();
+      let name = document.getElementById('name').value.trim();
+      let birth = document.getElementById('birth').value.trim();
+      let phone = document.getElementById('phone').value.trim();
+      let email = document.getElementById('email').value.trim();
+      let zipCode = document.getElementById('zipCode').value.trim();
+      let address = document.getElementById('address').value.trim();
+      let detailAddress = document.getElementById('detailAddress').value.trim();
 
       if(!document.getElementById('inputLoginID').disabled) {
           alert("아이디 중복체크를 해주세요.");
@@ -173,8 +179,18 @@
          return false;
       }
 
-      if(!pwdVal.test(password)) {
-          alert("비밀번호는 영문대소문자와 숫자, 특수문자 포함하여 10~20자리로 입력해주세요.");
+      if(!pwdVal.test(password) || blankVal.test(password)) {
+          alert("비밀번호는 공백없이 영문대소문자와 숫자, 특수문자 포함하여 10~20자리로 입력해주세요.");
+          return false;
+      }
+
+      if(!passwordConfirm) {
+          alert("비밀번호를 한번 더 입력해주세요.");
+          return false;
+      }
+
+      if(password != passwordConfirm) {
+          alert("비밀번호가 서로 다릅니다. 다시 입력해주세요.");
           return false;
       }
 

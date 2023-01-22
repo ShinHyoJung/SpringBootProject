@@ -50,4 +50,9 @@ public class DefaultSellService implements SellService {
     public int selectMaxSellID() {
         return sellDAO.selectMaxSellID();
     }
+
+    @Override
+    public void deleteByProductID(int productID) {
+        sellDAO.deleteByProductID(productID);
+    }
 }

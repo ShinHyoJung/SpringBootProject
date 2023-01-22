@@ -117,4 +117,10 @@ public class SellDAO {
         int maxSellID = jdbcTemplate.queryForObject(sql, Integer.class);
         return maxSellID;
     }
+
+    public void deleteByProductID(int productID) {
+        String sql = "DELETE FROM sell WHERE 1=1 AND product_id = ?";
+
+        jdbcTemplate.update(sql, productID);
+    }
 }

@@ -47,6 +47,9 @@
 <script>
     let selectCategory = function(value) {
         printProductList(value);
+        $("#productList option:eq(0)").prop("selected", true);
+
+        document.getElementById('name').value = $("#productList option:eq(0)").attr('id');
     }
 
     $("select[name=productID]").change(function() {

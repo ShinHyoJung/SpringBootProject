@@ -8,10 +8,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
-<div class="field">
-    로그인 아이디는 ${loginID} 입니다.
+<div class="field" style="margin-top: 100px;">
+    <p class="subtitle">로그인 아이디는 '${loginID}' 입니다.</p>
 </div>
-<div class="field">
+<div class="field" style="margin-top: 50px;">
     <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/sell/'">홈으로 가기</button>
 </div>
 </body>

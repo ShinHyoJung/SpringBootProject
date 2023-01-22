@@ -15,4 +15,8 @@ public interface CategoryService {
     void update(Category category);
 
     void delete(int categoryID);
+
+    String convertCodeToName(String code);
+
+    String convertNameToCode(String name);
 }
