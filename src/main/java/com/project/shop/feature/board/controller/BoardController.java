@@ -43,7 +43,7 @@ public class BoardController {
 
     @GetMapping("/write")
     public String getWrite(Model model, HttpSession session) {
-        int idx = (int)session.getAttribute("idx");
+        int idx = (int)session.getAttribute("loggedIn");
 
         if(Integer.valueOf(idx) != null) {
             String loginID = session.getAttribute("loggedIn").toString();

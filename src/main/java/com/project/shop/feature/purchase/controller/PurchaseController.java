@@ -200,7 +200,7 @@ public class PurchaseController {
 
     @GetMapping("/cart")
     public String getCart(Model model, HttpSession session) {
-        int idx = (int)session.getAttribute("idx");
+        int idx = (int)session.getAttribute("loggedIn");
         Member member = memberService.selectByIdx(idx);
 
         model.addAttribute("member", member);
@@ -213,7 +213,7 @@ public class PurchaseController {
     @PostMapping("/cart")
     public PostCartListResponse postCartList(HttpSession session) {
         PostCartListResponse pageResponse = new PostCartListResponse();
-        int idx = (int)session.getAttribute("idx");
+        int idx = (int)session.getAttribute("loggedIn");
         Member member = memberService.selectByIdx(idx);
         ArrayList<Cart> cartList = (ArrayList<Cart>)session.getAttribute("cartList");
         int totalPrice = 0;

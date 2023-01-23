@@ -11,7 +11,7 @@
 <html>
 <body onload="printList()">
 <p class="subtitle">배송조회</p>
-<div class="ui relaxed divided list" id="list" style="width: 55%;">
+<div class="ui relaxed divided list" id="list" style="width: 70%;">
  <!--   <c:forEach items="${parcelList}" var="parcelList">
             <div class="item">
             <div>

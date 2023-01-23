@@ -141,7 +141,7 @@ public class MemberController {
     public String getWithdrawal(Model model, HttpSession session) {
         PostWithdrawalResponse pageResponse = new PostWithdrawalResponse();
         try {
-            int idx = (int)session.getAttribute("idx");
+            int idx = (int)session.getAttribute("loggedIn");
             if(Integer.valueOf(idx) != null) {
                 memberService.delete(idx);
                 session.removeAttribute("loggedIn");

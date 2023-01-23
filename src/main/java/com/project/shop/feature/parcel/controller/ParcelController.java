@@ -42,7 +42,7 @@ public class ParcelController {
     @ResponseBody
     @PostMapping("/delivery-tracking/list")
     public PostDeliveryTrackingListResponse postDeliveryTrackingList(@RequestBody PostDeliveryTrackingList postDeliveryTrackingList, HttpSession session) {
-        int idx = (int)session.getAttribute("idx");
+        int idx = (int)session.getAttribute("loggedIn");
         int total = parcelService.count(idx);
         Paging paging = new Paging(postDeliveryTrackingList.getCurrentPage(), 5, total);
         List<Parcel> parcelList = parcelService.select(idx, paging);

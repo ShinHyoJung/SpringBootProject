@@ -28,10 +28,26 @@
   <div class="field">
     <textarea id="info" name="info" placeholder="상품 정보"></textarea>
   </div>
-    <input type="file" id="productImage" name="productImage" multiple="multiple">
+  <div class="field">
+    <input type="file" id="productImage" name="productImage" multiple="multiple" style="width: 30%;" onchange="readURL(this)">
+    <img id="productImagePreview" style="width: 300px; height: 300px;">
+  </div>
   <button class="ui button" type="submit"><i class="save icon"></i></button>
 </form>
 
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/manage/product/'">뒤로가기</button>
+<script>
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      let reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('productImagePreview').src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      document.getElementById('productImagePreview').src = '';
+    }
+  }
+</script>
 </body>
 </html>
