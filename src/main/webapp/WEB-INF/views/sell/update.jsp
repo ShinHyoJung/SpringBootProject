@@ -12,9 +12,16 @@
 <body>
 <p class="subtitle"> 판매글 수정 </p>
 <form class="ui form" action="${pageContext.request.contextPath}/sell/update" method="post" enctype="multipart/form-data" style="width: 50%;">
-    <input type="file" name="sellImage" multiple="multiple" value="${sell.thumbnailImageName}"> <br>
-    <input type="file" name="sellImage" multiple="multiple" value="${sell.titleImageName}"> <br>
+    <div class="field">
+        <label>썸네일 이미지</label>
+        <input type="file" name="sellImage" multiple="multiple" value="${sell.thumbnailImageName}" style="width: 30%;">
+    </div>
+    <div class="field">
+        <label>제목 이미지</label>
+        <input type="file" name="sellImage" multiple="multiple" value="${sell.titleImageName}" style="width: 30%;">
+    </div>
     <input type="hidden" id="name" name="name" value="">
+    <input type="hidden" id="sellID" name="sellID" value="${sell.sellID}">
     <div class="ui field">
         <label>제목</label>
         <input type="text" id="title" name="title" value="${sell.title}">
@@ -40,16 +47,24 @@
         <label>상세 내용</label>
         <textarea id="content" name="content">${sell.content}</textarea>
     </div>
-    <input type="hidden" id="sellID" name="sellID" value="${sell.sellID}"> <br>
-    <input type="file" name="sellImage" multiple="multiple" value="${sell.detailImageName}"> <br>
+    <div class="field">
+        <label>상세 이미지</label>
+        <input type="file" name="sellImage" multiple="multiple" value="${sell.detailImageName}" style="width: 30%;">
+    </div>
     <button class="ui button" type="submit" style="margin-top: 10px;"><i class="save icon"></i></button>
 </form>
 <script>
+    $(document).ready(function() {
+        document.getElementById('category').options[0].selected = true;
+        printProductList($('#category option:eq(0)').attr('value'));
+        document.getElementById('productList').options[0].selected = true;
+        document.getElementById('name').value = $("#productList option:selected").attr('id');
+    });
+
     let selectCategory = function(value) {
         printProductList(value);
-        $("#productList option:eq(0)").prop("selected", true);
-
-        document.getElementById('name').value = $("#productList option:eq(0)").attr('id');
+        document.getElementById('productList').options[0].selected = true;
+        document.getElementById('name').value = $("#productList option:selected").attr('id');
     }
 
     $("select[name=productID]").change(function() {

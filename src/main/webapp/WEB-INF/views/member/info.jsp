@@ -14,11 +14,10 @@
 <form class="ui form" name="infoForm" action="${pageContext.request.contextPath}/member/info/update" method="post" style="width: 30%;">
     <div class="field">
         <label> 이름  </label>
-            <input type="text" id="name" name="name" value = "${getInfoResponse.name}">
+            <input type="text" id="name" name="name" value = "${member.name}">
     </div>
     <div class="field">
-        <label> 아이디  </label>
-        ${getInfoResponse.loginID}
+        <label> 아이디  ${member.loginID} </label>
     </div>
     <div class="field">
         <label> 비밀번호 </label>
@@ -26,37 +25,37 @@
     </div>
     <div class="field">
         <label>  생년월일 </label>
-            <input type="text" id="birth" name="birth" value="${getInfoResponse.birth}">
+            <input type="text" id="birth" name="birth" value="${member.birth}">
     </div>
     <div class="field">
         <label> 휴대폰번호 </label>
-            <input type="text" id="phone" name="phone" value="${getInfoResponse.phone}">
+            <input type="text" id="phone" name="phone" value="${member.phone}">
     </div>
     <div class="field">
         <label> 이메일 </label>
-            <input type="text" id="email" name="email" value="${getInfoResponse.email}">
+            <input type="text" id="email" name="email" value="${member.email}">
     </div>
     <div class="field">
         <label> 우편번호 </label> <button class="ui button" type="button" onclick="searchZipCode();">우편번호 찾기</button>
-            <input type="text" id="zipCode" name="zipCode" value="${getInfoResponse.zipCode}" style="margin-top: 10px;">
+            <input type="text" id="zipCode" name="zipCode" value="${member.zipCode}" style="margin-top: 10px;">
     </div>
     <div class="field">
         <label> 주소 </label>
-        <input type="text" id="address" name="address" value="${getInfoResponse.address}">
+        <input type="text" id="address" name="address" value="${member.address}">
     </div>
     <div class="field">
         <label> 상세 주소 </label>
-        <input type="text" id="detailAddress" name="detailAddress" value="${getInfoResponse.detailAddress}">
+        <input type="text" id="detailAddress" name="detailAddress" value="${member.detailAddress}">
     </div>
     <div class="field">
         <label> 생성일시 </label>
-        <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${getInfoResponse.createDate}"/>
+        <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${member.createDate}"/>
     </div>
     <div class="field">
         <label> 변경일시 </label>
-        <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${getInfoResponse.updateDate}"/>
+        <fmt:formatDate pattern="yyyy-MM-dd hh:MM" value="${member.updateDate}"/>
     </div>
-        <input type="hidden" id="idx" name="idx" value="${getInfoResponse.idx}">
+        <input type="hidden" id="idx" name="idx" value="${member.idx}">
         <button class="ui button" type="button" onclick="updateInfo();"><i class="save icon"></i></button>
 </form>
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/member/info/download?idx=${idx}'">

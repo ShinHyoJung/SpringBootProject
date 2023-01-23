@@ -3,7 +3,6 @@ package com.project.shop.feature.purchase.controller;
 import com.project.shop.feature.cart.entity.Cart;
 import com.project.shop.feature.manage.category.entity.Category;
 import com.project.shop.feature.manage.category.service.CategoryService;
-import com.project.shop.feature.manage.product.dto.PostUpdateQuantity;
 import com.project.shop.feature.manage.product.entity.Product;
 import com.project.shop.feature.manage.product.service.ProductService;
 import com.project.shop.feature.member.service.MemberService;

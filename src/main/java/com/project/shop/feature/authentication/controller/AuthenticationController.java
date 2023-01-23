@@ -2,10 +2,11 @@ package com.project.shop.feature.authentication.controller;
 
 import com.project.shop.feature.authentication.dto.PostCheckAuth;
 import com.project.shop.feature.authentication.dto.PostCheckAuthResponse;
-import com.project.shop.feature.authentication.method.email.dto.PostSendEmail;
-import com.project.shop.feature.authentication.method.email.dto.PostSendEmailResponse;
-import com.project.shop.feature.authentication.method.email.service.MailService;
-import com.project.shop.feature.authentication.method.email.vo.Mail;
+import com.project.shop.feature.authentication.method.mail.dto.PostSendEmail;
+import com.project.shop.feature.authentication.method.mail.dto.PostSendEmailResponse;
+import com.project.shop.feature.authentication.method.mail.publisher.service.MailPublisherService;
+import com.project.shop.feature.authentication.method.mail.service.MailService;
+import com.project.shop.feature.authentication.method.mail.vo.Mail;
 import com.project.shop.feature.authentication.method.sms.dto.PostSendSms;
 import com.project.shop.feature.authentication.method.sms.dto.PostSendSmsResponse;
 import com.project.shop.feature.authentication.method.sms.service.SmsService;
@@ -30,6 +31,7 @@ import java.util.Map;
 public class AuthenticationController {
 
     private final MailService mailService;
+    private final MailPublisherService mailPublisherService;
     private final SmsService smsService;
     private final AuthenticationService authenticationService;
 
@@ -51,7 +53,7 @@ public class AuthenticationController {
         mail.setVariables(variables);
 
         try {
-            mailService.send(mail);
+            mailPublisherService.sendSimpleMail(mail);
             pageResponse.setCode("SUCCESS");
             pageResponse.setMessage("인증번호가 전송되었습니다.");
         } catch (Exception e) {

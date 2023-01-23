@@ -28,6 +28,9 @@ spring:
           auth: true
           starttls:
             enable: true
+  activemq:
+    packages:
+      trust-all: true
   thymeleaf:
     prefix: classpath:/templates/mail/
     suffix:  .html

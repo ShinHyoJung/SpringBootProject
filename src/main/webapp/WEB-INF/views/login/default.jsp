@@ -9,7 +9,7 @@
 <html>
 <body>
 <p class="subtitle"> 로그인 </p>
-<form class="ui form" name="loginForm" method="post" action="${pageContext.request.contextPath}/member/login" style="width: 30%;">
+<form class="ui form" style="width: 30%;">
     <div class="field">
         <label>아이디 </label>
         <input type="text" id="id" name="id" onkeyup="enterLogin()">
@@ -38,8 +38,25 @@
             return false;
         }
 
-        let form = document.loginForm;
-        form.submit();
+        let postObj = {
+            'loginID':loginID,
+            'password':password
+        }
+
+        $.ajax({
+            url: '${pageContext.request.contextPath}/login/do',
+            method: 'post',
+            dataType: 'json',
+            data: JSON.stringify(postObj),
+            contentType: 'application/json; charset=utf-8',
+            success: function(pageResponse) {
+                alert(pageResponse.message);
+
+                if(pageResponse.code == 'SUCCESS') {
+                    location.href='${pageContext.request.contextPath}/sell/';
+                }
+            }
+        })
     }
 
     function enterLogin() {

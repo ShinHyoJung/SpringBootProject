@@ -12,6 +12,8 @@ import com.project.shop.feature.sell.service.SellService;
 import com.project.shop.feature.util.FileUtils;
 import com.project.shop.feature.util.ImageUtils;
 import com.project.shop.feature.util.StringUtils;
+import com.project.shop.feature.want.entity.Want;
+import com.project.shop.feature.want.service.WantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.project.shop.feature.manage.category.entity.Category;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -33,6 +36,7 @@ public class SellController {
     private final ProductService productService;
     private final SellImageService sellImageService;
     private final CategoryService categoryService;
+    private final WantService wantService;
 
     @GetMapping("/")
     public String getSell(Model model, @ModelAttribute GetDefault getDefault) {
@@ -94,10 +98,19 @@ public class SellController {
     }
 
     @GetMapping("/detail/{sellID}")
-    public String getDetail(@PathVariable int sellID, Model model) throws SQLException {
+    public String getDetail(Model model, @PathVariable int sellID, HttpSession session) throws SQLException {
         Sell sell = sellService.select(sellID);
         List<Category> categoryList = categoryService.selectAll();
+        int idx = (int)session.getAttribute("loggedIn");
+        Want want = new Want();
 
+        try{
+            want = wantService.select(sellID, idx);
+        } catch (Exception e) {
+            want.setWantID(0);
+        }
+
+        model.addAttribute("wantID", want.getWantID());
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("menu", "sell");
         model.addAttribute("getDetailResponse", new GetDetailResponse(sell));

@@ -36,6 +36,9 @@
         <a class="item" href="${pageContext.request.contextPath}/member/info">
             내 정보
         </a>
+        <a class="item" href="${pageContext.request.contextPath}/want/">
+            찜한 내역
+        </a>
         <a class="item" href="${pageContext.request.contextPath}/purchase/ordered">
             주문 내역
         </a>

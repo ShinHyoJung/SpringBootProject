@@ -40,7 +40,7 @@
     let timer = null;
     let isRunning = false;
     let display = $('#timeout');
-=
+
     function sendEmail() {
         let name = document.getElementById('name').value.trim();
         let birth = document.getElementById('birth').value.trim();

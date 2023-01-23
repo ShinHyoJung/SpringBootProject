@@ -1,9 +1,9 @@
-package com.project.shop.feature.member.dto;
+package com.project.shop.feature.login.dto;
 
 import lombok.Data;
 
 @Data
 public class PostLogin {
-    private String id;
+    private String loginID;
     private String password;
 }

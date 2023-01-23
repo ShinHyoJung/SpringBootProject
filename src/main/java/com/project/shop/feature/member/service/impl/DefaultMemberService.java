@@ -1,8 +1,8 @@
 package com.project.shop.feature.member.service.impl;
 
+import com.project.shop.feature.login.dto.PostLogin;
 import com.project.shop.feature.member.dao.MemberDAO;
 import com.project.shop.feature.member.dto.GetInfoResponse;
-import com.project.shop.feature.member.dto.PostLogin;
 import com.project.shop.feature.member.entity.Member;
 import com.project.shop.feature.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -24,20 +24,6 @@ public class DefaultMemberService implements MemberService {
     }
 
     @Override
-    public boolean isValidateIDPWD(PostLogin postLogin) {
-        boolean isValidate;
-
-        try {
-            Member member = memberDAO.selectByLoginID(postLogin.getId());
-            String password = member.getPassword();
-            isValidate = bCryptPasswordEncoder.matches(postLogin.getPassword(), password);
-        } catch (Exception e) {
-            isValidate = false;
-        }
-        return isValidate;
-    }
-
-    @Override
     public Member selectByLoginID(String loginID) {
         return memberDAO.selectByLoginID(loginID);
     }
@@ -48,45 +34,8 @@ public class DefaultMemberService implements MemberService {
     }
 
     @Override
-    public GetInfoResponse selectInfo(Member member) {
-        GetInfoResponse getInfoResponse = new GetInfoResponse(member.getIdx(), member.getLoginID(), member.getName());
-
-        if(StringUtils.isNotEmpty(member.getBirth())) {
-            String birth = member.getBirth();
-            getInfoResponse.setBirth(birth);
-        }
-
-        if(StringUtils.isNotEmpty(member.getPhone())) {
-            String phone = member.getPhone();
-            getInfoResponse.setPhone(phone);
-        }
-
-        if(StringUtils.isNotEmpty(member.getEmail())) {
-            String email = member.getEmail();
-            getInfoResponse.setEmail(email);
-        }
-
-        if(StringUtils.isNotEmpty(member.getAddress())) {
-            String address = member.getAddress();
-            getInfoResponse.setAddress(address);
-        }
-
-        if(StringUtils.isNotEmpty(member.getDetailAddress())) {
-            String detailAddress = member.getDetailAddress();
-            getInfoResponse.setDetailAddress(detailAddress);
-        }
-
-        if(StringUtils.isNotEmpty(member.getZipCode())) {
-            String zipCode = member.getZipCode();
-            getInfoResponse.setZipCode(zipCode);
-        }
-
-        Date createDate = member.getCreateDate();
-        Date updateDate = member.getUpdateDate();
-        getInfoResponse.setCreateDate(createDate);
-        getInfoResponse.setUpdateDate(updateDate);
-
-        return getInfoResponse;
+    public Member select(int idx) {
+        return memberDAO.select(idx);
     }
 
     @Override
@@ -132,5 +81,4 @@ public class DefaultMemberService implements MemberService {
     public void updatePassword(String password, int idx) {
         memberDAO.updatePassword(password, idx);
     }
-
 }

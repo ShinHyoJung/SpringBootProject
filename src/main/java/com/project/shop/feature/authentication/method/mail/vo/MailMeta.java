@@ -1,4 +1,4 @@
-package com.project.shop.feature.authentication.method.email.vo;
+package com.project.shop.feature.authentication.method.mail.vo;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

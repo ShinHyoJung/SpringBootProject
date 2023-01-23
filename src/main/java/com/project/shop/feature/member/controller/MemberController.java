@@ -1,6 +1,5 @@
 package com.project.shop.feature.member.controller;
 
-import com.project.shop.feature.authentication.method.email.dto.PostSendEmailResponse;
 import com.project.shop.feature.code.error.ErrorCode;
 import com.project.shop.feature.code.success.SuccessCode;
 import com.project.shop.feature.manage.category.entity.Category;
@@ -76,46 +75,13 @@ public class MemberController {
         return pageResponse;
     }
 
-    @GetMapping("/login")
-    public String getLogin(Model model) {
-        List<Category> categoryList = categoryService.selectAll();
-
-        model.addAttribute("categoryList", categoryList);
-        model.addAttribute("menu", "sell");
-        model.addAttribute("main", VIEW_PREFIX + "login");
-        return "view";
-    }
-    @PostMapping("/login")
-    public String postLogin(Model model, HttpSession session, PostLogin postLogin) {
-        boolean isValidate = memberService.isValidateIDPWD(postLogin);
-
-        if(isValidate) {
-            if(StringUtils.isNotEmpty(postLogin.getId())) {
-                Member member = memberService.selectByLoginID(postLogin.getId());
-                int idx = member.getIdx();
-                session.setAttribute("idx", idx);
-                session.setAttribute("loggedIn", postLogin.getId());
-            }
-        }
-        model.addAttribute("main", "main/default");
-        return "view";
-    }
-
-    @GetMapping("/logout")
-    public String postLogout(Model model, HttpSession session) {
-        session.removeAttribute("loggedIn");
-        model.addAttribute("main", "main/default");
-        return "view";
-    }
-
     @GetMapping("/info")
     public String getInfo(Model model, HttpSession session) {
-        int idx = (int) session.getAttribute("idx");
-        Member member = memberService.selectByIdx(idx);
+        int idx = (int) session.getAttribute("loggedIn");
+        Member member = memberService.select(idx);
 
-        GetInfoResponse getInfoResponse = memberService.selectInfo(member);
+        model.addAttribute("member", member);
         model.addAttribute("menu", "user");
-        model.addAttribute("getInfoResponse", getInfoResponse);
         model.addAttribute("main", VIEW_PREFIX + "info");
         return "view";
     }

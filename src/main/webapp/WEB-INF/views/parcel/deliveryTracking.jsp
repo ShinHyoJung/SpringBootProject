@@ -176,8 +176,8 @@
                    listHTML += '</div>';
                    listHTML += '<br>배송 상품 :' + parcelList.name + ' ' + parcelList.quantity + '<br><br>';
                    listHTML += '우편번호 : ' + parcelList.zipCode + '<br>';
-                   listHTML += '배송주소 : ' + parcelList.address + ' ' + parcelList.detailAddress;
-                   listHTML += '<a class="ui button" href="' + deliveryTrackingSrc + '" target="_blank" style="margin-left: 30px;">배송 조회</a>';
+                   listHTML += '배송주소 : ' + parcelList.address + ' ' + parcelList.detailAddress+ '<br>';
+                   listHTML += '운송장번호: <a href="' + deliveryTrackingSrc + '" target="_blank" style="margin-left: 30px;">' + parcelList.waybillNumber + '</a>';
                    listHTML += '</div>';
                    listHTML += '</div>';
                 });

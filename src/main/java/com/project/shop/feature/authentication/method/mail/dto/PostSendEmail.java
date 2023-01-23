@@ -1,4 +1,4 @@
-package com.project.shop.feature.authentication.method.email.dto;
+package com.project.shop.feature.authentication.method.mail.dto;
 
 import lombok.Data;
 

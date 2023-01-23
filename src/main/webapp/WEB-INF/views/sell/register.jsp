@@ -11,8 +11,16 @@
 <body>
 <p class="subtitle"> 판매 등록 </p>
 <form class="ui form" method="post" action="${pageContext.request.contextPath}/sell/register" enctype="multipart/form-data" style="width: 50%;">
-    <input type="file" name="sellImage" multiple="multiple">
-    <input type="file" name="sellImage" multiple="multiple">
+    <div class="field">
+        <label>썸네일 이미지</label>
+        <input type="file" id="thumbnailImage" name="sellImage" multiple="multiple" style="width: 30%;" onchange="readURL(this, this.id);">
+        <img id="thumbnailImagePreview" style="width: 200px; height: 200px;">
+    </div>
+    <div class="field">
+        <label>제목 이미지</label>
+        <input type="file" id="titleImage" name="sellImage" multiple="multiple" style="width: 30%;" onchange="readURL(this, this.id)">
+        <img id="titleImagePreview" style="width: 300px; height: 300px;">
+    </div>
     <input type="hidden" id="name" name="name">
     <div class="field">
         <input type="text" id="title" name="title" placeholder="글 제목">
@@ -36,7 +44,11 @@
     <div class="field">
         <textarea id="content" name="content" placeholder="판매글 내용"></textarea>
     </div>
-    <input type="file" name="sellImage" multiple="multiple">
+    <div class="field">
+        <label>상세 이미지</label>
+        <input type="file" id="detailImage" name="sellImage" multiple="multiple" style="width: 30%;" onchange="readURL(this, this.id)">
+        <img id="detailImagePreview" style="width: 500px; height: 500px;">
+    </div>
     <button class="ui button" type="submit"><i class="save icon"></i></button>
 </form>
 
@@ -57,6 +69,24 @@
     $("select[name=productID]").change(function() {
         document.getElementById('name').value = $("select[name=productID] option:selected").attr('id');
     });
+
+    function readURL(input, imgType) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                if(imgType == 'thumbnailImage') {
+                    document.getElementById('thumbnailImagePreview').src = e.target.result;
+                } else if(imgType == 'titleImage') {
+                    document.getElementById('titleImagePreview').src = e.target.result;
+                } else if(imgType == 'detailImage') {
+                    document.getElementById('detailImagePreview').src = e.target.result;
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            document.getElementById('preview').src = "";
+        }
+    }
 
     function printProductList(category) {
         let postObj = {

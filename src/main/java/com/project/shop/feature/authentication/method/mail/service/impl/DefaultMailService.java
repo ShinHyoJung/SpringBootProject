@@ -1,9 +1,10 @@
-package com.project.shop.feature.authentication.method.email.service.impl;
+package com.project.shop.feature.authentication.method.mail.service.impl;
 
-import com.project.shop.feature.authentication.method.email.service.MailService;
-import com.project.shop.feature.authentication.method.email.vo.Mail;
-import com.project.shop.feature.authentication.method.email.vo.MailMeta;
+import com.project.shop.feature.authentication.method.mail.service.MailService;
+import com.project.shop.feature.authentication.method.mail.vo.Mail;
+import com.project.shop.feature.authentication.method.mail.vo.MailMeta;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class DefaultMailService implements MailService {
 
     private final JavaMailSender mailSender;
+    private final JmsTemplate jmsTemplate;
     private final SpringTemplateEngine templateEngine;
     private final MailMeta mailMeta;
     @Override
@@ -37,5 +39,7 @@ public class DefaultMailService implements MailService {
 
         helper.setText(html, true);
         mailSender.send(message);
+
+        //jmsTemplate.convertAndSend("send", mail);
     }
 }
