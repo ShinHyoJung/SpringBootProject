@@ -78,7 +78,7 @@ public class SellController {
 
     @PostMapping("/register")
     public String postRegister(PostRegister postRegister, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException, SQLException, InterruptedException {
-        List<SellImage> sellImageList = FileUtils.parseSellImage(multipartHttpServletRequest);
+        List<SellImage> sellImageList = FileUtils.parseInsertSellImage(multipartHttpServletRequest);
         sellService.insert(postRegister.toEntity(sellImageList.get(0).getStoredName(),
                 sellImageList.get(1).getStoredName(), sellImageList.get(2).getStoredName()));
         int sellID = sellService.selectMaxSellID();
@@ -128,8 +128,12 @@ public class SellController {
     @GetMapping("/update/{sellID}")
     public String getUpdate(Model model, @PathVariable int sellID) throws SQLException {
         Sell sell = sellService.select(sellID);
+        List<SellImage> sellImageList = sellImageService.select(sellID);
         List<Category> categoryList = categoryService.selectAll();
 
+        model.addAttribute("thumbnailImage", sellImageList.get(0));
+        model.addAttribute("titleImage", sellImageList.get(1));
+        model.addAttribute("detailImage", sellImageList.get(2));
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("sell", sell);
         model.addAttribute("main", VIEW_PREFIX + "update");
@@ -138,22 +142,22 @@ public class SellController {
 
     @PostMapping("/update")
     public String postUpdate(PostUpdate postUpdate, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException, InterruptedException, SQLException {
-        List<SellImage> sellImageList = FileUtils.parseSellImage(multipartHttpServletRequest);
-        sellService.update(postUpdate.toEntity(sellImageList.get(0).getStoredName(), sellImageList.get(1).getStoredName(),
-                sellImageList.get(2).getStoredName()));
+        List<SellImage> sellImageList = sellImageService.select(postUpdate.getSellID());
+        List<SellImage> updateSellImageList = FileUtils.parseUpdateSellImage(sellImageList, multipartHttpServletRequest);
+        sellService.update(postUpdate.toEntity(updateSellImageList.get(0).getStoredName(), updateSellImageList.get(1).getStoredName(),
+                updateSellImageList.get(2).getStoredName()));
 
-        if(sellImageList != null) {
-            for(SellImage sellImage : sellImageList) {
+        if(updateSellImageList != null) {
+            for(SellImage sellImage : updateSellImageList) {
                 sellImage.setSellID(postUpdate.getSellID());
             }
 
-            ImageUtils.cutImage(sellImageList.get(0).getStoredName(), 150, 100);
-            ImageUtils.cutImage(sellImageList.get(1).getStoredName(), 300, 300);
-            ImageUtils.resizeImage(sellImageList.get(2).getStoredName(), 1000, 1000);
+            ImageUtils.cutImage(updateSellImageList.get(0).getStoredName(), 150, 100);
+            ImageUtils.cutImage(updateSellImageList.get(1).getStoredName(), 300, 300);
+            ImageUtils.resizeImage(updateSellImageList.get(2).getStoredName(), 1000, 1000);
 
-            sellImageService.insert(sellImageList);
+            sellImageService.insert(updateSellImageList);
         }
-
         return "redirect:/sell/";
     }
 

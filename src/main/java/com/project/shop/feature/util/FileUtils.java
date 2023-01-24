@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 public class FileUtils {
 
-    public static List<SellImage> parseSellImage(MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
+    public static List<SellImage> parseInsertSellImage(MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
         if(ObjectUtils.isEmpty(multipartHttpServletRequest)) {
             return null;
         }
@@ -62,6 +62,57 @@ public class FileUtils {
             }
         }
         return sellImageList;
+    }
+
+    public static List<SellImage> parseUpdateSellImage(List<SellImage> sellImageList, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
+        Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
+
+        String originalFileName;
+        String storedFileName;
+        String originalFileExtension;
+        String contentType;
+        String path = "src/main/webapp/static/images/";
+        File file = new File(path);
+
+        List<SellImage> updateSellImageList = new ArrayList<>();
+
+        if(iterator.hasNext()) {
+            List<MultipartFile> multipartFileList = multipartHttpServletRequest.getFiles(iterator.next());
+
+            if(multipartFileList != null) {
+                for(int i = 0; i < multipartFileList.size(); i++) {
+                    if(multipartFileList.get(i).isEmpty() == false) {
+                        contentType = multipartFileList.get(i).getContentType();
+                        if(ObjectUtils.isEmpty(contentType)) {
+                            break;
+                        } else {
+                            originalFileName = multipartFileList.get(i).getOriginalFilename();
+                            originalFileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                        }
+
+                        //TODO: 기존 이미지파일 원본명과 다르면 갱신 같으면 갱신하지 않음
+
+                        if(multipartFileList.get(i).getOriginalFilename().equals(sellImageList.get(i).getOrgName())) {
+                           updateSellImageList.add(sellImageList.get(i));
+                        } else {
+                            SellImage sellImage = new SellImage();
+                            storedFileName = Long.toString(System.nanoTime()) + originalFileExtension;
+                            sellImage.setSize(String.valueOf(multipartFileList.get(i).getSize()));
+                            sellImage.setOrgName(multipartFileList.get(i).getOriginalFilename());
+                            sellImage.setStoredName(storedFileName);
+                            sellImage.setPath(path + storedFileName);
+                            sellImage.setDeleteYN("N");
+                            updateSellImageList.get(i).setDeleteYN("Y");
+                            updateSellImageList.add(sellImage);
+
+                            file = new File(path + storedFileName);
+                            multipartFileList.get(i).transferTo(file);
+                        }
+                    }
+                }
+            }
+        }
+        return updateSellImageList;
     }
 
     public static List<ProductImage> parseProductImage(MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
