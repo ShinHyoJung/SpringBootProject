@@ -153,8 +153,6 @@ public class ProductController {
 
                     if (i == 0) {
                         ImageUtils.cutImage(updateProductImageList.get(i).getStoredName(), 150, 100);
-                    } else if (i == 1) {
-                        ImageUtils.cutImage(updateProductImageList.get(i).getStoredName(), 300, 300);
                     }
                 }
             }

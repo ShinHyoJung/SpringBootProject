@@ -15,13 +15,15 @@
     <div class="field">
         <label>썸네일 이미지</label>
         <input type="file" id="thumbnailImage" name="sellImage" multiple="multiple" value="${sell.thumbnailImageName}" style="width: 30%;" onchange="readURL(this, this.id)">
+        <br>
         <img src="${pageContext.request.contextPath}/static/images/cut/${thumbnailImage.storedName}" id="thumbnailImagePreview" style="width: 200px; height: 200px;">
         ${thumbnailImage.orgName} ${thumbnailImage.size}kb
         <input type="hidden" name="thumbnailImage" value="${thumbnailImage.storedName}">
     </div>
     <div class="field">
         <label>제목 이미지</label>
-        <input type="file" id="titleImage" name="sellImage" multiple="multiple" value="${sell.titleImageName}" style="width: 30%;" onchange="readURL(this, this.id)">
+        <input type="file" id="titleImage" name="sellImage" multiple="multiple" value="${sell.titleImageName}" style="width: 40%;" onchange="readURL(this, this.id)">
+        <br>
         <img src="${pageContext.request.contextPath}/static/images/cut/${titleImage.storedName}" id="titleImagePreview" style="width: 300px; height: 300px;">
         ${titleImage.orgName} ${titleImage.size}kb
         <input type="hidden" name="titleImage" value="${titleImage.storedName}">
@@ -55,7 +57,8 @@
     </div>
     <div class="field">
         <label>상세 이미지</label>
-        <input type="file" id="detailImage" name="sellImage" multiple="multiple" value="${sell.detailImageName}" style="width: 30%;" onchange="readURL(this, this.id)">
+        <input type="file" id="detailImage" name="sellImage" multiple="multiple" value="${sell.detailImageName}" style="width:70%;" onchange="readURL(this, this.id)">
+        <br>
         <img src="${pageContext.request.contextPath}/static/images/resize/${detailImage.storedName}" id="detailImagePreview" style="width: 500px; height: 500px;">
         ${detailImage.orgName} ${detailImage.size}kb
         <input type="hidden" name="detailImage" value="${detailImage.storedName}">

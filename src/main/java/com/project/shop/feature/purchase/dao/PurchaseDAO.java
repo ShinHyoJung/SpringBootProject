@@ -23,12 +23,13 @@ public class PurchaseDAO {
 
     public void insert(List<Purchase> purchaseList) {
         String sql = "INSERT INTO purchase (name, price, quantity, address, detail_address, zip_code, thumbnail_image_name, imp_uid, " +
-                "sell_id, product_id, idx, order_status, purchase_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "sell_id, product_id, idx, order_status, available_cancel_yn, purchase_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         for(Purchase purchase : purchaseList) {
             jdbcTemplate.update(sql, purchase.getName(), purchase.getPrice(), purchase.getQuantity(), purchase.getAddress(),
                     purchase.getDetailAddress(), purchase.getZipCode(), purchase.getThumbnailImageName(), purchase.getImpUid(),
-                    purchase.getSellID(), purchase.getProductID(), purchase.getIdx(), purchase.getOrderStatus(), Timestamp.valueOf(LocalDateTime.now()));
+                    purchase.getSellID(), purchase.getProductID(), purchase.getIdx(), purchase.getOrderStatus(), "Y",
+                    Timestamp.valueOf(LocalDateTime.now()));
         }
     }
 
@@ -53,6 +54,7 @@ public class PurchaseDAO {
                 purchase.setProductID(rs.getInt("product_id"));
                 purchase.setIdx(rs.getInt("idx"));
                 purchase.setOrderStatus(rs.getString("order_status"));
+                purchase.setAvailableCancelYN(rs.getString("available_cancel_yn"));
                 purchase.setPurchaseDate(rs.getDate("purchase_date"));
                 return purchase;
             }
@@ -85,6 +87,7 @@ public class PurchaseDAO {
                 purchase.setSellID(rs.getInt("sell_id"));
                 purchase.setIdx(rs.getInt("idx"));
                 purchase.setOrderStatus(rs.getString("order_status"));
+                purchase.setAvailableCancelYN(rs.getString("available_cancel_yn"));
                 purchase.setPurchaseDate(rs.getDate("purchase_date"));
                 return purchase;
             }
@@ -99,9 +102,9 @@ public class PurchaseDAO {
         return maxSellID;
     }
 
-    public void updateOrderStatus(String orderStatus, int purchaseID) {
-        String sql = "UPDATE purchase SET order_status = ? WHERE 1=1 AND purchase_id = ?";
-        jdbcTemplate.update(sql, orderStatus, purchaseID);
+    public void updateOrdered(String orderStatus, String availableCancelYN, int purchaseID) {
+        String sql = "UPDATE purchase SET order_status = ?, available_cancel_yn = ? WHERE 1=1 AND purchase_id = ?";
+        jdbcTemplate.update(sql, orderStatus, availableCancelYN, purchaseID);
     }
 
     public int count(int idx) {

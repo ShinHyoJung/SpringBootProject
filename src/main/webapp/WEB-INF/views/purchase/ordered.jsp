@@ -86,7 +86,9 @@ function printList(currentPage) {
                     listHTML += '<td>' + purchaseList.price + '원</td>';
                     listHTML += '<td>' + purchaseList.orderStatus + '</td>';
                     listHTML += '<td>' + purchaseList.purchaseDate + '</td>';
-                    listHTML += '<td><button class="ui button" type="button" onclick="cancel('+ purchaseList.purchaseID + ')">주문취소</button></td>';
+                    if(purchaseList.availableCancelYN == 'Y') {
+                        listHTML += '<td><button class="ui button" type="button" onclick="cancel('+ purchaseList.purchaseID + ')">주문취소</button></td>';
+                    }
                     listHTML += '</tr>';
                 });
 

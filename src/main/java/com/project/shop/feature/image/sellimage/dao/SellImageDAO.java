@@ -30,8 +30,8 @@ public class SellImageDAO {
     }
 
     public List<SellImage> select(int sellID) throws SQLException {
-        String sql = "SELECT * FROM sell_image WHERE 1=1 AND sell_id = ? AND delete_yn = ?";
-        List<SellImage> sellImageList = jdbcTemplate.query(sql, new Object[]{sellID, "N"}, new RowMapper<SellImage>() {
+        String sql = "SELECT * FROM sell_image WHERE 1=1 AND sell_id = ?";
+        List<SellImage> sellImageList = jdbcTemplate.query(sql, new Object[]{sellID}, new RowMapper<SellImage>() {
             @Override
             public SellImage mapRow(ResultSet rs, int rowNum) throws SQLException {
                     SellImage sellImage = new SellImage();

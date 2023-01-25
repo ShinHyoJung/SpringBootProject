@@ -40,8 +40,8 @@ public class DefaultPurchaseService implements PurchaseService {
     }
 
     @Override
-    public void updateOrderStatus(String orderStatus, int purchaseID) {
-        purchaseDAO.updateOrderStatus(orderStatus, purchaseID);
+    public void updateOrdered(String orderStatus, String availableCancelYN, int purchaseID) {
+        purchaseDAO.updateOrdered(orderStatus, availableCancelYN, purchaseID);
     }
 
     @Override

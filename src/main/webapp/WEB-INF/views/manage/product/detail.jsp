@@ -11,10 +11,14 @@
 <body>
 <p class="subtitle">제품 상세</p>
 <form class="ui form" method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/manage/product/detail/update" style="width: 50%;">
-    <input type="file" id="thumbnailImage" name="productImage" multiple="multiple" value="${product.thumbnailImageName}" style="width: 30%;" onchange="readURL(this, this.id)">
-    <input type="hidden" id="productID" name="productID" value="${getDetailResponse.product.productID}">
-    <img src="${pageContext.request.contextPath}/static/images/cut/${thumbnailImage.storedName}" id="thumbnailImagePreview" style="width: 200px; height: 200px;">
-    <input type="hidden" name="thumbnailImage" value="${thumbnailImage.storedName}">
+    <div class="field">
+        <label>제품 이미지</label>
+        <input type="file" id="thumbnailImage" name="productImage" multiple="multiple" value="${product.thumbnailImageName}" style="width: 30%;" onchange="readURL(this, this.id)">
+        <br>
+        <input type="hidden" id="productID" name="productID" value="${getDetailResponse.product.productID}">
+        <img src="${pageContext.request.contextPath}/static/images/cut/${thumbnailImage.storedName}" id="thumbnailImagePreview" style="width: 200px; height: 200px;">
+        <input type="hidden" name="thumbnailImage" value="${thumbnailImage.storedName}">
+    </div>
     <div class="field">
         <label>제품 이름</label>
         <input type="text" id="name" name="name" value="${getDetailResponse.product.name}">

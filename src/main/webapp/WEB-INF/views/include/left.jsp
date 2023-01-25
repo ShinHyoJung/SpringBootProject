@@ -29,6 +29,9 @@
         <a class="item" href="${pageContext.request.contextPath}/manage/code/">
             제품 코드 관리
         </a>
+        <a class="item" href="${pageContext.request.contextPath}/manage/service/">
+            서비스 관리
+        </a>
     </div>
 </c:if>
 <c:if test="${menu eq 'user'}">

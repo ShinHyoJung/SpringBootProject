@@ -17,7 +17,7 @@ public interface PurchaseService {
 
     int selectMaxPurchaseID();
 
-    void updateOrderStatus(String orderStatus, int purchaseID);
+    void updateOrdered(String orderStatus, String availableCancelYN, int purchaseID);
 
     int count(int idx);
 }

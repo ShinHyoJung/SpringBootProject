@@ -13,6 +13,7 @@ CREATE TABLE purchase(
     idx int,
     order_status varchar(100),
     purchase_date datetime,
+    available_cancel_yn varchar(10),
     primary key (purchase_id)
 )
 ;

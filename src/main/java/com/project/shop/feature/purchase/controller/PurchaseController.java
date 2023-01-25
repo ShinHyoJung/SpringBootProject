@@ -111,7 +111,7 @@ public class PurchaseController {
     public PostOrderedListResponse postOrderedList(@RequestBody PostOrderedList postOrderedList, HttpSession session) {
         PostOrderedListResponse pageResponse = new PostOrderedListResponse();
         try {
-            int idx = (int) session.getAttribute("idx");
+            int idx = (int) session.getAttribute("loggedIn");
             int total = purchaseService.count(idx);
             Paging paging = new Paging(postOrderedList.getCurrentPage(), 5, total);
             List<Purchase> purchaseList = purchaseService.selectByIdx(idx, paging);
@@ -124,18 +124,22 @@ public class PurchaseController {
                     if (diffDays > 30) {
                         purchaseService.delete(purchase.getPurchaseID());
                     } else {
-                        if (diffDays == 0) {
-                            purchase.setOrderStatus("paymentComplete");
-                            purchaseService.updateOrderStatus("paymentComplete", purchase.getPurchaseID());
-                        } else if (diffDays == 1) {
-                            purchase.setOrderStatus("preparingForDelivery");
-                            purchaseService.updateOrderStatus("preparingForDelivery", purchase.getPurchaseID());
-                        } else if (diffDays == 2) {
-                            purchase.setOrderStatus("shipping");
-                            purchaseService.updateOrderStatus("shipping", purchase.getPurchaseID());
-                        } else if (diffDays == 3) {
-                            purchase.setOrderStatus("deliveryCompleted");
-                            purchaseService.updateOrderStatus("deliveryCompleted", purchase.getPurchaseID());
+                        if(diffDays > 7) {
+                            purchaseService.updateOrdered("deliveryCompleted", "N", purchase.getPurchaseID());
+                        } else {
+                            if (diffDays == 0) {
+                                purchase.setOrderStatus("paymentComplete");
+                                purchaseService.updateOrdered("paymentComplete", "Y", purchase.getPurchaseID());
+                            } else if (diffDays == 1) {
+                                purchase.setOrderStatus("preparingForDelivery");
+                                purchaseService.updateOrdered("preparingForDelivery", "Y", purchase.getPurchaseID());
+                            } else if (diffDays == 2) {
+                                purchase.setOrderStatus("shipping");
+                                purchaseService.updateOrdered("shipping", "Y", purchase.getPurchaseID());
+                            } else if (diffDays == 3) {
+                                purchase.setOrderStatus("deliveryCompleted");
+                                purchaseService.updateOrdered("deliveryCompleted", "Y", purchase.getPurchaseID());
+                            }
                         }
                     }
                 }

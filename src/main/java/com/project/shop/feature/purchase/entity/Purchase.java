@@ -19,5 +19,6 @@ public class Purchase {
     private int sellID;
     private int idx;
     private String orderStatus;
+    private String availableCancelYN;
     private Date purchaseDate;
 }

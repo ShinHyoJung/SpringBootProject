@@ -198,6 +198,7 @@ public class FileUtils {
                     if(multipartFileList.get(i).getOriginalFilename() != productImageList.get(i).getOrgName()) {
                         ProductImage productImage = new ProductImage();
                         storedFileName = Long.toString(System.nanoTime()) + originalFileExtension;
+                        productImage.setProductID(productImageList.get(i).getProductID());
                         productImage.setSize(String.valueOf(multipartFileList.get(i).getSize()));
                         productImage.setOrgName(multipartFileList.get(i).getOriginalFilename());
                         productImage.setStoredName(storedFileName);
