@@ -11,4 +11,6 @@ public interface SellImageService {
     void insert(List<SellImage> sellImageList) throws SQLException;
 
     List<SellImage> select(int sellID) throws SQLException;
+
+    void update(SellImage sellImage);
 }

@@ -22,4 +22,9 @@ public class DefaultProductImageService implements ProductImageService {
     public List<ProductImage> select(int productID) {
         return productImageDAO.select(productID);
     }
+
+    @Override
+    public void update(ProductImage productImage) {
+        productImageDAO.update(productImage);
+    }
 }

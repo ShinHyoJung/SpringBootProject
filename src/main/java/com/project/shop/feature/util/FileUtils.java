@@ -53,7 +53,6 @@ public class FileUtils {
                     sellImage.setOrgName(multipartFile.getOriginalFilename());
                     sellImage.setStoredName(storedFileName);
                     sellImage.setPath(path + storedFileName);
-                    sellImage.setDeleteYN("N");
                     sellImageList.add(sellImage);
 
                     file = new File(path + storedFileName);
@@ -65,6 +64,10 @@ public class FileUtils {
     }
 
     public static List<SellImage> parseUpdateSellImage(List<SellImage> sellImageList, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
+        if(ObjectUtils.isEmpty(multipartHttpServletRequest)) {
+            return null;
+        }
+
         Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
 
         String originalFileName;
@@ -90,24 +93,21 @@ public class FileUtils {
                             originalFileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
                         }
 
-                        //TODO: 기존 이미지파일 원본명과 다르면 갱신 같으면 갱신하지 않음
-
-                        if(multipartFileList.get(i).getOriginalFilename().equals(sellImageList.get(i).getOrgName())) {
-                           updateSellImageList.add(sellImageList.get(i));
-                        } else {
+                        if(multipartFileList.get(i).getOriginalFilename() != sellImageList.get(i).getOrgName()) {
                             SellImage sellImage = new SellImage();
                             storedFileName = Long.toString(System.nanoTime()) + originalFileExtension;
+                            sellImage.setSellID(sellImageList.get(i).getSellID());
                             sellImage.setSize(String.valueOf(multipartFileList.get(i).getSize()));
                             sellImage.setOrgName(multipartFileList.get(i).getOriginalFilename());
                             sellImage.setStoredName(storedFileName);
                             sellImage.setPath(path + storedFileName);
-                            sellImage.setDeleteYN("N");
-                            updateSellImageList.get(i).setDeleteYN("Y");
                             updateSellImageList.add(sellImage);
 
                             file = new File(path + storedFileName);
                             multipartFileList.get(i).transferTo(file);
                         }
+                    } else {
+                        updateSellImageList.add(sellImageList.get(i));
                     }
                 }
             }
@@ -115,7 +115,7 @@ public class FileUtils {
         return updateSellImageList;
     }
 
-    public static List<ProductImage> parseProductImage(MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
+    public static List<ProductImage> parseInsertProductImage(MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
         if(ObjectUtils.isEmpty(multipartHttpServletRequest)) {
             return null;
         }
@@ -152,7 +152,6 @@ public class FileUtils {
                     productImage.setOrgName(multipartFile.getOriginalFilename());
                     productImage.setStoredName(storedFileName);
                     productImage.setPath(path + storedFileName);
-                    productImage.setDeleteYN("N");
                     productImageList.add(productImage);
 
                     file = new File(path + storedFileName);
@@ -161,5 +160,58 @@ public class FileUtils {
             }
         }
         return productImageList;
+    }
+
+    public static List<ProductImage> parseUpdateProductImage(List<ProductImage> productImageList, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException {
+        if(ObjectUtils.isEmpty(multipartHttpServletRequest)) {
+            return null;
+        }
+
+        List<ProductImage> updateProductImageList = new ArrayList<>();
+
+        String path = "src/main/webapp/static/images/";
+        File file = new File(path);
+
+        if(file.exists() == false) {
+            file.mkdirs();
+        }
+
+        String originalFileName;
+        String storedFileName;
+        String originalFileExtension;
+        String contentType;
+
+        Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
+
+        while(iterator.hasNext()) {
+            List<MultipartFile> multipartFileList = multipartHttpServletRequest.getFiles(iterator.next());
+            for(int i = 0; i < multipartFileList.size(); i++) {
+                if(multipartFileList.get(i).isEmpty() == false) {
+                    contentType = multipartFileList.get(i).getContentType();
+                    if(ObjectUtils.isEmpty(contentType)) {
+                        break;
+                    } else {
+                        originalFileName = multipartFileList.get(i).getOriginalFilename();
+                        originalFileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                    }
+
+                    if(multipartFileList.get(i).getOriginalFilename() != productImageList.get(i).getOrgName()) {
+                        ProductImage productImage = new ProductImage();
+                        storedFileName = Long.toString(System.nanoTime()) + originalFileExtension;
+                        productImage.setSize(String.valueOf(multipartFileList.get(i).getSize()));
+                        productImage.setOrgName(multipartFileList.get(i).getOriginalFilename());
+                        productImage.setStoredName(storedFileName);
+                        productImage.setPath(path + storedFileName);
+                        updateProductImageList.add(productImage);
+
+                        file = new File(path + storedFileName);
+                        multipartFileList.get(i).transferTo(file);
+                    }
+                } else {
+                    updateProductImageList.add(productImageList.get(i));
+                }
+            }
+        }
+        return updateProductImageList;
     }
 }

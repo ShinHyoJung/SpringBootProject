@@ -20,12 +20,12 @@ public class SellImageDAO {
 
     public void insert(List<SellImage> sellImageList) throws SQLException {
         String sql = "INSERT INTO sell_image(org_name, stored_name, size," +
-                "path, sell_id, create_date, delete_yn) " +
+                "path, sell_id, create_date) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         for(SellImage sellImage : sellImageList) {
             jdbcTemplate.update(sql, sellImage.getOrgName(), sellImage.getStoredName(), sellImage.getSize(),
-                    sellImage.getPath(), sellImage.getSellID(), Timestamp.valueOf(LocalDateTime.now()), "N");
+                    sellImage.getPath(), sellImage.getSellID(), Timestamp.valueOf(LocalDateTime.now()));
         }
     }
 
@@ -42,10 +42,16 @@ public class SellImageDAO {
                     sellImage.setSellID(rs.getInt("sell_id"));
                     sellImage.setPath(rs.getString("path"));
                     sellImage.setCreateDate(rs.getDate("create_date"));
-                    sellImage.setDeleteYN(rs.getString("delete_yn"));
                     return sellImage;
             }
         });
         return sellImageList;
+    }
+
+    public void update(SellImage sellImage) {
+        String sql = "UPDATE sell_image SET org_name = ?, stored_name = ?, size = ?, " +
+                "path = ?, create_date = ? WHERE 1=1 AND image_id = ? AND sell_id = ?";
+        jdbcTemplate.update(sql, sellImage.getOrgName(), sellImage.getStoredName(), sellImage.getSize(),
+                sellImage.getPath(), Timestamp.valueOf(LocalDateTime.now()), sellImage.getImageID(), sellImage.getSellID());
     }
 }

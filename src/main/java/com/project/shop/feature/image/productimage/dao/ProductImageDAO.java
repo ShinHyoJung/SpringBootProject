@@ -21,18 +21,18 @@ public class ProductImageDAO {
     }
 
     public void insert(List<ProductImage> productImageList) {
-        String sql = "INSERT INTO product_image (org_name, stored_name, size, product_id, path, create_date, delete_yn)" +
-                " VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO product_image (org_name, stored_name, size, product_id, path, create_date)" +
+                " VALUES (?, ?, ?, ?, ?, ?)";
         for(ProductImage productImage : productImageList) {
             jdbcTemplate.update(sql, productImage.getOrgName(), productImage.getStoredName(), productImage.getSize(),
-                    productImage.getProductID(), productImage.getPath(), Timestamp.valueOf(LocalDateTime.now()), "N");
+                    productImage.getProductID(), productImage.getPath(), Timestamp.valueOf(LocalDateTime.now()));
         }
     }
 
     public List<ProductImage> select(int productID) {
-        String sql = "SELECT * FROM product_image WHERE 1=1 AND product_id = ? AND delete_yn = ?";
+        String sql = "SELECT * FROM product_image WHERE 1=1 AND product_id = ?";
 
-        List<ProductImage> productImageList = jdbcTemplate.query(sql, new Object[]{productID, "N"}, new RowMapper<ProductImage>() {
+        List<ProductImage> productImageList = jdbcTemplate.query(sql, new Object[]{productID}, new RowMapper<ProductImage>() {
             @Override
             public ProductImage mapRow(ResultSet rs, int rowNum) throws SQLException {
                 ProductImage productImage = new ProductImage();
@@ -43,10 +43,16 @@ public class ProductImageDAO {
                 productImage.setProductID(rs.getInt("product_id"));
                 productImage.setPath(rs.getString("path"));
                 productImage.setCreateDate(rs.getDate("create_date"));
-                productImage.setDeleteYN(rs.getString("delete_yn"));
                 return productImage;
             }
         });
         return productImageList;
+    }
+
+    public void update(ProductImage productImage) {
+        String sql = "UPDATE product_image SET org_name = ?, stored_name = ?, size = ?, path = ?, create_date = ?" +
+                "WHERE 1=1 AND image_id = ? AND product_id = ?";
+        jdbcTemplate.update(sql, productImage.getOrgName(), productImage.getStoredName(), productImage.getSize(),
+                productImage.getPath(), Timestamp.valueOf(LocalDateTime.now()), productImage.getImageID(), productImage.getProductID());
     }
 }

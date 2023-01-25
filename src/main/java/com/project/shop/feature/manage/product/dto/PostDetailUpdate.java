@@ -10,7 +10,7 @@ public class PostDetailUpdate {
     private int fullQuantity;
     private String info;
 
-    public Product toEntity(int soldQuantity, int leftQuantity) {
+    public Product toEntity(int soldQuantity, int leftQuantity, String thumbnailImageName) {
         Product product = new Product();
         product.setProductID(this.productID);
         product.setName(this.name);
@@ -18,6 +18,7 @@ public class PostDetailUpdate {
         product.setSoldQuantity(soldQuantity);
         product.setLeftQuantity(leftQuantity);
         product.setInfo(this.info);
+        product.setThumbnailImageName(thumbnailImageName);
         return product;
     }
 }

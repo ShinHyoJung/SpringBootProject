@@ -57,6 +57,7 @@ public class ProductDAO {
                 product.setName(rs.getString("name"));
                 product.setCode(rs.getString("code"));
                 product.setCategory(rs.getString("category"));
+                product.setThumbnailImageName("thumbnail_image_name");
                 product.setFullQuantity(rs.getInt("full_quantity"));
                 product.setSoldQuantity(rs.getInt("sold_quantity"));
                 product.setLeftQuantity(rs.getInt("left_quantity"));
@@ -77,6 +78,7 @@ public class ProductDAO {
                 product.setName(rs.getString("name"));
                 product.setCode(rs.getString("code"));
                 product.setCategory(rs.getString("category"));
+                product.setThumbnailImageName("thumbnail_image_name");
                 product.setFullQuantity(rs.getInt("full_quantity"));
                 product.setSoldQuantity(rs.getInt("sold_quantity"));
                 product.setLeftQuantity(rs.getInt("left_quantity"));
@@ -96,11 +98,11 @@ public class ProductDAO {
     }
 
     public void update(Product product) {
-        String sql = "UPDATE product SET name = ?, info = ?, full_quantity = ?, sold_quantity = ?, left_quantity = ?, " +
-                "update_date = ? " +
+        String sql = "UPDATE product SET name = ?, info = ?, thumbnail_image_name = ?, full_quantity = ?, " +
+                "sold_quantity = ?, left_quantity = ?, update_date = ? " +
                 "WHERE 1=1 AND product_id = ?";
 
-        jdbcTemplate.update(sql, new Object[]{product.getName(), product.getInfo(), product.getFullQuantity(),
+        jdbcTemplate.update(sql, new Object[]{product.getName(), product.getInfo(), product.getThumbnailImageName(), product.getFullQuantity(),
                 product.getSoldQuantity(), product.getLeftQuantity(), Timestamp.valueOf(LocalDateTime.now()), product.getProductID()});
     }
 

@@ -18,12 +18,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.project.shop.feature.manage.category.entity.Category;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -144,20 +146,34 @@ public class SellController {
     public String postUpdate(PostUpdate postUpdate, MultipartHttpServletRequest multipartHttpServletRequest) throws IOException, InterruptedException, SQLException {
         List<SellImage> sellImageList = sellImageService.select(postUpdate.getSellID());
         List<SellImage> updateSellImageList = FileUtils.parseUpdateSellImage(sellImageList, multipartHttpServletRequest);
+
+        Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
+        List<MultipartFile> multipartFileList = multipartHttpServletRequest.getFiles(iterator.next());
+
+        for(int i = 0; i < multipartFileList.size(); i++) {
+            if(StringUtils.isNotEmpty(multipartFileList.get(i).getOriginalFilename())) {
+                if (multipartFileList.get(i).getOriginalFilename() != sellImageList.get(i).getOrgName()) { // 새로 갱신된 파일이 있으면
+                    sellImageList.get(i).setSellID(updateSellImageList.get(i).getSellID());
+                    sellImageList.get(i).setPath(updateSellImageList.get(i).getPath());
+                    sellImageList.get(i).setSize(updateSellImageList.get(i).getSize());
+                    sellImageList.get(i).setOrgName(updateSellImageList.get(i).getOrgName());
+                    sellImageList.get(i).setStoredName(updateSellImageList.get(i).getStoredName());
+                    sellImageService.update(sellImageList.get(i));
+
+                    if (i == 0) {
+                        ImageUtils.cutImage(updateSellImageList.get(i).getStoredName(), 150, 100);
+                    } else if (i == 1) {
+                        ImageUtils.cutImage(updateSellImageList.get(i).getStoredName(), 300, 300);
+                    } else if (i == 2) {
+                        ImageUtils.resizeImage(updateSellImageList.get(i).getStoredName(), 1000, 1000);
+                    }
+                }
+            }
+        }
+
         sellService.update(postUpdate.toEntity(updateSellImageList.get(0).getStoredName(), updateSellImageList.get(1).getStoredName(),
                 updateSellImageList.get(2).getStoredName()));
 
-        if(updateSellImageList != null) {
-            for(SellImage sellImage : updateSellImageList) {
-                sellImage.setSellID(postUpdate.getSellID());
-            }
-
-            ImageUtils.cutImage(updateSellImageList.get(0).getStoredName(), 150, 100);
-            ImageUtils.cutImage(updateSellImageList.get(1).getStoredName(), 300, 300);
-            ImageUtils.resizeImage(updateSellImageList.get(2).getStoredName(), 1000, 1000);
-
-            sellImageService.insert(updateSellImageList);
-        }
         return "redirect:/sell/";
     }
 

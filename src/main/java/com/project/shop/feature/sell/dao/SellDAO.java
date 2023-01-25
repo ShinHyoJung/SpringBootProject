@@ -104,11 +104,12 @@ public class SellDAO {
 
     public void update(Sell sell) {
         String sql = "UPDATE sell SET title = ?, name = ?, content = ?, " +
-                "price = ?, thumbnail_image_name = ?, title_image_name = ?, detail_image_name = ?, update_date = ?" +
-                "WHERE 1=1 AND sell_id = ?";
+                "price = ?, thumbnail_image_name = ?, title_image_name = ?, " +
+                "detail_image_name = ?, update_date = ? WHERE 1=1 AND sell_id = ?";
 
-        jdbcTemplate.update(sql, new Object[]{sell.getTitle(), sell.getName(), sell.getContent(), sell.getPrice(),
-                sell.getThumbnailImageName(), sell.getTitleImageName(), sell.getDetailImageName(), Timestamp.valueOf(LocalDateTime.now())});
+        jdbcTemplate.update(sql,sell.getTitle(), sell.getName(), sell.getContent(), sell.getPrice(),
+                sell.getThumbnailImageName(), sell.getTitleImageName(), sell.getDetailImageName(),
+                Timestamp.valueOf(LocalDateTime.now()), sell.getSellID());
     }
 
     public int selectMaxSellID() {

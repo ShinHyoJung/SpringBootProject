@@ -9,4 +9,6 @@ public interface ProductImageService {
     void insert(List<ProductImage> productImageList);
 
     List<ProductImage> select(int productID);
+
+    void update(ProductImage productImage);
 }

@@ -13,5 +13,4 @@ public class SellImage {
     private int sellID;
     private String path;
     private Date createDate;
-    private String deleteYN;
 }

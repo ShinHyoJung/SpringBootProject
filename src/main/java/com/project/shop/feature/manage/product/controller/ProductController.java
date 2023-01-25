@@ -17,10 +17,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -85,7 +88,7 @@ public class ProductController {
 
     @PostMapping("/add")
     public String postAddProduct(PostAddProduct postAddProduct, MultipartHttpServletRequest multipartHttpServletRequest) throws SQLException, IOException, InterruptedException {
-        List<ProductImage> productImageList = FileUtils.parseProductImage(multipartHttpServletRequest);
+        List<ProductImage> productImageList = FileUtils.parseInsertProductImage(multipartHttpServletRequest);
         String productCode = productService.makeProductCode();
 
         if(productImageList != null) {
@@ -123,7 +126,7 @@ public class ProductController {
         Product product = productService.select(productID);
         List<ProductImage> productImageList = productImageService.select(productID);
 
-        model.addAttribute("productImageList", productImageList);
+        model.addAttribute("thumbnailImage", productImageList.get(0));
         model.addAttribute("getDetailResponse", new GetDetailResponse(product));
         model.addAttribute("menu", "manage");
         model.addAttribute("main", VIEW_PREFIX + "detail");
@@ -131,11 +134,36 @@ public class ProductController {
     }
 
     @PostMapping("/detail/update")
-    public String postUpdateDetailProduct(PostDetailUpdate postDetailUpdate) throws SQLException {
+    public String postUpdateDetailProduct(PostDetailUpdate postDetailUpdate, MultipartHttpServletRequest multipartHttpServletRequest) throws SQLException, IOException, InterruptedException {
+        List<ProductImage> productImageList = productImageService.select(postDetailUpdate.getProductID());
+        List<ProductImage> updateProductImageList = FileUtils.parseUpdateProductImage(productImageList, multipartHttpServletRequest);
+
+        Iterator<String> iterator = multipartHttpServletRequest.getFileNames();
+        List<MultipartFile> multipartFileList = multipartHttpServletRequest.getFiles(iterator.next());
+
+        for(int i = 0; i < multipartFileList.size(); i++) {
+            if(StringUtils.isNotEmpty(multipartFileList.get(i).getOriginalFilename())) {
+                if (multipartFileList.get(i).getOriginalFilename() != productImageList.get(i).getOrgName()) { // 새로 갱신된 파일이 있으면
+                    productImageList.get(i).setProductID(updateProductImageList.get(i).getProductID());
+                    productImageList.get(i).setPath(updateProductImageList.get(i).getPath());
+                    productImageList.get(i).setSize(updateProductImageList.get(i).getSize());
+                    productImageList.get(i).setOrgName(updateProductImageList.get(i).getOrgName());
+                    productImageList.get(i).setStoredName(updateProductImageList.get(i).getStoredName());
+                    productImageService.update(productImageList.get(i));
+
+                    if (i == 0) {
+                        ImageUtils.cutImage(updateProductImageList.get(i).getStoredName(), 150, 100);
+                    } else if (i == 1) {
+                        ImageUtils.cutImage(updateProductImageList.get(i).getStoredName(), 300, 300);
+                    }
+                }
+            }
+        }
+
         Product product = productService.select(postDetailUpdate.getProductID());
         int leftQuantity = postDetailUpdate.getFullQuantity() - product.getSoldQuantity();
 
-        productService.update(postDetailUpdate.toEntity(product.getSoldQuantity(), leftQuantity));
+        productService.update(postDetailUpdate.toEntity(product.getSoldQuantity(), leftQuantity, updateProductImageList.get(0).getStoredName()));
         return "redirect:/manage/product/";
     }
 }
