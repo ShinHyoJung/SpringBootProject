@@ -1,4 +1,4 @@
-package com.project.shop.feature.board.dto;
+package com.project.shop.feature.inquiry.dto;
 
 import lombok.Data;
 

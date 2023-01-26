@@ -13,12 +13,14 @@
 <form class="ui form" method="post" action="${pageContext.request.contextPath}/sell/register" enctype="multipart/form-data" style="width: 50%;">
     <div class="field">
         <label>썸네일 이미지</label>
-        <input type="file" id="thumbnailImage" name="sellImage" multiple="multiple" style="width: 30%;" onchange="readURL(this, this.id);">
+        <input type="file" id="thumbnailImage" name="sellImage" multiple="multiple" style="width: 22%;" onchange="readURL(this, this.id);">
+        <br>
         <img id="thumbnailImagePreview" style="width: 200px; height: 200px;">
     </div>
     <div class="field">
         <label>제목 이미지</label>
-        <input type="file" id="titleImage" name="sellImage" multiple="multiple" style="width: 30%;" onchange="readURL(this, this.id)">
+        <input type="file" id="titleImage" name="sellImage" multiple="multiple" style="width: 33%;" onchange="readURL(this, this.id)">
+        <br>
         <img id="titleImagePreview" style="width: 300px; height: 300px;">
     </div>
     <input type="hidden" id="name" name="name">
@@ -46,7 +48,8 @@
     </div>
     <div class="field">
         <label>상세 이미지</label>
-        <input type="file" id="detailImage" name="sellImage" multiple="multiple" style="width: 30%;" onchange="readURL(this, this.id)">
+        <input type="file" id="detailImage" name="sellImage" multiple="multiple" style="width: 55%;" onchange="readURL(this, this.id)">
+        <br>
         <img id="detailImagePreview" style="width: 500px; height: 500px;">
     </div>
     <button class="ui button" type="submit"><i class="save icon"></i></button>

@@ -47,7 +47,7 @@ public class LoginController {
                 pageResponse.setMessage("로그인이 성공적으로 완료되었습니다.");
             } else {
                 pageResponse.setCode("FAIL");
-                pageResponse.setMessage("로그인을 실패하였습니다. 다시 시도해주세요.");
+                pageResponse.setMessage("아이디 또는 비밀번호가 일치하지 않습니다. 다시 시도해주세요.");
             }
         } catch (Exception e) {
             pageResponse.setCode("FAIL");

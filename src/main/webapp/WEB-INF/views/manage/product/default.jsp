@@ -22,9 +22,9 @@
     <input type="text" id="keyword" onkeyup="printList();" placeholder="Search...">
     <i class="search icon"></i>
 </div>
-<table id="table" class="ui fixed single line celled table" style="width: 90%;">
+<table id="table" class="ui fixed single line celled table" style="display:none; width: 90%;">
 </table>
-<div id="pagination" class="ui pagination menu" style="margin-left: 500px;">
+<div id="pagination" class="ui pagination menu" style="display:none; margin-left: 500px;">
 </div>
 <script>
     function printList(currentPage) {
@@ -53,14 +53,10 @@
             contentType: 'application/json; charset=utf-8',
             success: function(pageResponse) {
                 console.log(pageResponse);
-                let emptyMsg = '재고가 없습니다.';
                 let pageHTML = '';
                 let listHTML = '';
 
-                if(pageResponse.productList == 0) {
-                    $('#table').html(emptyMsg);
-                    $('#pagination').css('display', 'none');
-                } else {
+                if(pageResponse.code == 'SUCCESS') {
                     if (pageResponse.paging.prev) {
                         pageHTML += '<a class="item"> < </a>';
                     }
@@ -109,8 +105,12 @@
                     });
                     listHTML += '</tbody>';
 
-                    $('#pagination').html(pageHTML);
+                    $('#table').css('display', '');
+                    $('#pagination').css('display', '');
                     $('#table').html(listHTML);
+                    $('#pagination').html(pageHTML);
+                } else {
+                    alert(pageResponse.message);
                 }
             }
         })

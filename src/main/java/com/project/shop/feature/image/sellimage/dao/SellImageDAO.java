@@ -21,7 +21,7 @@ public class SellImageDAO {
     public void insert(List<SellImage> sellImageList) throws SQLException {
         String sql = "INSERT INTO sell_image(org_name, stored_name, size," +
                 "path, sell_id, create_date) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
         for(SellImage sellImage : sellImageList) {
             jdbcTemplate.update(sql, sellImage.getOrgName(), sellImage.getStoredName(), sellImage.getSize(),

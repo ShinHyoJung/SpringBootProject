@@ -10,10 +10,10 @@ CREATE TABLE purchase(
     imp_uid varchar(500),
     product_id int,
     sell_id int,
-    idx int,
     order_status varchar(100),
     purchase_date datetime,
     available_cancel_yn varchar(10),
+    idx int,
     primary key (purchase_id)
 )
 ;

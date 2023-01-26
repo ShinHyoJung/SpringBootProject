@@ -8,15 +8,23 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
-<p>글쓰기</p>
-<form method="post" action="${pageContext.request.contextPath}/board/write">
-  <textarea id="title" name="title"></textarea> <br>
-  작성자: ${getWriteResponse.writer} <br>
-  <textarea id="content" name="content"></textarea> <br>
+<p class="subtitle">글쓰기</p>
+<form class="ui form" method="post" action="${pageContext.request.contextPath}/inquiry/write" style="width: 50%;">
+  <div class="field">
+    <label>제목</label>
+    <input type="text" id="title" name="title"/>
+  </div>
+  <div class="field">
+    <label>작성자: ${getWriteResponse.writer}</label>
+  </div>
+  <div class="field">
+    <label>내용</label>
+    <textarea id="content" name="content"></textarea>
+  </div>
   <input type="hidden" id="writer" name="writer" value="${getWriteResponse.writer}"> <br>
   <input type="hidden" id="idx" name="idx" value="${getWriteResponse.idx}"> <br>
   <input type="hidden" id="loginID" name="loginID" value="${getWriteResponse.loginID}">
-  <button type="submit">등록</button>
+  <button class="ui button" type="submit">등록</button>
 </form>
 </body>
 </html>

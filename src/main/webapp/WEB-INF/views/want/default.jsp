@@ -11,7 +11,7 @@
 <p class="subtitle">찜한 내역</p>
 <div class="ui items" id="list">
 </div>
-<div class="ui pagination menu" id="pagination" style="margin-top: 20px; margin-left: 300px;">
+<div class="ui pagination menu" id="pagination" style="display:none; margin-top: 20px; margin-left: 300px;">
 </div>
 <script>
     function printList(currentPage) {
@@ -34,37 +34,42 @@
                 let pageHTML = '';
                 let listHTML = '';
 
-                if (pageResponse.paging.prev) {
-                    pageHTML += '<a class="item"> < </a>';
-                }
-
-                for (let i = pageResponse.paging.startPage; i <= pageResponse.paging.endPage; i++) {
-                    if (currentPage == i) {
-                        pageHTML += '<a class="active item" onclick="printList(' + i + ')">' + i + '</a>';
-                    } else {
-                        pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
+                if(pageResponse.code == 'SUCCESS') {
+                    if (pageResponse.paging.prev) {
+                        pageHTML += '<a class="item"> < </a>';
                     }
+
+                    for (let i = pageResponse.paging.startPage; i <= pageResponse.paging.endPage; i++) {
+                        if (currentPage == i) {
+                            pageHTML += '<a class="active item" onclick="printList(' + i + ')">' + i + '</a>';
+                        } else {
+                            pageHTML += '<a class="item" onclick="printList(' + i + ')">' + i + '</a>';
+                        }
+                    }
+
+                    if (pageResponse.paging.next) {
+                        pageHTML += '<a class="item"> > </a>';
+                    }
+
+                    $.each(pageResponse.wantList, function(i, wantList) {
+                        let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + wantList.thumbnailImageName;
+                        listHTML += '<div class="item">';
+                        listHTML += '<div class="image">';
+                        listHTML += '<img src="' + imgSrc + '"/>';
+                        listHTML += '</div>';
+                        listHTML += '<div class="content">';
+                        listHTML += '<a class="header" href="${pageContext.request.contextPath}/sell/detail/'+ wantList.sellID +'">' + wantList.name + '</a>';
+                        listHTML += '<div class="description">';
+                        listHTML += '<p>' + wantList.price + '원</p>';
+                        listHTML += '<button class="ui button" type="button" id="' + wantList.sellID + '" onclick="remove(this.id);" value="' + wantList.wantID + '">삭제</button>';
+                    });
+
+                    $('#pagination').css('display', '');
+                    $('#list').html(listHTML);
+                    $('#pagination').html(pageHTML);
+                } else {
+                    alert(pageResponse.message);
                 }
-
-                if (pageResponse.paging.next) {
-                    pageHTML += '<a class="item"> > </a>';
-                }
-
-                $.each(pageResponse.wantList, function(i, wantList) {
-                    let imgSrc = '${pageContext.request.contextPath}/static/images/cut/' + wantList.thumbnailImageName;
-                    listHTML += '<div class="item">';
-                    listHTML += '<div class="image">';
-                    listHTML += '<img src="' + imgSrc + '"/>';
-                    listHTML += '</div>';
-                    listHTML += '<div class="content">';
-                    listHTML += '<a class="header" href="${pageContext.request.contextPath}/sell/detail/'+ wantList.sellID +'">' + wantList.name + '</a>';
-                    listHTML += '<div class="description">';
-                    listHTML += '<p>' + wantList.price + '원</p>';
-                    listHTML += '<button class="ui button" type="button" id="' + wantList.sellID + '" onclick="remove(this.id);" value="' + wantList.wantID + '">삭제</button>';
-                });
-
-                $('#list').html(listHTML);
-                $('#pagination').html(pageHTML);
             }
         });
     }

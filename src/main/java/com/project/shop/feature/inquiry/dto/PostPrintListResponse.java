@@ -1,6 +1,6 @@
-package com.project.shop.feature.board.dto;
+package com.project.shop.feature.inquiry.dto;
 
-import com.project.shop.feature.board.entity.Board;
+import com.project.shop.feature.inquiry.entity.Inquiry;
 import com.project.shop.feature.page.Paging;
 import lombok.Data;
 
@@ -18,11 +18,11 @@ import java.util.List;
 @Data
 public class PostPrintListResponse {
     private Paging paging;
-    private List<Board> boardList;
+    private List<Inquiry> inquiryList;
 
-    public PostPrintListResponse(Paging paging, List<Board> boardList) {
+    public PostPrintListResponse(Paging paging, List<Inquiry> inquiryList) {
         this.paging = paging;
-        this.boardList = boardList;
+        this.inquiryList = inquiryList;
     }
 
 }

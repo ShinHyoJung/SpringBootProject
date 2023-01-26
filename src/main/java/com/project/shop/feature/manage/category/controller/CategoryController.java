@@ -28,12 +28,23 @@ public class CategoryController {
     @ResponseBody
     @PostMapping("/list")
     public PostPrintListResponse postPrintList() {
+        PostPrintListResponse pageResponse = new PostPrintListResponse();
         List<Category> categoryList = categoryService.selectAll();
-        return new PostPrintListResponse(categoryList);
+
+        if(categoryList.isEmpty()) {
+            pageResponse.setCode("FAIL");
+            pageResponse.setMessage("카테고리가 비어있습니다.");
+        } else {
+            pageResponse.setCategoryList(categoryList);
+            pageResponse.setCode("SUCCESS");
+            pageResponse.setMessage("카테고리 목록입니다.");
+        }
+        return pageResponse;
     }
 
     @GetMapping("/add")
     public String getAddCategory(Model model) {
+        model.addAttribute("menu", "manage");
         model.addAttribute("main", VIEW_PREFIX + "add");
         return "view";
     }
@@ -56,6 +67,7 @@ public class CategoryController {
     public String getDetailCategory(Model model, @PathVariable int categoryID) {
         Category category = categoryService.select(categoryID);
         model.addAttribute("category", category);
+        model.addAttribute("menu", "manage");
         model.addAttribute("main", VIEW_PREFIX + "detail");
         return "view";
     }

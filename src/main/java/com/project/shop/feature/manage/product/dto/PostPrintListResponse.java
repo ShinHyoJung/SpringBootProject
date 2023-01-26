@@ -19,9 +19,6 @@ import java.util.List;
 public class PostPrintListResponse {
     private Paging paging;
     private List<Product> productList;
-
-    public PostPrintListResponse(Paging paging, List<Product> productList) {
-        this.paging = paging;
-        this.productList = productList;
-    }
+    private String code;
+    private String message;
 }

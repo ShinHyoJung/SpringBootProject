@@ -29,7 +29,8 @@
     <textarea id="info" name="info" placeholder="상품 정보"></textarea>
   </div>
   <div class="field">
-    <input type="file" id="productImage" name="productImage" multiple="multiple" style="width: 30%;" onchange="readURL(this)">
+    <input type="file" id="productImage" name="productImage" multiple="multiple" style="width: 33%;" onchange="readURL(this)">
+    <br>
     <img id="productImagePreview" style="width: 300px; height: 300px;">
   </div>
   <button class="ui button" type="submit"><i class="save icon"></i></button>

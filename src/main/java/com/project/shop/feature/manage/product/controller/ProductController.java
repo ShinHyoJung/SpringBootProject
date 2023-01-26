@@ -23,6 +23,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -55,7 +57,8 @@ public class ProductController {
 
     @ResponseBody
     @PostMapping("/list")
-    public PostPrintListResponse manageList(@RequestBody PostPrintList postPrintList) throws SQLException {
+    public PostPrintListResponse postManageList(@RequestBody PostPrintList postPrintList) throws SQLException {
+        PostPrintListResponse pageResponse = new PostPrintListResponse();
         if(postPrintList.getSearchOption().equals("category")) {
             if(StringUtils.isNotEmpty(postPrintList.getKeyword())) {
                 String name = postPrintList.getKeyword();
@@ -68,12 +71,20 @@ public class ProductController {
         Paging paging = new Paging(postPrintList.getCurrentPage(), 5, total);
         List<Product> productList = productService.selectAll(paging, postPrintList.getSearchOption(), postPrintList.getKeyword());
 
-        for(Product product : productList) {
-            String name = categoryService.convertCodeToName(product.getCategory());
-            product.setCategory(name);
+        if(productList.isEmpty()) {
+            pageResponse.setCode("FAIL");
+            pageResponse.setMessage("재고 목록이 비어있습니다.");
+        } else {
+            for(Product product : productList) {
+                String name = categoryService.convertCodeToName(product.getCategory());
+                product.setCategory(name);
+            }
+            pageResponse.setProductList(productList);
+            pageResponse.setPaging(paging);
+            pageResponse.setCode("SUCCESS");
+            pageResponse.setMessage("재고 목록입니다.");
         }
-
-        return new PostPrintListResponse(paging, productList);
+        return pageResponse;
     }
 
     @GetMapping("/add")

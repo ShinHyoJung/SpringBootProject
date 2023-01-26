@@ -8,6 +8,8 @@ import java.util.List;
 
 @Data
 public class PostPrintListResponse {
-    @NonNull
+
     private List<Category> categoryList;
+    private String code;
+    private String message;
 }

@@ -51,7 +51,7 @@
         <a class="item" href="${pageContext.request.contextPath}/parcel/delivery-tracking">
             배송조회
         </a>
-        <a class="item">
+        <a class="item" href="${pageContext.request.contextPath}/inquiry/">
             상담 문의
         </a>
     </div>

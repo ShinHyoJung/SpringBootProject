@@ -1,12 +1,12 @@
-package com.project.shop.feature.board.controller;
+package com.project.shop.feature.inquiry.controller;
 
-import com.project.shop.feature.board.dto.*;
-import com.project.shop.feature.board.entity.Board;
-import com.project.shop.feature.board.service.BoardService;
+import com.project.shop.feature.inquiry.dto.*;
+import com.project.shop.feature.inquiry.entity.Inquiry;
+import com.project.shop.feature.inquiry.service.InquiryService;
 import com.project.shop.feature.member.entity.Member;
 import com.project.shop.feature.member.service.MemberService;
 import com.project.shop.feature.page.Paging;
-import com.project.shop.feature.board.dto.PostPrintList;
+import com.project.shop.feature.inquiry.dto.PostPrintList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,28 +17,29 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("board/")
-public class BoardController {
+@RequestMapping("inquiry/")
+public class InquiryController {
 
-    private static final String VIEW_PREFIX = "board/";
+    private static final String VIEW_PREFIX = "inquiry/";
 
     private final MemberService memberService;
-    private final BoardService boardService;
+    private final InquiryService inquiryService;
 
     @GetMapping("/")
-    public String getBoard(Model model) {
+    public String getInquiry(Model model) {
+        model.addAttribute("menu", "user");
         model.addAttribute("main", VIEW_PREFIX + "default");
         return "view";
     }
     @ResponseBody
     @PostMapping("/list")
-    public PostPrintListResponse postBoard(@RequestBody PostPrintList postPrintList) {
-        int total = boardService.count();
+    public PostPrintListResponse postInquiry(@RequestBody PostPrintList postPrintList) {
+        int total = inquiryService.count();
 
         Paging paging = new Paging(postPrintList.getCurrentPage(), 5, total);
-        List<Board> boardList = boardService.selectAll(paging);
+        List<Inquiry> inquiryList = inquiryService.selectAll(paging);
 
-        return new PostPrintListResponse(paging, boardList);
+        return new PostPrintListResponse(paging, inquiryList);
     }
 
     @GetMapping("/write")
@@ -56,6 +57,7 @@ public class BoardController {
             pageResponse.setWriter(member.getName());
 
             model.addAttribute("getWriteResponse", pageResponse);
+            model.addAttribute("menu", "user");
             model.addAttribute("main", VIEW_PREFIX + "write");
         } else {
             model.addAttribute("main", "main/default");
@@ -64,38 +66,40 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String postWrite(Model model, PostWrite postWrite) {
-        boardService.insert(postWrite.toEntity());
-        return "redirect:/board/";
+    public String postWrite(PostWrite postWrite) {
+        inquiryService.insert(postWrite.toEntity());
+        return "redirect:/inquiry/";
     }
 
-    @GetMapping("/read/{boardID}")
-    public String getRead(@PathVariable("boardID")int boardID, Model model) {
-        Board board = boardService.select(boardID);
+    @GetMapping("/read/{inquiryID}")
+    public String getRead(@PathVariable("inquiryID")int inquiryID, Model model) {
+        Inquiry inquiry = inquiryService.select(inquiryID);
         GetReadResponse pageResponse = new GetReadResponse();
-        pageResponse.setTitle(board.getTitle());
-        pageResponse.setContent(board.getContent());
-        pageResponse.setWriter(board.getWriter());
-        pageResponse.setCreateDate(board.getCreateDate());
-        pageResponse.setUpdateDate(board.getUpdateDate());
-        pageResponse.setBoardID(board.getBoardID());
+        pageResponse.setTitle(inquiry.getTitle());
+        pageResponse.setContent(inquiry.getContent());
+        pageResponse.setWriter(inquiry.getWriter());
+        pageResponse.setCreateDate(inquiry.getCreateDate());
+        pageResponse.setUpdateDate(inquiry.getUpdateDate());
+        pageResponse.setInquiryID(inquiry.getInquiryID());
+
         model.addAttribute("getReadResponse", pageResponse);
+        model.addAttribute("menu", "user");
         model.addAttribute("main", VIEW_PREFIX + "read");
         return "view";
     }
 
     @GetMapping("/delete")
     public String getDelete(PostDelete postDelete) {
-        boardService.delete(postDelete.getBoardID());
+        inquiryService.delete(postDelete.getInquiryID());
         return "redirect:/board/";
     }
 
-    @GetMapping("/update/{boardID}")
-    public String getUpdate(@PathVariable("boardID")int boardID, Model model) {
-        Board board = boardService.select(boardID);
+    @GetMapping("/update/{inquiryID}")
+    public String getUpdate(@PathVariable("inquiryID")int inquiryID, Model model) {
+        Inquiry board = inquiryService.select(inquiryID);
 
         GetUpdateResponse pageResponse = new GetUpdateResponse();
-        pageResponse.setBoardID(boardID);
+        pageResponse.setInquiryID(inquiryID);
         pageResponse.setTitle(board.getTitle());
         pageResponse.setContent(board.getContent());
         pageResponse.setWriter(board.getWriter());
@@ -107,7 +111,7 @@ public class BoardController {
 
     @PostMapping("/update")
     public String postUpdate(PostUpdate postUpdate) {
-        boardService.update(postUpdate.toEntity());
-        return "redirect:/board/read/" + postUpdate.getBoardID();
+        inquiryService.update(postUpdate.toEntity());
+        return "redirect:/board/read/" + postUpdate.getInquiryID();
     }
 }

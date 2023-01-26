@@ -23,7 +23,7 @@ public class PurchaseDAO {
 
     public void insert(List<Purchase> purchaseList) {
         String sql = "INSERT INTO purchase (name, price, quantity, address, detail_address, zip_code, thumbnail_image_name, imp_uid, " +
-                "sell_id, product_id, idx, order_status, available_cancel_yn, purchase_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "sell_id, product_id, idx, order_status, available_cancel_yn, purchase_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         for(Purchase purchase : purchaseList) {
             jdbcTemplate.update(sql, purchase.getName(), purchase.getPrice(), purchase.getQuantity(), purchase.getAddress(),

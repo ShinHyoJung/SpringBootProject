@@ -1,4 +1,4 @@
-package com.project.shop.feature.board.dto;
+package com.project.shop.feature.inquiry.dto;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class GetReadResponse {
-    private int boardID;
+    private int inquiryID;
     private String title;
     private String content;
     private String writer;

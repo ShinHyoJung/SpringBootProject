@@ -26,7 +26,7 @@
         </div>
       </c:forEach>-->
     </div>
-<div id="pagination" class="ui pagination menu" style="margin-top: 100px; margin-left: 200px;"></div>
+<div id="pagination" class="ui pagination menu" style="margin-top: 100px; margin-left: 200px; display:none;"></div>
 <script>
 function printList(currentPage) {
     if(!currentPage) {
@@ -95,10 +95,9 @@ function printList(currentPage) {
                 listHTML += '</tbody>';
 
                 $('#table').html(listHTML);
+                $('#pagination').css('display', '');
                 $('#pagination').html(pageHTML);
             } else {
-                $('#table').css('display', 'none');
-                $('#pagination').css('display', 'none');
                 alert(pageResponse.message);
             }
         }

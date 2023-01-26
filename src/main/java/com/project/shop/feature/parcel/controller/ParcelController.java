@@ -42,35 +42,42 @@ public class ParcelController {
     @ResponseBody
     @PostMapping("/delivery-tracking/list")
     public PostDeliveryTrackingListResponse postDeliveryTrackingList(@RequestBody PostDeliveryTrackingList postDeliveryTrackingList, HttpSession session) {
+        PostDeliveryTrackingListResponse pageResponse = new PostDeliveryTrackingListResponse();
+
         int idx = (int)session.getAttribute("loggedIn");
         int total = parcelService.count(idx);
         Paging paging = new Paging(postDeliveryTrackingList.getCurrentPage(), 5, total);
         List<Parcel> parcelList = parcelService.select(idx, paging);
 
-        for(Parcel parcel : parcelList) {
-            Date purchaseDate = parcel.getPurchaseDate();
-            long diffDays = DateUtils.getDayDifference(purchaseDate, new Date());
+        if(parcelList.isEmpty()) {
+            pageResponse.setCode("FAIL");
+            pageResponse.setMessage("배송조회 목록이 비어있습니다.");
+        } else {
+            for(Parcel parcel : parcelList) {
+                Date purchaseDate = parcel.getPurchaseDate();
+                long diffDays = DateUtils.getDayDifference(purchaseDate, new Date());
 
-            if(diffDays == 0) {
-                parcel.setStatus(0);
-                parcelService.updateStatus(0, parcel.getParcelID());
-            } else if(diffDays == 1) {
-                parcel.setStatus(1);
-                parcelService.updateStatus(1, parcel.getParcelID());
-            } else if(diffDays == 2) {
-                parcel.setStatus(2);
-                parcelService.updateStatus(2, parcel.getParcelID());
-            } else if(diffDays == 3) {
-                parcel.setStatus(3);
-                parcelService.updateStatus(3, parcel.getParcelID());
-            } else {
-                parcelService.deleteByParcelID(parcel.getParcelID());
+                if(diffDays == 0) {
+                    parcel.setStatus(0);
+                    parcelService.updateStatus(0, parcel.getParcelID());
+                } else if(diffDays == 1) {
+                    parcel.setStatus(1);
+                    parcelService.updateStatus(1, parcel.getParcelID());
+                } else if(diffDays == 2) {
+                    parcel.setStatus(2);
+                    parcelService.updateStatus(2, parcel.getParcelID());
+                } else if(diffDays == 3) {
+                    parcel.setStatus(3);
+                    parcelService.updateStatus(3, parcel.getParcelID());
+                } else {
+                    parcelService.deleteByParcelID(parcel.getParcelID());
+                }
             }
+            pageResponse.setParcelList(parcelList);
+            pageResponse.setPaging(paging);
+            pageResponse.setCode("SUCCESS");
+            pageResponse.setMessage("배송조회 목록 입니다.");
         }
-
-        PostDeliveryTrackingListResponse pageResponse = new PostDeliveryTrackingListResponse();
-        pageResponse.setPaging(paging);
-        pageResponse.setParcelList(parcelList);
         return pageResponse;
     }
 }

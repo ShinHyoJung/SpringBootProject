@@ -1,12 +1,12 @@
-package com.project.shop.feature.board.entity;
+package com.project.shop.feature.inquiry.entity;
 
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class Board {
-    private int boardID;
+public class Inquiry {
+    private int inquiryID;
     private String loginID;
     private String title;
     private String content;

@@ -44,7 +44,7 @@ public class PurchaseController {
 
     @PostMapping("/pay")
     public String getPay(Model model, PostPayment postPayment,  HttpSession session) throws SQLException {
-        int idx = (int) session.getAttribute("idx");
+        int idx = (int) session.getAttribute("loggedIn");
         Member member = memberService.selectByIdx(idx);
         Sell sell = sellService.select(postPayment.getSellID());
 

@@ -41,10 +41,15 @@ public class WantController {
 
             List<Want> wantList = wantService.selectAll(idx, paging);
 
-            pageResponse.setWantList(wantList);
-            pageResponse.setPaging(paging);
-            pageResponse.setCode("SUCCESS");
-            pageResponse.setMessage("찜한 내역입니다.");
+            if(wantList.isEmpty()) {
+              pageResponse.setCode("FAIL");
+              pageResponse.setMessage("찜한 내역이 비어있습니다.");
+            } else {
+                pageResponse.setWantList(wantList);
+                pageResponse.setPaging(paging);
+                pageResponse.setCode("SUCCESS");
+                pageResponse.setMessage("찜한 내역입니다.");
+            }
         } catch (Exception e) {
             pageResponse.setCode("FAIL");
             pageResponse.setMessage("찜한 내역이 비어있습니다.");

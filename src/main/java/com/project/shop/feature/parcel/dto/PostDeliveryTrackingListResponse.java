@@ -19,4 +19,6 @@ import java.util.List;
 public class PostDeliveryTrackingListResponse {
     private List<Parcel> parcelList;
     private Paging paging;
+    private String code;
+    private String message;
 }
