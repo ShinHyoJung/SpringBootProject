@@ -67,10 +67,10 @@ function printList(currentPage) {
 
                 listHTML += '<thead>';
                 listHTML += '<tr>';
-                listHTML += '<th class="two wide" style="width:40px;">주문 번호</th>';
+                listHTML += '<th class="one wide" style="width:40px;">주문 번호</th>';
                 listHTML += '<th class="three wide">제품 명</th>';
                 listHTML += '<th class="two wide"> 수량 </th>';
-                listHTML += '<th class="two wide"> 가격 </th>';
+                listHTML += '<th class="one wide"> 가격 </th>';
                 listHTML += '<th class="two wide"> 주문 상태 </th>';
                 listHTML += '<th class="three wide"> 주문일시 </th>';
                 listHTML += '<th class="two wide"></th>';
