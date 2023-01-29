@@ -3,8 +3,10 @@ package com.project.shop.feature.member.service;
 import com.project.shop.feature.member.dto.GetInfoResponse;
 import com.project.shop.feature.login.dto.PostLogin;
 import com.project.shop.feature.member.entity.Member;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface MemberService {
+public interface MemberService extends UserDetailsService {
 
     void insert(Member member);
 
@@ -25,4 +27,6 @@ public interface MemberService {
     boolean isExistLoginID(String loginID);
 
     void updatePassword(String password, int idx);
+
+    UserDetails loadUserByUsername(String username);
 }

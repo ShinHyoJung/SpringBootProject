@@ -43,7 +43,8 @@ public class MemberDAO {
     }
 
     public Member selectByLoginID(String loginID) {
-        String sql = "SELECT idx AS idx, password AS password \n" +
+        String sql = "SELECT idx AS idx, password AS password" +
+                "name AS name  \n" +
                 "FROM member WHERE 1=1 AND login_id = ?";
 
         Member member = jdbcTemplate.queryForObject(sql, new Object[]{loginID}, new RowMapper<Member>() {
@@ -52,6 +53,7 @@ public class MemberDAO {
                 Member member = new Member();
                 member.setIdx(rs.getInt("idx"));
                 member.setPassword(rs.getString("password"));
+                member.setAuth(rs.getString("auth"));
                 return member;
             }
         });

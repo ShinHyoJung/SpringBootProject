@@ -7,6 +7,8 @@ import com.project.shop.feature.member.entity.Member;
 import com.project.shop.feature.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +19,7 @@ import java.util.Date;
 public class DefaultMemberService implements MemberService {
 
     private final MemberDAO memberDAO;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Override
     public void insert(Member member) {
         memberDAO.insert(member);
@@ -80,5 +82,11 @@ public class DefaultMemberService implements MemberService {
     @Override
     public void updatePassword(String password, int idx) {
         memberDAO.updatePassword(password, idx);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Member member = memberDAO.selectByLoginID(username);
+        return member;
     }
 }

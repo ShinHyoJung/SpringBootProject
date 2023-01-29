@@ -1,5 +1,7 @@
 package com.project.shop.feature.member.controller;
 
+import com.project.shop.feature.auth.entity.Auth;
+import com.project.shop.feature.auth.service.AuthService;
 import com.project.shop.feature.code.error.ErrorCode;
 import com.project.shop.feature.code.success.SuccessCode;
 import com.project.shop.feature.manage.category.entity.Category;
@@ -34,6 +36,7 @@ public class MemberController {
     private final MemberService memberService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final CategoryService categoryService;
+    private final AuthService authService;
 
     @GetMapping("/signUp") // 회원가입 페이지
     public String getSignUp(Model model) {
@@ -51,6 +54,12 @@ public class MemberController {
             String password = postSignUp.getPassword();
             String encryptPassword = bCryptPasswordEncoder.encode(password);
             memberService.insert(postSignUp.toEntity(encryptPassword));
+
+            Auth auth = new Auth();
+            auth.setAuth("USER");
+            auth.setUsername(postSignUp.getLoginID());
+            auth.setPassword(encryptPassword);
+            authService.insert(auth);
         } catch (Exception e) {
 
         }
