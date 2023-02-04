@@ -15,6 +15,11 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +30,8 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -53,13 +60,20 @@ public class MemberController {
         try {
             String password = postSignUp.getPassword();
             String encryptPassword = bCryptPasswordEncoder.encode(password);
-            memberService.insert(postSignUp.toEntity(encryptPassword));
 
+            /*
             Auth auth = new Auth();
-            auth.setAuth("USER");
+            auth.setAuth(AuthorityUtils.createAuthorityList("ROLE_USER"));
             auth.setUsername(postSignUp.getLoginID());
             auth.setPassword(encryptPassword);
-            authService.insert(auth);
+             */
+            Member member = new Member();
+            member.setLoginID(postSignUp.getLoginID());
+            member.setAuthorities(AuthorityUtils.createAuthorityList("ROLE_USER"));
+            authService.insert(member);
+
+            memberService.insert(postSignUp.toEntity(encryptPassword));
+
         } catch (Exception e) {
 
         }
@@ -84,12 +98,16 @@ public class MemberController {
         return pageResponse;
     }
 
+    @Secured({"ROLE_USER"})
     @GetMapping("/info")
-    public String getInfo(Model model, HttpSession session) {
-        int idx = (int) session.getAttribute("loggedIn");
-        Member member = memberService.select(idx);
+    public String getInfo(Model model) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
 
-        model.addAttribute("member", member);
+        Member member = memberService.selectByLoginID(username);
+        int idx = member.getIdx();
+
+        model.addAttribute("member", memberService.select(idx));
         model.addAttribute("menu", "user");
         model.addAttribute("main", VIEW_PREFIX + "info");
         return "view";

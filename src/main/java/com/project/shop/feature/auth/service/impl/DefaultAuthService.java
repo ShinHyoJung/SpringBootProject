@@ -3,10 +3,15 @@ package com.project.shop.feature.auth.service.impl;
 import com.project.shop.feature.auth.dao.AuthDAO;
 import com.project.shop.feature.auth.entity.Auth;
 import com.project.shop.feature.auth.service.AuthService;
+import com.project.shop.feature.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service("AuthService")
@@ -16,17 +21,22 @@ public class DefaultAuthService implements AuthService {
     private final AuthDAO authDAO;
 
     @Override
-    public void insert(Auth auth) {
-        authDAO.insert(auth);
+    public void insert(Member member) {
+        authDAO.insert(member);
     }
 
     @Override
-    public List<GrantedAuthority> select(String username) {
-        return authDAO.selectList(username);
+    public Collection<GrantedAuthority> getAuthorities(String username) {
+         return authDAO.select(username);
     }
 
     @Override
     public void update(String username, String auth) {
         authDAO.update(username, auth);
+    }
+
+    @Override
+    public void delete(String username) {
+        authDAO.delete(username);
     }
 }

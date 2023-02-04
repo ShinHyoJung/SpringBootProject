@@ -34,17 +34,19 @@ public class MemberDAO {
 
     public void insert(Member member) {
         String sql = "INSERT INTO member(" +
-                "login_id, password, name, birth, address, detail_address, zip_code, phone, email, create_date, update_date) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "login_id, password, name, birth, address, detail_address, zip_code, phone, email, create_date, update_date," +
+                "isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, member.getLoginID(), member.getPassword(), member.getName(), member.getBirth(),
                 member.getAddress(), member.getDetailAddress(), member.getZipCode(), member.getPhone(), member.getEmail(),
-                Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
+                Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()),
+                member.isAccountNonExpired(), member.isAccountNonLocked(), member.isCredentialsNonExpired(), member.isEnabled());
     }
 
     public Member selectByLoginID(String loginID) {
-        String sql = "SELECT idx AS idx, password AS password" +
-                "name AS name  \n" +
+        String sql = "SELECT idx, login_id, password, " +
+                "isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled\n" +
                 "FROM member WHERE 1=1 AND login_id = ?";
 
         Member member = jdbcTemplate.queryForObject(sql, new Object[]{loginID}, new RowMapper<Member>() {
@@ -52,8 +54,12 @@ public class MemberDAO {
             public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Member member = new Member();
                 member.setIdx(rs.getInt("idx"));
+                member.setLoginID(rs.getString("login_id"));
                 member.setPassword(rs.getString("password"));
-                member.setAuth(rs.getString("auth"));
+                member.setAccountNonExpired(rs.getBoolean("isAccountNonExpired"));
+                member.setAccountNonLocked(rs.getBoolean("isAccountNonLocked"));
+                member.setCredentialNonExpired(rs.getBoolean("isCredentialsNonExpired"));
+                member.setEnabled(rs.getBoolean("isEnabled"));
                 return member;
             }
         });

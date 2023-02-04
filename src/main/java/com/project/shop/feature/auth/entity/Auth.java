@@ -14,8 +14,6 @@ import java.util.List;
 public class Auth {
     private String username;
     private String password;
-    private String auth;
+    private Collection<GrantedAuthority> auth;
     private Date authDate;
-
-
 }

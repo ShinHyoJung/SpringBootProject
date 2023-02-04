@@ -1,4 +1,4 @@
-waCREATE TABLE want(
+CREATE TABLE want(
     want_id int not null auto_increment,
     name varchar(300),
     price varchar(500),

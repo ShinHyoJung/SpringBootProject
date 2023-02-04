@@ -1,5 +1,7 @@
 package com.project.shop.feature.member.service.impl;
 
+import com.project.shop.feature.auth.dao.AuthDAO;
+import com.project.shop.feature.auth.service.AuthService;
 import com.project.shop.feature.login.dto.PostLogin;
 import com.project.shop.feature.member.dao.MemberDAO;
 import com.project.shop.feature.member.dto.GetInfoResponse;
@@ -12,13 +14,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionContext;
 import java.util.Date;
+import java.util.Enumeration;
 
 @Service
 @RequiredArgsConstructor
 public class DefaultMemberService implements MemberService {
 
     private final MemberDAO memberDAO;
+    private final AuthService authService;
 
     @Override
     public void insert(Member member) {
@@ -87,6 +94,7 @@ public class DefaultMemberService implements MemberService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberDAO.selectByLoginID(username);
+        member.setAuthorities(authService.getAuthorities(username));
         return member;
     }
 }

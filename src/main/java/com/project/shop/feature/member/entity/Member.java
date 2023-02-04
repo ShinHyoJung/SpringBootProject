@@ -2,13 +2,11 @@ package com.project.shop.feature.member.entity;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Data
 public class Member implements UserDetails {
@@ -24,10 +22,14 @@ public class Member implements UserDetails {
     private String zipCode;
     private Date createDate;
     private Date updateDate;
-    private Collection<? extends GrantedAuthority> authorities;
+    private Collection<GrantedAuthority> authorities;
+    private boolean isAccountNonExpired;
+    private boolean isAccountNonLocked;
+    private boolean isCredentialNonExpired;
+    private boolean isEnabled;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<GrantedAuthority> getAuthorities() {
         return this.authorities;
     }
 

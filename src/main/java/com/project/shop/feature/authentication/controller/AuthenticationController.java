@@ -30,7 +30,6 @@ import java.util.Map;
 @RequestMapping("/authentication")
 public class AuthenticationController {
 
-    private final MailService mailService;
     private final MailPublisherService mailPublisherService;
     private final SmsService smsService;
     private final AuthenticationService authenticationService;

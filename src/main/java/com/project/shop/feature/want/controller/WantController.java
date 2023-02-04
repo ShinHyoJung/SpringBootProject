@@ -6,6 +6,7 @@ import com.project.shop.feature.sell.service.SellService;
 import com.project.shop.feature.want.dto.*;
 import com.project.shop.feature.want.service.WantService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ public class WantController {
     private final WantService wantService;
     private final SellService sellService;
 
+    @Secured({"ROLE_USER"})
     @GetMapping("/")
     public String getWant(Model model) {
         model.addAttribute("menu", "user");

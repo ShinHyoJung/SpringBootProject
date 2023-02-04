@@ -9,10 +9,10 @@
 <html>
 <body>
 <p class="subtitle"> 로그인 </p>
-<form class="ui form" style="width: 30%;">
+<form class="ui form" name="loginForm" method="post" action="${pageContext.request.contextPath}/login/do" style="width: 30%;">
     <div class="field">
         <label>아이디 </label>
-        <input type="text" id="id" name="id" onkeyup="enterLogin()">
+        <input type="text" id="id" name="username" onkeyup="enterLogin()">
     </div>
     <div class="field">
         <label> 비밀번호</label>
@@ -37,11 +37,11 @@
             alert("비밀번호를 입력해주세요.");
             return false;
         }
-
-        let postObj = {
-            'loginID':loginID,
-            'password':password
-        }
+        /*
+          let postObj = {
+              'loginID':loginID,
+              'password':password
+          }
 
         $.ajax({
             url: '${pageContext.request.contextPath}/login/do',
@@ -57,6 +57,9 @@
                 }
             }
         })
+        */
+        let form = document.loginForm;
+        form.submit();
     }
 
     function enterLogin() {

@@ -17,6 +17,7 @@ import com.project.shop.feature.util.DateUtils;
 import com.project.shop.feature.web.rest.client.pay.service.PayService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -99,6 +100,7 @@ public class PurchaseController {
         return "view";
     }
 
+    @Secured({"ROLE_USER"})
     @GetMapping("/ordered")
     public String getOrdered(Model model) {
         model.addAttribute("menu", "user");

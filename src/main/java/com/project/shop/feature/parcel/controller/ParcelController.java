@@ -7,6 +7,7 @@ import com.project.shop.feature.parcel.entity.Parcel;
 import com.project.shop.feature.parcel.service.ParcelService;
 import com.project.shop.feature.util.DateUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,8 @@ public class ParcelController {
 
     private final static String VIEW_PREFIX = "parcel/";
     private final ParcelService parcelService;
+
+    @Secured({"ROLE_USER"})
     @GetMapping("/delivery-tracking")
     public String getDeliveryTracking(Model model) {
         model.addAttribute("menu", "user");

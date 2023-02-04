@@ -30,7 +30,7 @@ public class LoginController {
         model.addAttribute("main", VIEW_PREFIX + "default");
         return "view";
     }
-
+/*
     @ResponseBody
     @PostMapping("/do")
     public PostLoginResponse postLogin(@RequestBody PostLogin postLogin, HttpSession session) {
@@ -55,6 +55,7 @@ public class LoginController {
         }
         return pageResponse;
     }
+*/
 
     @GetMapping("/logout")
     public String postLogout(Model model, HttpSession session) {
