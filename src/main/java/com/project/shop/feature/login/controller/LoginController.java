@@ -4,6 +4,7 @@ import com.project.shop.feature.login.dto.PostLoginResponse;
 import com.project.shop.feature.login.service.LoginService;
 import com.project.shop.feature.manage.category.entity.Category;
 import com.project.shop.feature.login.dto.PostLogin;
+import com.project.shop.feature.manage.category.service.CategoryService;
 import com.project.shop.feature.member.entity.Member;
 import com.project.shop.feature.member.service.MemberService;
 import lombok.Data;
@@ -22,11 +23,14 @@ import java.util.List;
 public class LoginController {
 
     private static final String VIEW_PREFIX = "login/";
-    private final MemberService memberService;
-    private final LoginService loginService;
+    private final CategoryService categoryService;
 
     @GetMapping("/")
     public String getLogin(Model model) {
+        List<Category> categoryList = categoryService.selectAll();
+
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("menu", "sell");
         model.addAttribute("main", VIEW_PREFIX + "default");
         return "view";
     }
@@ -59,7 +63,6 @@ public class LoginController {
 
     @GetMapping("/logout")
     public String postLogout(Model model, HttpSession session) {
-        session.removeAttribute("loggedIn");
         model.addAttribute("main", "main/default");
         return "view";
     }

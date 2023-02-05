@@ -18,6 +18,8 @@ import com.project.shop.feature.web.rest.client.pay.service.PayService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +47,11 @@ public class PurchaseController {
 
     @PostMapping("/pay")
     public String getPay(Model model, PostPayment postPayment,  HttpSession session) throws SQLException {
-        int idx = (int) session.getAttribute("loggedIn");
-        Member member = memberService.selectByIdx(idx);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
+        Member member = memberService.selectByLoginID(username);
+        int idx = member.getIdx();
+
         Sell sell = sellService.select(postPayment.getSellID());
 
         List<Category> categoryList = categoryService.selectAll();
@@ -55,7 +60,7 @@ public class PurchaseController {
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("quantity", postPayment.getQuantity());
         model.addAttribute("sell", sell);
-        model.addAttribute("member", member);
+        model.addAttribute("member", memberService.selectByIdx(idx));
         model.addAttribute("main", VIEW_PREFIX + "payment");
         return "view";
     }
@@ -110,10 +115,14 @@ public class PurchaseController {
 
     @ResponseBody
     @PostMapping("/ordered/list")
-    public PostOrderedListResponse postOrderedList(@RequestBody PostOrderedList postOrderedList, HttpSession session) {
+    public PostOrderedListResponse postOrderedList(@RequestBody PostOrderedList postOrderedList) {
         PostOrderedListResponse pageResponse = new PostOrderedListResponse();
         try {
-            int idx = (int) session.getAttribute("loggedIn");
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = ((UserDetails)principal).getUsername();
+            Member member = memberService.selectByLoginID(username);
+            int idx = member.getIdx();
+
             int total = purchaseService.count(idx);
             Paging paging = new Paging(postOrderedList.getCurrentPage(), 5, total);
             List<Purchase> purchaseList = purchaseService.selectByIdx(idx, paging);
@@ -206,10 +215,12 @@ public class PurchaseController {
 
     @GetMapping("/cart")
     public String getCart(Model model, HttpSession session) {
-        int idx = (int)session.getAttribute("loggedIn");
-        Member member = memberService.selectByIdx(idx);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
+        Member member = memberService.selectByLoginID(username);
+        int idx = member.getIdx();
 
-        model.addAttribute("member", member);
+        model.addAttribute("member", memberService.selectByIdx(idx));
         model.addAttribute("menu", "user");
         model.addAttribute("main", VIEW_PREFIX + "cart");
         return "view";
@@ -219,8 +230,11 @@ public class PurchaseController {
     @PostMapping("/cart")
     public PostCartListResponse postCartList(HttpSession session) {
         PostCartListResponse pageResponse = new PostCartListResponse();
-        int idx = (int)session.getAttribute("loggedIn");
-        Member member = memberService.selectByIdx(idx);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
+        Member member = memberService.selectByLoginID(username);
+        int idx = member.getIdx();
+
         ArrayList<Cart> cartList = (ArrayList<Cart>)session.getAttribute("cartList");
         int totalPrice = 0;
 
@@ -230,7 +244,7 @@ public class PurchaseController {
             }
 
             pageResponse.setCartList(cartList);
-            pageResponse.setMember(member);
+            pageResponse.setMember(memberService.selectByIdx(idx));
             pageResponse.setTotalPrice(totalPrice);
             pageResponse.setCode("SUCCESS");
             pageResponse.setMessage("장바구니 목록이 있습니다.");

@@ -18,4 +18,8 @@ public interface InquiryService {
     void update(Inquiry inquiry);
 
     int count();
+
+    List<Inquiry> selectAllByIdx(int idx, Paging paging);
+
+    int countByIdx(int idx);
 }

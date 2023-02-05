@@ -43,7 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .logout()
                         .logoutRequestMatcher(new AntPathRequestMatcher("/login/logout"))
                         .logoutSuccessUrl("/sell/")
-                        .invalidateHttpSession(true);
+                        .invalidateHttpSession(true)
+                        .and()
+
+                        .exceptionHandling()
+                        .accessDeniedPage("/error/denied");
 
                         httpSecurity.httpBasic().disable();
                         httpSecurity.csrf().disable();

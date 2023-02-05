@@ -4,6 +4,8 @@ import com.project.shop.feature.image.sellimage.entity.SellImage;
 import com.project.shop.feature.manage.category.service.CategoryService;
 import com.project.shop.feature.manage.product.entity.Product;
 import com.project.shop.feature.manage.product.service.ProductService;
+import com.project.shop.feature.member.entity.Member;
+import com.project.shop.feature.member.service.MemberService;
 import com.project.shop.feature.sell.dto.*;
 import com.project.shop.feature.image.sellimage.service.SellImageService;
 import com.project.shop.feature.page.Paging;
@@ -15,6 +17,8 @@ import com.project.shop.feature.util.StringUtils;
 import com.project.shop.feature.want.entity.Want;
 import com.project.shop.feature.want.service.WantService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +43,7 @@ public class SellController {
     private final SellImageService sellImageService;
     private final CategoryService categoryService;
     private final WantService wantService;
+    private final MemberService memberService;
 
     @GetMapping("/")
     public String getSell(Model model, @ModelAttribute GetDefault getDefault) {
@@ -100,13 +105,16 @@ public class SellController {
     }
 
     @GetMapping("/detail/{sellID}")
-    public String getDetail(Model model, @PathVariable int sellID, HttpSession session) throws SQLException {
+    public String getDetail(Model model, @PathVariable int sellID) throws SQLException {
         Sell sell = sellService.select(sellID);
         List<Category> categoryList = categoryService.selectAll();
-        int idx = (int)session.getAttribute("loggedIn");
         Want want = new Want();
-
         try{
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = ((UserDetails)principal).getUsername();
+            Member member = memberService.selectByLoginID(username);
+            int idx = member.getIdx();
+
             want = wantService.select(sellID, idx);
         } catch (Exception e) {
             want.setWantID(0);

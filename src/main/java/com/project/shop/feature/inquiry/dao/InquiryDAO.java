@@ -64,6 +64,7 @@ public class InquiryDAO {
             @Override
             public Inquiry mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Inquiry inquiry = new Inquiry();
+                inquiry.setInquiryID(rs.getInt("inquiry_id"));
                 inquiry.setTitle(rs.getString("title"));
                 inquiry.setWriter(rs.getString("writer"));
                 inquiry.setContent(rs.getString("content"));
@@ -91,7 +92,31 @@ public class InquiryDAO {
     }
 
     public void delete(int inquiryID) {
-        String sql = "DELETE FROM board WHERE 1=1 AND inquiry_id = ?";
-        jdbcTemplate.update(sql, new Object[]{inquiryID});
+        String sql = "DELETE FROM inquiry WHERE 1=1 AND inquiry_id = ?";
+        jdbcTemplate.update(sql, inquiryID);
+    }
+
+    public List<Inquiry> selectAllByIdx(int idx, Paging paging) {
+        String sql = "SELECT * FROM inquiry WHERE 1=1 AND idx = ? LIMIT ?, ?";
+
+        List<Inquiry> inquiryList = jdbcTemplate.query(sql, new Object[]{idx, paging.getSkip(), paging.getCountPerPage()}, new RowMapper<Inquiry>() {
+            @Override
+            public Inquiry mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Inquiry inquiry = new Inquiry();
+                inquiry.setInquiryID(rs.getInt("inquiry_id"));
+                inquiry.setTitle(rs.getString("title"));
+                inquiry.setCreateDate(rs.getDate("create_date"));
+                inquiry.setUpdateDate(rs.getDate("update_date"));
+                return inquiry;
+            }
+        });
+        return inquiryList;
+    }
+
+    public int countByIdx(int idx) {
+        String sql = "SELECT COUNT(*) FROM inquiry WHERE 1=1 AND idx = ?";
+
+        int count = jdbcTemplate.queryForObject(sql, new Object[]{idx}, Integer.class);
+        return count;
     }
 }

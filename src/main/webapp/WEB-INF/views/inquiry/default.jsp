@@ -58,7 +58,6 @@
                     listHTML += '<tr>';
                     listHTML += '<th>글 번호</th>';
                     listHTML += '<th> 제목 </th>';
-                    listHTML += '<th> 작성자 </th>';
                     listHTML += '<th> 작성날짜 </th>';
                     listHTML += '<th> 수정날짜 </th>';
                     listHTML += '</tr>';
@@ -71,7 +70,6 @@
                     listHTML += '<tr>';
                     listHTML += '<td>'+ inquiryList.inquiryID +'</td>';
                     listHTML += '<td><a href="'+ inquiryUrl + '">' + inquiryList.title + '</a></td>';
-                    listHTML += '<td>' + inquiryList.writer + '</td>';
                     listHTML += '<td>' + inquiryList.createDate + '</td>';
                     listHTML += '<td>' + inquiryList.updateDate + '</td>';
                     listHTML += '</tbody>';

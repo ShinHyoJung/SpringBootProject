@@ -98,12 +98,11 @@ public class MemberController {
         return pageResponse;
     }
 
-    @Secured({"ROLE_USER"})
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping("/info")
     public String getInfo(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails)principal).getUsername();
-
         Member member = memberService.selectByLoginID(username);
         int idx = member.getIdx();
 
@@ -168,10 +167,14 @@ public class MemberController {
     public String getWithdrawal(Model model, HttpSession session) {
         PostWithdrawalResponse pageResponse = new PostWithdrawalResponse();
         try {
-            int idx = (int)session.getAttribute("loggedIn");
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = ((UserDetails)principal).getUsername();
+            Member member = memberService.selectByLoginID(username);
+            int idx = member.getIdx();
+
             if(Integer.valueOf(idx) != null) {
                 memberService.delete(idx);
-                session.removeAttribute("loggedIn");
+
                 pageResponse.setCode(SuccessCode.member.withdrawalMember.getCode());
                 pageResponse.setMessage(SuccessCode.member.withdrawalMember.getMessageKey());
             } else {

@@ -8,11 +8,14 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <body onload="printList()">
 <input type="hidden" id="category" value="${category}">
+<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/sell/register'"><i class="plus icon"></i></button>
 <button class="ui button" onclick="location.reload()"><i class="undo icon"></i></button>
+</sec:authorize>
 <select class="ui dropdown" id="searchOption">
     <option value="title">글 제목</option>
     <option value="name">제품 이름</option>

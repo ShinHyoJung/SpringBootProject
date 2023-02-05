@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <body>
 <c:if test="${menu eq 'sell'}">
@@ -39,21 +40,23 @@
         <a class="item" href="${pageContext.request.contextPath}/member/info">
             내 정보
         </a>
-        <a class="item" href="${pageContext.request.contextPath}/want/">
-            찜한 내역
-        </a>
-        <a class="item" href="${pageContext.request.contextPath}/purchase/ordered">
-            주문 내역
-        </a>
-        <a class="item" href="${pageContext.request.contextPath}/purchase/cart">
-            장바구니
-        </a>
-        <a class="item" href="${pageContext.request.contextPath}/parcel/delivery-tracking">
-            배송조회
-        </a>
-        <a class="item" href="${pageContext.request.contextPath}/inquiry/">
-            상담 문의
-        </a>
+        <sec:authorize access="hasAnyRole('ROLE_USER')">
+            <a class="item" href="${pageContext.request.contextPath}/want/">
+                찜한 내역
+            </a>
+            <a class="item" href="${pageContext.request.contextPath}/purchase/ordered">
+                주문 내역
+            </a>
+            <a class="item" href="${pageContext.request.contextPath}/purchase/cart">
+                장바구니
+            </a>
+            <a class="item" href="${pageContext.request.contextPath}/parcel/delivery-tracking">
+                배송조회
+            </a>
+            <a class="item" href="${pageContext.request.contextPath}/inquiry/">
+                상담 문의
+            </a>
+        </sec:authorize>
     </div>
 </c:if>
 <script>

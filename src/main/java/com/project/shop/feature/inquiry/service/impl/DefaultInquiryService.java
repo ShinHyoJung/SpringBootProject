@@ -42,4 +42,14 @@ public class DefaultInquiryService implements InquiryService {
     public int count() {
         return inquiryDAO.count();
     }
+
+    @Override
+    public List<Inquiry> selectAllByIdx(int idx, Paging paging) {
+        return inquiryDAO.selectAllByIdx(idx, paging);
+    }
+
+    @Override
+    public int countByIdx(int idx) {
+        return inquiryDAO.countByIdx(idx);
+    }
 }

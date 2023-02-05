@@ -1,5 +1,7 @@
 package com.project.shop.feature.parcel.controller;
 
+import com.project.shop.feature.member.entity.Member;
+import com.project.shop.feature.member.service.MemberService;
 import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.parcel.dto.PostDeliveryTrackingList;
 import com.project.shop.feature.parcel.dto.PostDeliveryTrackingListResponse;
@@ -8,6 +10,8 @@ import com.project.shop.feature.parcel.service.ParcelService;
 import com.project.shop.feature.util.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +37,7 @@ public class ParcelController {
 
     private final static String VIEW_PREFIX = "parcel/";
     private final ParcelService parcelService;
+    private final MemberService memberService;
 
     @Secured({"ROLE_USER"})
     @GetMapping("/delivery-tracking")
@@ -47,7 +52,11 @@ public class ParcelController {
     public PostDeliveryTrackingListResponse postDeliveryTrackingList(@RequestBody PostDeliveryTrackingList postDeliveryTrackingList, HttpSession session) {
         PostDeliveryTrackingListResponse pageResponse = new PostDeliveryTrackingListResponse();
 
-        int idx = (int)session.getAttribute("loggedIn");
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
+        Member member = memberService.selectByLoginID(username);
+        int idx = member.getIdx();
+
         int total = parcelService.count(idx);
         Paging paging = new Paging(postDeliveryTrackingList.getCurrentPage(), 5, total);
         List<Parcel> parcelList = parcelService.select(idx, paging);

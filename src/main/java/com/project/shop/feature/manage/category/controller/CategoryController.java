@@ -3,6 +3,7 @@ package com.project.shop.feature.manage.category.controller;
 import com.project.shop.feature.manage.category.dto.*;
 import com.project.shop.feature.manage.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ public class CategoryController {
     private final static String VIEW_PREFIX = "manage/category/";
     private final CategoryService categoryService;
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/")
     public String getCategory(Model model) {
         model.addAttribute("menu", "manage");
@@ -63,6 +65,7 @@ public class CategoryController {
         return new PostDeleteResponse(code);
     }
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/detail/{categoryID}")
     public String getDetailCategory(Model model, @PathVariable int categoryID) {
         Category category = categoryService.select(categoryID);

@@ -28,6 +28,7 @@
 </table>
 <br>
 <a class="ui button" href="${pageContext.request.contextPath}/inquiry/update/${getReadResponse.inquiryID}"><i class="alternate pencil icon"></i></a>
+<a class="ui button" href="${pageContext.request.contextPath}/inquiry/delete/${getReadResponse.inquiryID}"><i class="trash alternate icon"></i></a>
 <a class="ui button" href="${pageContext.request.contextPath}/inquiry/"><i class="list icon"></i></a>
 
 </body>

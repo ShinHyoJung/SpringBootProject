@@ -14,6 +14,7 @@ import com.project.shop.feature.util.FileUtils;
 import com.project.shop.feature.util.ImageUtils;
 import com.project.shop.feature.util.StringUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +49,7 @@ public class ProductController {
     private final CategoryService categoryService;
     private final SellService sellService;
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/")
     public String manage(Model model) {
         model.addAttribute("menu", "manage");
@@ -87,6 +89,7 @@ public class ProductController {
         return pageResponse;
     }
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/add")
     public String getAddProduct(Model model) {
         List<Category> categoryList = categoryService.selectAll();
@@ -132,6 +135,7 @@ public class ProductController {
         return pageResponse;
     }
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/detail/{productID}")
     public String getDetailProduct(Model model, @PathVariable int productID) throws SQLException {
         Product product = productService.select(productID);

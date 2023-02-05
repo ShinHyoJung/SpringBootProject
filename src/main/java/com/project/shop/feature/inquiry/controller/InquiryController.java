@@ -8,6 +8,9 @@ import com.project.shop.feature.member.service.MemberService;
 import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.inquiry.dto.PostPrintList;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +28,7 @@ public class InquiryController {
     private final MemberService memberService;
     private final InquiryService inquiryService;
 
+    @Secured({"ROLE_USER"})
     @GetMapping("/")
     public String getInquiry(Model model) {
         model.addAttribute("menu", "user");
@@ -34,26 +38,31 @@ public class InquiryController {
     @ResponseBody
     @PostMapping("/list")
     public PostPrintListResponse postInquiry(@RequestBody PostPrintList postPrintList) {
-        int total = inquiryService.count();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
+        Member member = memberService.selectByLoginID(username);
+        int idx = member.getIdx();
+
+        int total = inquiryService.countByIdx(idx);
 
         Paging paging = new Paging(postPrintList.getCurrentPage(), 5, total);
-        List<Inquiry> inquiryList = inquiryService.selectAll(paging);
+        List<Inquiry> inquiryList = inquiryService.selectAllByIdx(idx, paging);
 
         return new PostPrintListResponse(paging, inquiryList);
     }
 
     @GetMapping("/write")
-    public String getWrite(Model model, HttpSession session) {
-        int idx = (int)session.getAttribute("loggedIn");
+    public String getWrite(Model model) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
+        Member memberForIdx = memberService.selectByLoginID(username);
+        int idx = memberForIdx.getIdx();
 
         if(Integer.valueOf(idx) != null) {
-            String loginID = session.getAttribute("loggedIn").toString();
-
             Member member = memberService.selectByIdx(idx);
-
             GetWriteResponse pageResponse = new GetWriteResponse();
             pageResponse.setIdx(idx);
-            pageResponse.setLoginID(loginID);
+            pageResponse.setLoginID(username);
             pageResponse.setWriter(member.getName());
 
             model.addAttribute("getWriteResponse", pageResponse);
@@ -73,8 +82,9 @@ public class InquiryController {
 
     @GetMapping("/read/{inquiryID}")
     public String getRead(@PathVariable("inquiryID")int inquiryID, Model model) {
-        Inquiry inquiry = inquiryService.select(inquiryID);
         GetReadResponse pageResponse = new GetReadResponse();
+        Inquiry inquiry = inquiryService.select(inquiryID);
+
         pageResponse.setTitle(inquiry.getTitle());
         pageResponse.setContent(inquiry.getContent());
         pageResponse.setWriter(inquiry.getWriter());
@@ -88,14 +98,14 @@ public class InquiryController {
         return "view";
     }
 
-    @GetMapping("/delete")
-    public String getDelete(PostDelete postDelete) {
-        inquiryService.delete(postDelete.getInquiryID());
-        return "redirect:/board/";
+    @GetMapping("/delete/{inquiryID}")
+    public String getDelete(@PathVariable("inquiryID")int inquiryID) {
+        inquiryService.delete(inquiryID);
+        return "redirect:/inquiry/";
     }
 
     @GetMapping("/update/{inquiryID}")
-    public String getUpdate(@PathVariable("inquiryID")int inquiryID, Model model) {
+    public String getUpdate(Model model, @PathVariable("inquiryID")int inquiryID) {
         Inquiry board = inquiryService.select(inquiryID);
 
         GetUpdateResponse pageResponse = new GetUpdateResponse();
@@ -104,6 +114,7 @@ public class InquiryController {
         pageResponse.setContent(board.getContent());
         pageResponse.setWriter(board.getWriter());
 
+        model.addAttribute("menu", "user");
         model.addAttribute("getUpdateResponse", pageResponse);
         model.addAttribute("main", VIEW_PREFIX + "update");
         return "view";
@@ -112,6 +123,6 @@ public class InquiryController {
     @PostMapping("/update")
     public String postUpdate(PostUpdate postUpdate) {
         inquiryService.update(postUpdate.toEntity());
-        return "redirect:/board/read/" + postUpdate.getInquiryID();
+        return "redirect:/inquiry/read/" + postUpdate.getInquiryID();
     }
 }

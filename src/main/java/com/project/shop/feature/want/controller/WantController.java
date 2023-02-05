@@ -1,5 +1,7 @@
 package com.project.shop.feature.want.controller;
 
+import com.project.shop.feature.member.entity.Member;
+import com.project.shop.feature.member.service.MemberService;
 import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.sell.entity.Sell;
 import com.project.shop.feature.sell.service.SellService;
@@ -7,6 +9,8 @@ import com.project.shop.feature.want.dto.*;
 import com.project.shop.feature.want.service.WantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -23,6 +27,7 @@ public class WantController {
     private final static String VIEW_PREFIX = "want/";
     private final WantService wantService;
     private final SellService sellService;
+    private final MemberService memberService;
 
     @Secured({"ROLE_USER"})
     @GetMapping("/")
@@ -34,10 +39,14 @@ public class WantController {
 
     @ResponseBody
     @PostMapping("/list")
-    public PostPrintListResponse postPrintWantList(@RequestBody PostPrintList postPrintList, HttpSession session) {
+    public PostPrintListResponse postPrintWantList(@RequestBody PostPrintList postPrintList) {
         PostPrintListResponse pageResponse = new PostPrintListResponse();
         try {
-            int idx = (int)session.getAttribute("loggedIn");
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = ((UserDetails)principal).getUsername();
+            Member member = memberService.selectByLoginID(username);
+            int idx = member.getIdx();
+
             int total = wantService.count(idx);
             Paging paging = new Paging(postPrintList.getCurrentPage(), 5, total);
 
@@ -61,13 +70,17 @@ public class WantController {
 
     @ResponseBody
     @PostMapping("/add")
-    public PostAddWantResponse postAddWant(@RequestBody PostAddWant postAddWant, HttpSession session) {
+    public PostAddWantResponse postAddWant(@RequestBody PostAddWant postAddWant) {
         PostAddWantResponse pageResponse = new PostAddWantResponse();
         try {
-            int idx = (int)session.getAttribute("loggedIn");
-            Sell sell = sellService.select(postAddWant.getSellID());
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = ((UserDetails)principal).getUsername();
+            Member member = memberService.selectByLoginID(username);
+            int idx = member.getIdx();
 
+            Sell sell = sellService.select(postAddWant.getSellID());
             wantService.insert(postAddWant.toEntity(idx, sell.getThumbnailImageName()));
+
             pageResponse.setCode("SUCCESS");
             pageResponse.setMessage("찜한내역에 추가되었습니다.");
         } catch (Exception e) {
@@ -79,10 +92,14 @@ public class WantController {
 
     @ResponseBody
     @PostMapping("/delete")
-    public PostDeleteWantResponse postDeleteWant(@RequestBody PostDeleteWant postDeleteWant, HttpSession session) {
+    public PostDeleteWantResponse postDeleteWant(@RequestBody PostDeleteWant postDeleteWant) {
         PostDeleteWantResponse pageResponse = new PostDeleteWantResponse();
         try {
-            int idx = (int)session.getAttribute("loggedIn");
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = ((UserDetails)principal).getUsername();
+            Member member = memberService.selectByLoginID(username);
+            int idx = member.getIdx();
+
             wantService.delete(postDeleteWant.getSellID(), idx);
 
             pageResponse.setCode("SUCCESS");

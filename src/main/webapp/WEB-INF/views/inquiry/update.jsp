@@ -8,12 +8,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
-<form method="post" action="${pageContext.request.contextPath}/board/update">
-  제목: <textarea id="title" name="title">${getUpdateResponse.title}</textarea> <br>
-  작성자: ${getUpdateResponse.writer}<br>
-  내용: <textarea id="content" name="content">${getUpdateResponse.content}</textarea> <br>
-  <input type="hidden" id="boardID" name="boardID" value="${getUpdateResponse.boardID}"> <br>
-  <button type="submit">등록</button>
+<p class="subtitle">문의글 수정</p>
+<form class="ui form" style="width: 30%;" method="post" action="${pageContext.request.contextPath}/inquiry/update">
+  <div class="ui field">
+    <label>제목</label>
+    <input type="text" id="title" name="title" value="${getUpdateResponse.title}">
+  </div>
+  <div class="ui field">
+    <label>작성자</label> ${getUpdateResponse.writer}
+  </div>
+  <div class="ui field">
+    <label>내용</label>
+    <textarea id="content" name="content">${getUpdateResponse.content}</textarea>
+  </div>
+  <input type="hidden" id="boardID" name="inquiryID" value="${getUpdateResponse.inquiryID}"> <br>
+  <button class="ui button" type="submit"><i class="save icon"></i></button>
 </form>
 </body>
 </html>
