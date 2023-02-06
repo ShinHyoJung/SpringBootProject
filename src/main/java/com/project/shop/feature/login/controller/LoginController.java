@@ -62,7 +62,7 @@ public class LoginController {
 */
 
     @GetMapping("/logout")
-    public String postLogout(Model model, HttpSession session) {
+    public String postLogout(Model model) {
         model.addAttribute("main", "main/default");
         return "view";
     }

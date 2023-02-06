@@ -52,10 +52,7 @@ public class ParcelController {
     public PostDeliveryTrackingListResponse postDeliveryTrackingList(@RequestBody PostDeliveryTrackingList postDeliveryTrackingList, HttpSession session) {
         PostDeliveryTrackingListResponse pageResponse = new PostDeliveryTrackingListResponse();
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails)principal).getUsername();
-        Member member = memberService.selectByLoginID(username);
-        int idx = member.getIdx();
+        int idx = memberService.selectIdxByUsername();
 
         int total = parcelService.count(idx);
         Paging paging = new Paging(postDeliveryTrackingList.getCurrentPage(), 5, total);

@@ -172,7 +172,6 @@ public class ProductController {
                 }
             }
         }
-
         Product product = productService.select(postDetailUpdate.getProductID());
         int leftQuantity = postDetailUpdate.getFullQuantity() - product.getSoldQuantity();
 

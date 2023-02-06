@@ -11,6 +11,10 @@ CREATE TABLE member (
     phone varchar(300),
     create_date datetime,
     update_date datetime,
+    isAccountNonExpired tinyint(4),
+    isAccountNonLocked tinyint(4),
+    isCredentialsNonExpired tinyint(4),
+    isEnabled tinyint(4),
     primary key (idx)
 )
 ;

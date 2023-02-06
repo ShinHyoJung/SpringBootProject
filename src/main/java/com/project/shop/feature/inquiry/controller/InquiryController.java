@@ -35,16 +35,13 @@ public class InquiryController {
         model.addAttribute("main", VIEW_PREFIX + "default");
         return "view";
     }
+
     @ResponseBody
     @PostMapping("/list")
     public PostPrintListResponse postInquiry(@RequestBody PostPrintList postPrintList) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails)principal).getUsername();
-        Member member = memberService.selectByLoginID(username);
-        int idx = member.getIdx();
+        int idx = memberService.selectIdxByUsername();
 
         int total = inquiryService.countByIdx(idx);
-
         Paging paging = new Paging(postPrintList.getCurrentPage(), 5, total);
         List<Inquiry> inquiryList = inquiryService.selectAllByIdx(idx, paging);
 
@@ -53,16 +50,13 @@ public class InquiryController {
 
     @GetMapping("/write")
     public String getWrite(Model model) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails)principal).getUsername();
-        Member memberForIdx = memberService.selectByLoginID(username);
-        int idx = memberForIdx.getIdx();
+        int idx = memberService.selectIdxByUsername();
 
         if(Integer.valueOf(idx) != null) {
             Member member = memberService.selectByIdx(idx);
             GetWriteResponse pageResponse = new GetWriteResponse();
             pageResponse.setIdx(idx);
-            pageResponse.setLoginID(username);
+            pageResponse.setLoginID(member.getLoginID());
             pageResponse.setWriter(member.getName());
 
             model.addAttribute("getWriteResponse", pageResponse);
@@ -106,13 +100,13 @@ public class InquiryController {
 
     @GetMapping("/update/{inquiryID}")
     public String getUpdate(Model model, @PathVariable("inquiryID")int inquiryID) {
-        Inquiry board = inquiryService.select(inquiryID);
+        Inquiry inquiry = inquiryService.select(inquiryID);
 
         GetUpdateResponse pageResponse = new GetUpdateResponse();
         pageResponse.setInquiryID(inquiryID);
-        pageResponse.setTitle(board.getTitle());
-        pageResponse.setContent(board.getContent());
-        pageResponse.setWriter(board.getWriter());
+        pageResponse.setTitle(inquiry.getTitle());
+        pageResponse.setContent(inquiry.getContent());
+        pageResponse.setWriter(inquiry.getWriter());
 
         model.addAttribute("menu", "user");
         model.addAttribute("getUpdateResponse", pageResponse);

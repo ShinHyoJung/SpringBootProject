@@ -29,4 +29,6 @@ public interface MemberService extends UserDetailsService {
     void updatePassword(String password, int idx);
 
     UserDetails loadUserByUsername(String username);
+
+    int selectIdxByUsername();
 }

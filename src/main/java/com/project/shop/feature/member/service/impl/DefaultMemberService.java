@@ -9,6 +9,7 @@ import com.project.shop.feature.member.entity.Member;
 import com.project.shop.feature.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -96,5 +97,14 @@ public class DefaultMemberService implements MemberService {
         Member member = memberDAO.selectByLoginID(username);
         member.setAuthorities(authService.getAuthorities(username));
         return member;
+    }
+
+    @Override
+    public int selectIdxByUsername() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
+        Member member = memberDAO.selectByLoginID(username);
+        int idx = member.getIdx();
+        return idx;
     }
 }

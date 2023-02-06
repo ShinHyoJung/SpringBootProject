@@ -42,10 +42,7 @@ public class WantController {
     public PostPrintListResponse postPrintWantList(@RequestBody PostPrintList postPrintList) {
         PostPrintListResponse pageResponse = new PostPrintListResponse();
         try {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String username = ((UserDetails)principal).getUsername();
-            Member member = memberService.selectByLoginID(username);
-            int idx = member.getIdx();
+            int idx = memberService.selectIdxByUsername();
 
             int total = wantService.count(idx);
             Paging paging = new Paging(postPrintList.getCurrentPage(), 5, total);
@@ -73,10 +70,7 @@ public class WantController {
     public PostAddWantResponse postAddWant(@RequestBody PostAddWant postAddWant) {
         PostAddWantResponse pageResponse = new PostAddWantResponse();
         try {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String username = ((UserDetails)principal).getUsername();
-            Member member = memberService.selectByLoginID(username);
-            int idx = member.getIdx();
+            int idx = memberService.selectIdxByUsername();
 
             Sell sell = sellService.select(postAddWant.getSellID());
             wantService.insert(postAddWant.toEntity(idx, sell.getThumbnailImageName()));
@@ -95,10 +89,7 @@ public class WantController {
     public PostDeleteWantResponse postDeleteWant(@RequestBody PostDeleteWant postDeleteWant) {
         PostDeleteWantResponse pageResponse = new PostDeleteWantResponse();
         try {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String username = ((UserDetails)principal).getUsername();
-            Member member = memberService.selectByLoginID(username);
-            int idx = member.getIdx();
+            int idx = memberService.selectIdxByUsername();
 
             wantService.delete(postDeleteWant.getSellID(), idx);
 

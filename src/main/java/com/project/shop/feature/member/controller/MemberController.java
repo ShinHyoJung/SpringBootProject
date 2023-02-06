@@ -60,20 +60,12 @@ public class MemberController {
         try {
             String password = postSignUp.getPassword();
             String encryptPassword = bCryptPasswordEncoder.encode(password);
+            memberService.insert(postSignUp.toEntity(encryptPassword));
 
-            /*
-            Auth auth = new Auth();
-            auth.setAuth(AuthorityUtils.createAuthorityList("ROLE_USER"));
-            auth.setUsername(postSignUp.getLoginID());
-            auth.setPassword(encryptPassword);
-             */
             Member member = new Member();
             member.setLoginID(postSignUp.getLoginID());
             member.setAuthorities(AuthorityUtils.createAuthorityList("ROLE_USER"));
             authService.insert(member);
-
-            memberService.insert(postSignUp.toEntity(encryptPassword));
-
         } catch (Exception e) {
 
         }
@@ -101,12 +93,10 @@ public class MemberController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @GetMapping("/info")
     public String getInfo(Model model) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails)principal).getUsername();
-        Member member = memberService.selectByLoginID(username);
-        int idx = member.getIdx();
+        int idx = memberService.selectIdxByUsername();
+        Member member = memberService.select(idx);
 
-        model.addAttribute("member", memberService.select(idx));
+        model.addAttribute("member", member);
         model.addAttribute("menu", "user");
         model.addAttribute("main", VIEW_PREFIX + "info");
         return "view";
@@ -164,16 +154,16 @@ public class MemberController {
     }
 
     @GetMapping("/withdrawal")
-    public String getWithdrawal(Model model, HttpSession session) {
+    public String getWithdrawal(Model model) {
         PostWithdrawalResponse pageResponse = new PostWithdrawalResponse();
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String username = ((UserDetails)principal).getUsername();
-            Member member = memberService.selectByLoginID(username);
-            int idx = member.getIdx();
+            int idx = memberService.selectIdxByUsername();
 
             if(Integer.valueOf(idx) != null) {
                 memberService.delete(idx);
+                authService.delete(username);
 
                 pageResponse.setCode(SuccessCode.member.withdrawalMember.getCode());
                 pageResponse.setMessage(SuccessCode.member.withdrawalMember.getMessageKey());

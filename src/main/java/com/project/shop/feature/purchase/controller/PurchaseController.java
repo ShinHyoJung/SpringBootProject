@@ -46,11 +46,8 @@ public class PurchaseController {
     private final ProductService productService;
 
     @PostMapping("/pay")
-    public String getPay(Model model, PostPayment postPayment,  HttpSession session) throws SQLException {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails)principal).getUsername();
-        Member member = memberService.selectByLoginID(username);
-        int idx = member.getIdx();
+    public String getPay(Model model, PostPayment postPayment) throws SQLException {
+        int idx = memberService.selectIdxByUsername();
 
         Sell sell = sellService.select(postPayment.getSellID());
 
@@ -118,10 +115,7 @@ public class PurchaseController {
     public PostOrderedListResponse postOrderedList(@RequestBody PostOrderedList postOrderedList) {
         PostOrderedListResponse pageResponse = new PostOrderedListResponse();
         try {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String username = ((UserDetails)principal).getUsername();
-            Member member = memberService.selectByLoginID(username);
-            int idx = member.getIdx();
+            int idx = memberService.selectIdxByUsername();
 
             int total = purchaseService.count(idx);
             Paging paging = new Paging(postOrderedList.getCurrentPage(), 5, total);
@@ -214,11 +208,8 @@ public class PurchaseController {
     }
 
     @GetMapping("/cart")
-    public String getCart(Model model, HttpSession session) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails)principal).getUsername();
-        Member member = memberService.selectByLoginID(username);
-        int idx = member.getIdx();
+    public String getCart(Model model) {
+        int idx = memberService.selectIdxByUsername();
 
         model.addAttribute("member", memberService.selectByIdx(idx));
         model.addAttribute("menu", "user");
@@ -230,10 +221,7 @@ public class PurchaseController {
     @PostMapping("/cart")
     public PostCartListResponse postCartList(HttpSession session) {
         PostCartListResponse pageResponse = new PostCartListResponse();
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails)principal).getUsername();
-        Member member = memberService.selectByLoginID(username);
-        int idx = member.getIdx();
+        int idx = memberService.selectIdxByUsername();
 
         ArrayList<Cart> cartList = (ArrayList<Cart>)session.getAttribute("cartList");
         int totalPrice = 0;

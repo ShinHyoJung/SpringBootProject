@@ -109,7 +109,8 @@ public class SellController {
         Sell sell = sellService.select(sellID);
         List<Category> categoryList = categoryService.selectAll();
         Want want = new Want();
-        try{
+
+        try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             String username = ((UserDetails)principal).getUsername();
             Member member = memberService.selectByLoginID(username);
