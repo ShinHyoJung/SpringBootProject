@@ -1,21 +1,17 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: ShinHyoJung
-  Date: 2022-11-30
-  Time: 오후 3:39
+  Date: 2023-02-06
+  Time: 오후 9:01
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<body onload="printList()">
-<p class="subtitle">문의 게시판</p>
-<a class="ui button" href="${pageContext.request.contextPath}/inquiry/write"><i class="plus icon"></i></a>
+<body onload="printList();">
+<p class="subtitle">상담 문의 관리</p>
 <table class="ui basic table" id="table" style="width: 70%;">
 </table>
 <div class="ui pagination menu" id="pagination" style="margin-top: 300px; margin-left: 300px;">
-</div>
 <script>
     function printList(currentPage) {
         if(!currentPage) {
@@ -27,7 +23,7 @@
         };
 
         $.ajax({
-            url: '${pageContext.request.contextPath}/inquiry/list',
+            url: '${pageContext.request.contextPath}/inquiry/manage/list',
             method: 'post',
             dataType: 'json',
             data: JSON.stringify(postObj),
@@ -58,6 +54,7 @@
                     listHTML += '<tr>';
                     listHTML += '<th>글 번호</th>';
                     listHTML += '<th> 제목 </th>';
+                    listHTML += '<th> 작성자 </th>';
                     listHTML += '<th> 작성날짜 </th>';
                     listHTML += '<th> 수정날짜 </th>';
                     listHTML += '</tr>';
@@ -70,6 +67,7 @@
                     listHTML += '<tr>';
                     listHTML += '<td>'+ inquiryList.inquiryID +'</td>';
                     listHTML += '<td><a href="'+ inquiryUrl + '">' + inquiryList.title + '</a></td>';
+                    listHTML += '<td>' + inquiryList.writer + '</td>';
                     listHTML += '<td>' + inquiryList.createDate + '</td>';
                     listHTML += '<td>' + inquiryList.updateDate + '</td>';
                     listHTML += '</tbody>';
@@ -78,7 +76,7 @@
                 $('#pagination').html(pageHTML);
                 $('#table').html(listHTML);
             }
-        })
+        });
     }
 </script>
 </body>

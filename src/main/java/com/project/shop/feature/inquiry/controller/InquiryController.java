@@ -1,5 +1,7 @@
 package com.project.shop.feature.inquiry.controller;
 
+import com.project.shop.feature.answer.entity.Answer;
+import com.project.shop.feature.answer.service.impl.AnswerService;
 import com.project.shop.feature.inquiry.dto.*;
 import com.project.shop.feature.inquiry.entity.Inquiry;
 import com.project.shop.feature.inquiry.service.InquiryService;
@@ -27,6 +29,7 @@ public class InquiryController {
 
     private final MemberService memberService;
     private final InquiryService inquiryService;
+    private final AnswerService answerService;
 
     @Secured({"ROLE_USER"})
     @GetMapping("/")
@@ -77,6 +80,7 @@ public class InquiryController {
     @GetMapping("/read/{inquiryID}")
     public String getRead(@PathVariable("inquiryID")int inquiryID, Model model) {
         GetReadResponse pageResponse = new GetReadResponse();
+        int idx = memberService.selectIdxByUsername();
         Inquiry inquiry = inquiryService.select(inquiryID);
 
         pageResponse.setTitle(inquiry.getTitle());
@@ -85,8 +89,17 @@ public class InquiryController {
         pageResponse.setCreateDate(inquiry.getCreateDate());
         pageResponse.setUpdateDate(inquiry.getUpdateDate());
         pageResponse.setInquiryID(inquiry.getInquiryID());
+        pageResponse.setIdx(inquiry.getIdx());
+
+        try {
+            Answer answer = answerService.select(inquiryID);
+            model.addAttribute("answer", answer);
+        } catch (Exception e) {
+
+        }
 
         model.addAttribute("getReadResponse", pageResponse);
+        model.addAttribute("idx", idx);
         model.addAttribute("menu", "user");
         model.addAttribute("main", VIEW_PREFIX + "read");
         return "view";
@@ -118,5 +131,39 @@ public class InquiryController {
     public String postUpdate(PostUpdate postUpdate) {
         inquiryService.update(postUpdate.toEntity());
         return "redirect:/inquiry/read/" + postUpdate.getInquiryID();
+    }
+
+    @GetMapping("/manage")
+    public String getManageInquiry(Model model) {
+        model.addAttribute("menu", "manage");
+        model.addAttribute("main", VIEW_PREFIX + "manage");
+        return "view";
+    }
+
+    @ResponseBody
+    @PostMapping("/manage/list")
+    public PostPrintManageListResponse postPrintManageList(@RequestBody PostPrintManageList postPrintManageList) {
+        PostPrintManageListResponse pageResponse = new PostPrintManageListResponse();
+
+        int total = inquiryService.count();
+        Paging paging = new Paging(postPrintManageList.getCurrentPage(), 5, total);
+
+        List<Inquiry> inquiryList = inquiryService.selectAll(paging);
+
+        pageResponse.setPaging(paging);
+        pageResponse.setInquiryList(inquiryList);
+        return pageResponse;
+    }
+
+    @PostMapping("/manage/answer/write")
+    public String postWriteAnswer(com.project.shop.feature.answer.dto.PostWrite postWrite) {
+        int idx = postWrite.getIdx();
+        Member member = memberService.selectByIdx(idx);
+
+        String writer = member.getName();
+
+        answerService.insert(postWrite.toEntity(writer));
+
+        return "redirect:/inquiry/read/" + postWrite.getInquiryID();
     }
 }

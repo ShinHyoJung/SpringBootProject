@@ -33,6 +33,9 @@
         <a class="item" href="${pageContext.request.contextPath}/manage/service/">
             서비스 관리
         </a>
+        <a class="item" href="${pageContext.request.contextPath}/inquiry/manage/">
+            상담문의 관리
+        </a>
     </div>
 </c:if>
 <c:if test="${menu eq 'user'}">
