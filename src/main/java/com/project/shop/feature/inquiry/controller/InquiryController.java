@@ -1,5 +1,6 @@
 package com.project.shop.feature.inquiry.controller;
 
+import com.project.shop.feature.answer.dto.PostDeleteResponse;
 import com.project.shop.feature.answer.entity.Answer;
 import com.project.shop.feature.answer.service.impl.AnswerService;
 import com.project.shop.feature.inquiry.dto.*;
@@ -100,7 +101,7 @@ public class InquiryController {
 
         model.addAttribute("getReadResponse", pageResponse);
         model.addAttribute("idx", idx);
-        model.addAttribute("menu", "user");
+        model.addAttribute("menu", "manage");
         model.addAttribute("main", VIEW_PREFIX + "read");
         return "view";
     }
@@ -165,5 +166,27 @@ public class InquiryController {
         answerService.insert(postWrite.toEntity(writer));
 
         return "redirect:/inquiry/read/" + postWrite.getInquiryID();
+    }
+
+    @PostMapping("/manage/answer/update")
+    public String postUpdateAnswer(com.project.shop.feature.answer.dto.PostUpdate postUpdate) {
+        answerService.update(postUpdate.toEntity());
+
+        return "redirect:/inquiry/read/" + postUpdate.getInquiryID();
+    }
+
+    @ResponseBody
+    @PostMapping("/manage/answer/delete")
+    public PostDeleteResponse postDeleteAnswer(@RequestBody com.project.shop.feature.answer.dto.PostDelete postDelete) {
+        PostDeleteResponse postDeleteResponse = new PostDeleteResponse();
+        try {
+            answerService.delete(postDelete.getAnswerID());
+            postDeleteResponse.setCode("SUCCESS");
+            postDeleteResponse.setMessage("답변을 삭제하였습니다.");
+        } catch (Exception e) {
+            postDeleteResponse.setCode("FAIL");
+            postDeleteResponse.setMessage("답변 삭제를 실패하였습니다.");
+        }
+        return postDeleteResponse;
     }
 }

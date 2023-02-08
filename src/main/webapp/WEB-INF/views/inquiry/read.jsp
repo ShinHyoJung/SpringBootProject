@@ -33,6 +33,17 @@
     <a class="ui button" href="${pageContext.request.contextPath}/inquiry/update/${getReadResponse.inquiryID}"><i class="alternate pencil icon"></i></a>
     <a class="ui button" href="${pageContext.request.contextPath}/inquiry/delete/${getReadResponse.inquiryID}"><i class="trash alternate icon"></i></a>
 </c:if>
+<c:if test="${not empty answer}">
+    <table id="answer" class="ui basic table" style="width: 50%;">
+        <tr>
+            <td>작성자: ${answer.writer} </td>
+        </tr>
+        <tr >
+            <td style="height: 500px;">${answer.content} </td>
+        </tr>
+        <input type="hidden" id="answerID" value="${answer.answerID}">
+    </table>
+</c:if>
 <sec:authorize access="hasAnyRole('ROLE_USER')">
     <a class="ui button" href="${pageContext.request.contextPath}/inquiry/"><i class="list icon"></i></a>
 </sec:authorize>
@@ -47,28 +58,49 @@
             </form>
         </c:when>
         <c:otherwise>
-            <table id="answer" class="ui basic table" style="width: 50%;">
-                <tr>
-                    <td>작성자: ${answer.writer} </td>
-                </tr>
-                <tr >
-                    <td style="height: 500px;">내용: ${answer.content} </td>
-                </tr>
-                <input type="hidden" id="answerID" value="${answer.answerID}">
-            </table>
+            <form class="ui form" id="updateAnswer" method="post" action="${pageContext.request.contextPath}/inquiry/manage/answer/update" style="width:50%; display: none">
+                <div class="ui field">
+                    <label>작성자</label>
+                    ${answer.writer}
+                </div>
+                <div class="ui field">
+                    <label>내용</label>
+                    <textarea name="content">${answer.content}</textarea>
+                </div>
+                <input type="hidden" name="inquiryID" value="${getReadResponse.inquiryID}">
+                <input type="hidden" name="answerID" value="${answer.answerID}">
+                <button class="ui button" type="submit"><i class="save icon"></i></button>
+            </form>
         </c:otherwise>
     </c:choose>
-    <button class="ui button" onclick="updateAnswer();"><i class="alternate pencil icon"></i></button>
+    <button class="ui button" id="update" onclick="updateAnswer();"><i class="alternate pencil icon"></i></button>
     <button class="ui button" onclick="removeAnswer();"><i class="trash alternate icon"></i></button>
     <a class="ui button" href="${pageContext.request.contextPath}/inquiry/manage"><i class="list icon"></i></a>
 </sec:authorize>
 <script>
     function updateAnswer() {
-
+        $('#answer').css('display', 'none');
+        $('#updateAnswer').css('display', '');
+        $('#update').css('display', 'none');
     }
 
     function removeAnswer() {
+        let answerID = document.getElementById('answerID').value;
+        let postObj = {
+            'answerID':answerID
+        }
 
+        $.ajax({
+            url: '${pageContext.request.contextPath}/inquiry/manage/answer/delete',
+            method: 'post',
+            dataType: 'json',
+            data: JSON.stringify(postObj),
+            contentType: 'application/json; charset=utf-8',
+            success: function(pageResponse) {
+                alert(pageResponse.message);
+                location.reload();
+            }
+        })
     }
 </script>
 </body>
