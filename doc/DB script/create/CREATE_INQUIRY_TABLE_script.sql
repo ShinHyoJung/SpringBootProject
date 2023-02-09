@@ -7,6 +7,7 @@ CREATE TABLE inquiry (
     create_date datetime,
     update_date datetime,
     idx int,
+    is_answer tinyint,
     primary key (inquiry_id)
 )
 ;
