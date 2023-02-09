@@ -40,8 +40,8 @@ public class AuthDAO {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
 
         SimpleGrantedAuthority authority = jdbcTemplate.queryForObject(sql, new Object[]{username}, SimpleGrantedAuthority.class);
-
         authorities.add(authority);
+
         return authorities;
     }
 

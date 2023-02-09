@@ -29,10 +29,12 @@
     </tr>
 </table>
 <br>
-<c:if test="${getReadResponse.idx eq idx}">
-    <a class="ui button" href="${pageContext.request.contextPath}/inquiry/update/${getReadResponse.inquiryID}"><i class="alternate pencil icon"></i></a>
-    <a class="ui button" href="${pageContext.request.contextPath}/inquiry/delete/${getReadResponse.inquiryID}"><i class="trash alternate icon"></i></a>
-</c:if>
+<sec:authorize access="hasAnyRole('ROLE_USER')">
+    <c:if test="${empty answer}">
+        <a class="ui button" href="${pageContext.request.contextPath}/inquiry/update/${getReadResponse.inquiryID}"><i class="alternate pencil icon"></i></a>
+        <a class="ui button" href="${pageContext.request.contextPath}/inquiry/delete/${getReadResponse.inquiryID}"><i class="trash alternate icon"></i></a>
+    </c:if>
+</sec:authorize>
 <c:if test="${not empty answer}">
     <table id="answer" class="ui basic table" style="width: 50%;">
         <tr>
@@ -45,6 +47,7 @@
     </table>
 </c:if>
 <sec:authorize access="hasAnyRole('ROLE_USER')">
+
     <a class="ui button" href="${pageContext.request.contextPath}/inquiry/"><i class="list icon"></i></a>
 </sec:authorize>
 <sec:authorize access="hasAnyRole('ROLE_ADMIN')">
@@ -87,8 +90,9 @@
     function removeAnswer() {
         let answerID = document.getElementById('answerID').value;
         let postObj = {
-            'answerID':answerID
-        }
+            'answerID':answerID,
+            'inquiryID':'${getReadResponse.inquiryID}'
+        };
 
         $.ajax({
             url: '${pageContext.request.contextPath}/inquiry/manage/answer/delete',

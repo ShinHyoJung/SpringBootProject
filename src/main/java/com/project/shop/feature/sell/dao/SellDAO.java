@@ -47,7 +47,8 @@ public class SellDAO {
     }
 
     public List<Sell> selectAll(Paging paging, String category, String searchOption, String keyword) {
-        String sql = "SELECT * FROM sell WHERE 1=1 AND category = ? AND " + searchOption + " LIKE concat('%', ?, '%') LIMIT ?, ?";
+        String sql = "SELECT * FROM sell WHERE 1=1 AND category = ? AND " + searchOption +
+                " LIKE concat('%', ?, '%') LIMIT ?, ?";
         List<Sell> sellList = jdbcTemplate.query(sql, new Object[]{category, keyword,
                 paging.getSkip(), paging.getCountPerPage()}, new RowMapper<Sell>() {
             @Override

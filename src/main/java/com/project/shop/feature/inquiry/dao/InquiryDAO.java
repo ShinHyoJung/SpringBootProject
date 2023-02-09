@@ -31,27 +31,30 @@ public class InquiryDAO {
     }
 
     public void insert(Inquiry inquiry) {
-        String sql = "INSERT INTO inquiry (login_id, title, content, writer, create_date, update_date, idx)" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO inquiry (login_id, title, content, writer, create_date, " +
+                "update_date, idx, is_answer) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, inquiry.getLoginID(), inquiry.getTitle(), inquiry.getContent(), inquiry.getWriter(),
-                Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()), inquiry.getIdx());
+                Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()), inquiry.getIdx(), 0);
     }
 
-    public List<Inquiry> selectAll(Paging paging) {
-        String sql = "SELECT * FROM inquiry LIMIT ?, ?";
+    public List<Inquiry> selectAll(Paging paging, String searchOption, String keyword) {
+        String sql = "SELECT * FROM inquiry " +
+                "WHERE 1=1 AND " + searchOption + " LIKE concat('%', ?, '%') " +
+                "ORDER BY is_answer ASC LIMIT ?, ?";
 
-        List<Inquiry> inquiryList = jdbcTemplate.query(sql, new Object[]{paging.getSkip(), paging.getCountPerPage()},
+        List<Inquiry> inquiryList = jdbcTemplate.query(sql, new Object[]{keyword, paging.getSkip(), paging.getCountPerPage()},
                 new RowMapper<Inquiry>() {
             @Override
             public Inquiry mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Inquiry board = new Inquiry();
-                board.setInquiryID(rs.getInt("inquiry_id"));
-                board.setTitle(rs.getString("title"));
-                board.setWriter(rs.getString("writer"));
-                board.setCreateDate(rs.getDate("create_date"));
-                board.setUpdateDate(rs.getDate("update_date"));
-                return board;
+                Inquiry inquiry = new Inquiry();
+                inquiry.setInquiryID(rs.getInt("inquiry_id"));
+                inquiry.setTitle(rs.getString("title"));
+                inquiry.setWriter(rs.getString("writer"));
+                inquiry.setCreateDate(rs.getDate("create_date"));
+                inquiry.setUpdateDate(rs.getDate("update_date"));
+                inquiry.setAnswer(rs.getBoolean("is_answer"));
+                return inquiry;
             }
         });
         return inquiryList;
@@ -77,10 +80,10 @@ public class InquiryDAO {
         return inquiry;
     }
 
-    public int count() {
-        String sql = "SELECT COUNT(*) FROM inquiry";
+    public int count(String searchOption, String keyword) {
+        String sql = "SELECT COUNT(*) FROM inquiry WHERE 1=1 AND " + searchOption + " LIKE concat('%', ?, '%')";
 
-        int total = jdbcTemplate.queryForObject(sql, Integer.class);
+        int total = jdbcTemplate.queryForObject(sql, new Object[]{keyword}, Integer.class);
         return total;
     }
 
@@ -93,13 +96,16 @@ public class InquiryDAO {
 
     public void delete(int inquiryID) {
         String sql = "DELETE FROM inquiry WHERE 1=1 AND inquiry_id = ?";
+
         jdbcTemplate.update(sql, inquiryID);
     }
 
-    public List<Inquiry> selectAllByIdx(int idx, Paging paging) {
-        String sql = "SELECT * FROM inquiry WHERE 1=1 AND idx = ? LIMIT ?, ?";
+    public List<Inquiry> selectAllByIdx(int idx, Paging paging, String searchOption, String keyword) {
+        String sql = "SELECT * FROM inquiry WHERE 1=1 AND idx = ? " +
+                "AND " + searchOption + " LIKE concat('%', ?, '%')" +
+                " ORDER BY is_answer ASC LIMIT ?, ?";
 
-        List<Inquiry> inquiryList = jdbcTemplate.query(sql, new Object[]{idx, paging.getSkip(), paging.getCountPerPage()}, new RowMapper<Inquiry>() {
+        List<Inquiry> inquiryList = jdbcTemplate.query(sql, new Object[]{idx, keyword, paging.getSkip(), paging.getCountPerPage()}, new RowMapper<Inquiry>() {
             @Override
             public Inquiry mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Inquiry inquiry = new Inquiry();
@@ -107,16 +113,23 @@ public class InquiryDAO {
                 inquiry.setTitle(rs.getString("title"));
                 inquiry.setCreateDate(rs.getDate("create_date"));
                 inquiry.setUpdateDate(rs.getDate("update_date"));
+                inquiry.setAnswer(rs.getBoolean("is_answer"));
                 return inquiry;
             }
         });
         return inquiryList;
     }
 
-    public int countByIdx(int idx) {
-        String sql = "SELECT COUNT(*) FROM inquiry WHERE 1=1 AND idx = ?";
+    public int countByIdx(int idx, String searchOption, String keyword) {
+        String sql = "SELECT COUNT(*) FROM inquiry WHERE 1=1 AND idx = ? AND " + searchOption + " LIKE concat('%', ?, '%')";
 
-        int count = jdbcTemplate.queryForObject(sql, new Object[]{idx}, Integer.class);
+        int count = jdbcTemplate.queryForObject(sql, new Object[]{idx, keyword}, Integer.class);
         return count;
+    }
+
+    public void updateIsAnswer(boolean isAnswer, int inquiryID) {
+        String sql = "UPDATE inquiry SET is_answer = ? WHERE 1=1 AND inquiry_id = ?";
+
+        jdbcTemplate.update(sql, isAnswer, inquiryID);
     }
 }

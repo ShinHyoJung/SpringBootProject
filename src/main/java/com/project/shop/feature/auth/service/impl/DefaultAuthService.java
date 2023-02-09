@@ -7,6 +7,8 @@ import com.project.shop.feature.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,5 +40,14 @@ public class DefaultAuthService implements AuthService {
     @Override
     public void delete(String username) {
         authDAO.delete(username);
+    }
+
+    @Override
+    public String getRole() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Collection<? extends GrantedAuthority> auth = ((UserDetails)principal).getAuthorities();
+        String role = String.valueOf(auth.iterator().next());
+
+        return role;
     }
 }

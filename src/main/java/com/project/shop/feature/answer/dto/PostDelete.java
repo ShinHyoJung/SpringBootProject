@@ -14,4 +14,5 @@ import lombok.Data;
 @Data
 public class PostDelete {
     private int answerID;
+    private int inquiryID;
 }

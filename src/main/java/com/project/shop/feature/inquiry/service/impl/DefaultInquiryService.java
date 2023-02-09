@@ -19,8 +19,8 @@ public class DefaultInquiryService implements InquiryService {
     }
 
     @Override
-    public List<Inquiry> selectAll(Paging paging) {
-        return inquiryDAO.selectAll(paging);
+    public List<Inquiry> selectAll(Paging paging, String searchOption, String keyword) {
+        return inquiryDAO.selectAll(paging, searchOption, keyword);
     }
 
     @Override
@@ -39,17 +39,22 @@ public class DefaultInquiryService implements InquiryService {
     }
 
     @Override
-    public int count() {
-        return inquiryDAO.count();
+    public int count(String searchOption, String keyword) {
+        return inquiryDAO.count(searchOption, keyword);
     }
 
     @Override
-    public List<Inquiry> selectAllByIdx(int idx, Paging paging) {
-        return inquiryDAO.selectAllByIdx(idx, paging);
+    public List<Inquiry> selectAllByIdx(int idx, Paging paging, String searhOption, String keyword) {
+        return inquiryDAO.selectAllByIdx(idx, paging, searhOption, keyword);
     }
 
     @Override
-    public int countByIdx(int idx) {
-        return inquiryDAO.countByIdx(idx);
+    public int countByIdx(int idx, String searchOption, String keyword) {
+        return inquiryDAO.countByIdx(idx, searchOption, keyword);
+    }
+
+    @Override
+    public void updateIsAnswer(boolean isAnswer, int inquiryID) {
+        inquiryDAO.updateIsAnswer(isAnswer, inquiryID);
     }
 }

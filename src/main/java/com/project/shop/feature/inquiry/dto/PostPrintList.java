@@ -14,5 +14,6 @@ import lombok.Data;
 @Data
 public class PostPrintList {
     private String keyword;
+    private String searchOption;
     private int currentPage;
 }

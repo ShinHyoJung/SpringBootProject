@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class PostPrintManageList {
     private String keyword;
+    private String searchOption;
     private int currentPage;
 }

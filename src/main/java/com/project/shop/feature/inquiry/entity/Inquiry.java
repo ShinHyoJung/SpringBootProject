@@ -14,4 +14,5 @@ public class Inquiry {
     private Date createDate;
     private Date updateDate;
     private int idx;
+    private boolean isAnswer;
 }

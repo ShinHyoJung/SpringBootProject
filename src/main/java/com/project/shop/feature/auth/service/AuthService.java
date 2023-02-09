@@ -17,4 +17,6 @@ public interface AuthService {
     void update(String username, String auth);
 
     void delete(String username);
+
+    String getRole();
 }

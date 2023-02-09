@@ -9,7 +9,7 @@ public interface InquiryService {
 
     void insert(Inquiry inquiry);
 
-    List<Inquiry> selectAll(Paging paging);
+    List<Inquiry> selectAll(Paging paging, String searchOption, String keyword);
 
     Inquiry select(int inquiryID);
 
@@ -17,9 +17,11 @@ public interface InquiryService {
 
     void update(Inquiry inquiry);
 
-    int count();
+    int count(String searchOption, String keyword);
 
-    List<Inquiry> selectAllByIdx(int idx, Paging paging);
+    List<Inquiry> selectAllByIdx(int idx, Paging paging, String searchOption, String keyword);
 
-    int countByIdx(int idx);
+    int countByIdx(int idx, String searchOption, String keyword);
+
+    void updateIsAnswer(boolean isAnswer, int inquiryID);
 }

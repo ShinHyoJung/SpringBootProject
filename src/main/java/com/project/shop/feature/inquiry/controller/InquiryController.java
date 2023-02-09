@@ -3,6 +3,7 @@ package com.project.shop.feature.inquiry.controller;
 import com.project.shop.feature.answer.dto.PostDeleteResponse;
 import com.project.shop.feature.answer.entity.Answer;
 import com.project.shop.feature.answer.service.impl.AnswerService;
+import com.project.shop.feature.auth.service.AuthService;
 import com.project.shop.feature.inquiry.dto.*;
 import com.project.shop.feature.inquiry.entity.Inquiry;
 import com.project.shop.feature.inquiry.service.InquiryService;
@@ -12,6 +13,7 @@ import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.inquiry.dto.PostPrintList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -31,6 +34,7 @@ public class InquiryController {
     private final MemberService memberService;
     private final InquiryService inquiryService;
     private final AnswerService answerService;
+    private final AuthService authService;
 
     @Secured({"ROLE_USER"})
     @GetMapping("/")
@@ -44,10 +48,10 @@ public class InquiryController {
     @PostMapping("/list")
     public PostPrintListResponse postInquiry(@RequestBody PostPrintList postPrintList) {
         int idx = memberService.selectIdxByUsername();
+        int total = inquiryService.countByIdx(idx, postPrintList.getSearchOption(), postPrintList.getKeyword());
 
-        int total = inquiryService.countByIdx(idx);
         Paging paging = new Paging(postPrintList.getCurrentPage(), 5, total);
-        List<Inquiry> inquiryList = inquiryService.selectAllByIdx(idx, paging);
+        List<Inquiry> inquiryList = inquiryService.selectAllByIdx(idx, paging, postPrintList.getSearchOption(), postPrintList.getKeyword());
 
         return new PostPrintListResponse(paging, inquiryList);
     }
@@ -82,6 +86,7 @@ public class InquiryController {
     public String getRead(@PathVariable("inquiryID")int inquiryID, Model model) {
         GetReadResponse pageResponse = new GetReadResponse();
         int idx = memberService.selectIdxByUsername();
+
         Inquiry inquiry = inquiryService.select(inquiryID);
 
         pageResponse.setTitle(inquiry.getTitle());
@@ -99,9 +104,15 @@ public class InquiryController {
 
         }
 
-        model.addAttribute("getReadResponse", pageResponse);
+        String role = authService.getRole();
+        if(role.equals("ROLE_ADMIN")) {
+            model.addAttribute("menu", "manage");
+        } else {
+            model.addAttribute("menu", "user");
+        }
+
         model.addAttribute("idx", idx);
-        model.addAttribute("menu", "manage");
+        model.addAttribute("getReadResponse", pageResponse);
         model.addAttribute("main", VIEW_PREFIX + "read");
         return "view";
     }
@@ -146,10 +157,10 @@ public class InquiryController {
     public PostPrintManageListResponse postPrintManageList(@RequestBody PostPrintManageList postPrintManageList) {
         PostPrintManageListResponse pageResponse = new PostPrintManageListResponse();
 
-        int total = inquiryService.count();
+        int total = inquiryService.count(postPrintManageList.getSearchOption(), postPrintManageList.getKeyword());
         Paging paging = new Paging(postPrintManageList.getCurrentPage(), 5, total);
 
-        List<Inquiry> inquiryList = inquiryService.selectAll(paging);
+        List<Inquiry> inquiryList = inquiryService.selectAll(paging, postPrintManageList.getSearchOption(), postPrintManageList.getKeyword());
 
         pageResponse.setPaging(paging);
         pageResponse.setInquiryList(inquiryList);
@@ -160,10 +171,10 @@ public class InquiryController {
     public String postWriteAnswer(com.project.shop.feature.answer.dto.PostWrite postWrite) {
         int idx = postWrite.getIdx();
         Member member = memberService.selectByIdx(idx);
-
         String writer = member.getName();
 
         answerService.insert(postWrite.toEntity(writer));
+        inquiryService.updateIsAnswer(true, postWrite.getInquiryID());
 
         return "redirect:/inquiry/read/" + postWrite.getInquiryID();
     }
@@ -181,6 +192,7 @@ public class InquiryController {
         PostDeleteResponse postDeleteResponse = new PostDeleteResponse();
         try {
             answerService.delete(postDelete.getAnswerID());
+            inquiryService.updateIsAnswer(false, postDelete.getInquiryID());
             postDeleteResponse.setCode("SUCCESS");
             postDeleteResponse.setMessage("답변을 삭제하였습니다.");
         } catch (Exception e) {
