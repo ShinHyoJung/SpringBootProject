@@ -1,3 +1,4 @@
+
 <%--
   Created by IntelliJ IDEA.
   User: ShinHyoJung
@@ -57,10 +58,12 @@
                 <input type="hidden" id="idx" name="idx" value="${idx}">
                 <input type="hidden" id="inquiryID" name="inquiryID" value="${getReadResponse.inquiryID}">
                 <textarea id="content" name="content"> </textarea>
-                <button class="ui button" type="submit">등록</button>
+                <button class="ui button" style="margin-top: 20px;" type="submit">등록</button>
             </form>
         </c:when>
         <c:otherwise>
+            <button class="ui button" id="update" onclick="updateAnswer();"><i class="alternate pencil icon"></i></button>
+            <button class="ui button" onclick="removeAnswer();"><i class="trash alternate icon"></i></button>
             <form class="ui form" id="updateAnswer" method="post" action="${pageContext.request.contextPath}/inquiry/manage/answer/update" style="width:50%; display: none">
                 <div class="ui field">
                     <label>작성자</label>
@@ -76,8 +79,6 @@
             </form>
         </c:otherwise>
     </c:choose>
-    <button class="ui button" id="update" onclick="updateAnswer();"><i class="alternate pencil icon"></i></button>
-    <button class="ui button" onclick="removeAnswer();"><i class="trash alternate icon"></i></button>
     <a class="ui button" href="${pageContext.request.contextPath}/inquiry/manage"><i class="list icon"></i></a>
 </sec:authorize>
 <script>

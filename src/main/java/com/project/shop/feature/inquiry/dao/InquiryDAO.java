@@ -103,7 +103,7 @@ public class InquiryDAO {
     public List<Inquiry> selectAllByIdx(int idx, Paging paging, String searchOption, String keyword) {
         String sql = "SELECT * FROM inquiry WHERE 1=1 AND idx = ? " +
                 "AND " + searchOption + " LIKE concat('%', ?, '%')" +
-                " ORDER BY is_answer ASC LIMIT ?, ?";
+                " ORDER BY is_answer DESC LIMIT ?, ?";
 
         List<Inquiry> inquiryList = jdbcTemplate.query(sql, new Object[]{idx, keyword, paging.getSkip(), paging.getCountPerPage()}, new RowMapper<Inquiry>() {
             @Override
