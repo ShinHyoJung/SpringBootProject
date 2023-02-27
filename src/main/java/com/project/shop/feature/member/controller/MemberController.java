@@ -299,4 +299,20 @@ public class MemberController {
         }
         return pageResponse;
     }
+
+    @ResponseBody
+    @PostMapping("/check/loggedIn")
+    public PostCheckLoggedInResponse postCheckLoggedIn() {
+        PostCheckLoggedInResponse postCheckLoggedInResponse = new PostCheckLoggedInResponse();
+        boolean isLoggedIn = memberService.isLogin();
+
+        if(!isLoggedIn) {
+            postCheckLoggedInResponse.setCode("FAIL");
+            postCheckLoggedInResponse.setMessage("로그인이 필요합니다.");
+        } else {
+            postCheckLoggedInResponse.setCode("SUCCESS");
+            postCheckLoggedInResponse.setMessage("인증 완료되었습니다.");
+        }
+        return postCheckLoggedInResponse;
+    }
 }

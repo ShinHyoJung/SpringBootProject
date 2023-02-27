@@ -2,6 +2,7 @@ package com.project.shop.feature.manage.product.service;
 
 import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.manage.product.entity.Product;
+import com.project.shop.feature.purchase.dto.PostDoPay;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -32,4 +33,6 @@ public interface ProductService {
     void update(Product product);
 
     int selectMaxProductID();
+
+    Product calculateProduct(Product product, PostDoPay postDoPay);
 }

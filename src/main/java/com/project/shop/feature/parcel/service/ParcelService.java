@@ -1,7 +1,10 @@
 package com.project.shop.feature.parcel.service;
 
 import com.project.shop.feature.page.Paging;
+import com.project.shop.feature.parcel.dto.PostAddParcel;
 import com.project.shop.feature.parcel.entity.Parcel;
+import com.project.shop.feature.purchase.dto.PostDoPay;
+import com.project.shop.feature.purchase.entity.Purchase;
 
 import java.util.List;
 
@@ -28,4 +31,6 @@ public interface ParcelService {
     String makeWaybillNumber();
 
     int count(int idx);
+
+    PostAddParcel add(PostDoPay postDoPay, Purchase purchase, String waybillNumber, int purchaseID);
 }

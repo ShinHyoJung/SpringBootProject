@@ -20,7 +20,8 @@
 </div>
 <table class="ui basic table" id="table" style="width: 70%;">
 </table>
-<div class="ui pagination menu" id="pagination" style="margin-top: 300px; margin-left: 300px;"/>
+<div class="ui pagination menu" id="pagination" style="margin-top: 300px; margin-left: 300px;">
+</div>
 <script>
     function printList(currentPage) {
         let searchOption = document.getElementById('searchOption').value;

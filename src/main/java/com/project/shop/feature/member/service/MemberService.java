@@ -31,4 +31,6 @@ public interface MemberService extends UserDetailsService {
     UserDetails loadUserByUsername(String username);
 
     int selectIdxByUsername();
+
+    boolean isLogin();
 }

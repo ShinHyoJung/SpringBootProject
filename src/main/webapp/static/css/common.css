@@ -22,14 +22,14 @@
 }
 
 .main{
-    width: 90%;
+    width: 85%;
     height: 100%;
     float: right;
     background-color: whitesmoke;
 }
 
 .left {
-    width: 10%;
+    width: 15%;
     float: left;
 }
 

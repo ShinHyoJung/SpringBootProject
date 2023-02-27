@@ -67,34 +67,14 @@ public class PurchaseController {
         purchaseService.insert(postDoPay.toEntity());
 
         Product product = productService.select(postDoPay.getProductID());
-        int soldQuantity = product.getSoldQuantity();
-        int leftQuantity = product.getLeftQuantity();
-
-        soldQuantity += postDoPay.getQuantity();
-        leftQuantity -= postDoPay.getQuantity();
-
-        product.setSoldQuantity(soldQuantity);
-        product.setLeftQuantity(leftQuantity);
+        product = productService.calculateProduct(product, postDoPay);
         productService.update(product);
 
         int purchaseID = purchaseService.selectMaxPurchaseID();
         String waybillNumber = parcelService.makeWaybillNumber();
         Purchase purchase = purchaseService.selectByPurchaseID(purchaseID);
 
-        PostAddParcel postAddParcel = new PostAddParcel();
-        postAddParcel.setName(postDoPay.getName());
-        postAddParcel.setIdx(postDoPay.getIdx());
-        postAddParcel.setAddress(postDoPay.getAddress());
-        postAddParcel.setDetailAddress(postDoPay.getDetailAddress());
-        postAddParcel.setZipCode(postDoPay.getZipCode());
-        postAddParcel.setQuantity(postDoPay.getQuantity());
-        postAddParcel.setStatus(0);
-        postAddParcel.setPurchaseID(purchaseID);
-        postAddParcel.setSellID(postDoPay.getSellID());
-        postAddParcel.setProductID(postDoPay.getProductID());
-        postAddParcel.setPurchaseDate(purchase.getPurchaseDate());
-        postAddParcel.setWaybillNumber(waybillNumber);
-
+        PostAddParcel postAddParcel = parcelService.add(postDoPay, purchase, waybillNumber, purchaseID);
         parcelService.insert(postAddParcel.toEntity());
 
         session.removeAttribute("cartList");

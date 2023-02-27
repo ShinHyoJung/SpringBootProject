@@ -39,8 +39,8 @@ public class SellDAO {
 
     public void insert(Sell sell) {
         String sql = "INSERT INTO sell (name, title, content, price, category, thumbnail_image_name, " +
-                "title_image_name, detail_image_name, product_id, create_date, update_date) VALUES (" +
-                "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "title_image_name, detail_image_name, product_id, create_date, update_date) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, sell.getName(), sell.getTitle(), sell.getContent(),
         sell.getPrice(), sell.getCategory(), sell.getThumbnailImageName(), sell.getTitleImageName(), sell.getDetailImageName(),
                 sell.getProductID(), Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));

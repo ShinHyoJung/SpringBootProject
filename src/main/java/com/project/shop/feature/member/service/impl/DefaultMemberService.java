@@ -109,4 +109,16 @@ public class DefaultMemberService implements MemberService {
         int idx = member.getIdx();
         return idx;
     }
+
+    @Override
+    public boolean isLogin() {
+        boolean isLoggedIn = false;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal.equals("anonymousUser")) {
+            isLoggedIn = false;
+        } else {
+            isLoggedIn = true;
+        }
+        return isLoggedIn;
+    }
 }

@@ -2,8 +2,11 @@ package com.project.shop.feature.parcel.service.impl;
 
 import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.parcel.dao.ParcelDAO;
+import com.project.shop.feature.parcel.dto.PostAddParcel;
 import com.project.shop.feature.parcel.entity.Parcel;
 import com.project.shop.feature.parcel.service.ParcelService;
+import com.project.shop.feature.purchase.dto.PostDoPay;
+import com.project.shop.feature.purchase.entity.Purchase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -64,5 +67,24 @@ public class DefaultParcelService implements ParcelService {
     @Override
     public int count(int idx) {
         return parcelDAO.count(idx);
+    }
+
+    @Override
+    public PostAddParcel add(PostDoPay postDoPay, Purchase purchase, String waybillNumber, int purchaseID) {
+        PostAddParcel postAddParcel = new PostAddParcel();
+
+        postAddParcel.setName(postDoPay.getName());
+        postAddParcel.setIdx(postDoPay.getIdx());
+        postAddParcel.setAddress(postDoPay.getAddress());
+        postAddParcel.setDetailAddress(postDoPay.getDetailAddress());
+        postAddParcel.setZipCode(postDoPay.getZipCode());
+        postAddParcel.setQuantity(postDoPay.getQuantity());
+        postAddParcel.setStatus(0);
+        postAddParcel.setPurchaseID(purchaseID);
+        postAddParcel.setSellID(postDoPay.getSellID());
+        postAddParcel.setProductID(postDoPay.getProductID());
+        postAddParcel.setPurchaseDate(purchase.getPurchaseDate());
+        postAddParcel.setWaybillNumber(waybillNumber);
+        return postAddParcel;
     }
 }

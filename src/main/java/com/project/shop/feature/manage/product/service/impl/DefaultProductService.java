@@ -4,6 +4,7 @@ import com.project.shop.feature.manage.product.service.ProductService;
 import com.project.shop.feature.page.Paging;
 import com.project.shop.feature.manage.product.dao.ProductDAO;
 import com.project.shop.feature.manage.product.entity.Product;
+import com.project.shop.feature.purchase.dto.PostDoPay;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -72,5 +73,18 @@ public class DefaultProductService implements ProductService {
     @Override
     public int selectMaxProductID() {
         return productDAO.selectMaxProductID();
+    }
+
+    @Override
+    public Product calculateProduct(Product product, PostDoPay postDoPay) {
+        int soldQuantity = product.getSoldQuantity();
+        int leftQuantity = product.getLeftQuantity();
+
+        soldQuantity += postDoPay.getQuantity();
+        leftQuantity -= postDoPay.getQuantity();
+
+        product.setSoldQuantity(soldQuantity);
+        product.setLeftQuantity(leftQuantity);
+        return product;
     }
 }

@@ -8,10 +8,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <body>
+<sec:authorize access="hasAnyRole('ROLE_ADMIN')">
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/sell/update/${getDetailResponse.sell.sellID}'"><i class="alternate pencil icon"></i></button>
 <button class="ui button" onclick="location.href='${pageContext.request.contextPath}/sell/delete/${getDetailResponse.sell.sellID}'"><i class="trash alternate icon"></i></button>
+</sec:authorize>
 <br>
 <p style="margin-top: 20px; font-size: 30px;">${getDetailResponse.sell.title}</p> <br>
 <form method="post" action="${pageContext.request.contextPath}/purchase/pay" name="purchaseForm">
@@ -60,83 +63,119 @@ ${getDetailResponse.sell.content} <br>
 <button class="ui button" style="margin-top: 20px;" onclick="location.href='${pageContext.request.contextPath}/sell/'"><i class="list icon"></i></button>
 <script>
     function purchase() {
-        let form = document.purchaseForm;
-        form.submit();
-    }
-
-    function addCart() {
-        let name = document.getElementById('name').value;
-        let price = document.getElementById('price').value;
-        let quantity = document.getElementById('quantity').value;
-        let sellID = document.getElementById('sellID').value;
-        let productID = document.getElementById('productID').value;
-
-        let postObj = {
-            'name': name,
-            'price':price,
-            'quantity':quantity,
-            'sellID':sellID,
-            'productID':productID
-        };
-
         $.ajax({
-            url: '${pageContext.request.contextPath}/purchase/cart/add',
+            url: '${pageContext.request.contextPath}/member/check/loggedIn',
             method: 'post',
             dataType: 'json',
-            data: JSON.stringify(postObj),
             contentType: 'application/json; charset=utf-8',
             success: function(pageResponse) {
-                alert(pageResponse.message);
+                if(pageResponse.code == 'SUCCESS') {
+                    let form = document.purchaseForm;
+                    form.submit();
+                } else {
+                    alert(pageResponse.message);
+                }
             }
         })
     }
 
+    function addCart() {
+        $.ajax({
+            url: '${pageContext.request.contextPath}/member/check/loggedIn',
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function(pageResponse) {
+                if(pageResponse.code == 'SUCCESS') {
+                    let name = document.getElementById('name').value;
+                    let price = document.getElementById('price').value;
+                    let quantity = document.getElementById('quantity').value;
+                    let sellID = document.getElementById('sellID').value;
+                    let productID = document.getElementById('productID').value;
+
+                    let postObj = {
+                        'name': name,
+                        'price':price,
+                        'quantity':quantity,
+                        'sellID':sellID,
+                        'productID':productID
+                    };
+
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/purchase/cart/add',
+                        method: 'post',
+                        dataType: 'json',
+                        data: JSON.stringify(postObj),
+                        contentType: 'application/json; charset=utf-8',
+                        success: function(pageResponse) {
+                            alert(pageResponse.message);
+                        }
+                    });
+                } else {
+                    alert(pageResponse.message);
+                }
+            }
+        });
+    }
+
     function want() {
-        let sellID = document.getElementById('sellID').value;
-        let price = document.getElementById('price').value;
+        $.ajax({
+            url: '${pageContext.request.contextPath}/member/check/loggedIn',
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function(pageResponse) {
+                if(pageResponse.code == 'SUCCESS') {
+                    let sellID = document.getElementById('sellID').value;
+                    let price = document.getElementById('price').value;
 
-        if($('#want').attr('class') == 'heart outline icon') {
-            let postObj = {
-                'name':'${getDetailResponse.sell.title}',
-                'price':price,
-                'sellID':sellID
-            }
+                    if($('#want').attr('class') == 'heart outline icon') {
+                        let postObj = {
+                            'name':'${getDetailResponse.sell.title}',
+                            'price':price,
+                            'sellID':sellID
+                        }
 
-            $.ajax({
-                url:'${pageContext.request.contextPath}/want/add',
-                method: 'post',
-                dataType: 'json',
-                data: JSON.stringify(postObj),
-                contentType: 'application/json; charset=utf-8',
-                success: function(pageResponse) {
-                    alert(pageResponse.message);
+                        $.ajax({
+                            url:'${pageContext.request.contextPath}/want/add',
+                            method: 'post',
+                            dataType: 'json',
+                            data: JSON.stringify(postObj),
+                            contentType: 'application/json; charset=utf-8',
+                            success: function(pageResponse) {
+                                alert(pageResponse.message);
 
-                    if(pageResponse.code == 'SUCCESS') {
-                        $('#want').attr('class', 'heart icon');
+                                if(pageResponse.code == 'SUCCESS') {
+                                    $('#want').attr('class', 'heart icon');
+                                }
+                            }
+                        })
+                    } else {
+                        let postObj = {
+                            'status':'false',
+                            'sellID':sellID
+                        }
+
+                        $.ajax({
+                            url: '${pageContext.request.contextPath}/want/delete',
+                            method: 'post',
+                            dataType: 'json',
+                            data: JSON.stringify(postObj),
+                            contentType: 'application/json; charset=utf-8',
+                            success: function(pageResponse) {
+                                alert(pageResponse.message);
+
+                                if(pageResponse.code == 'SUCCESS') {
+                                    $('#want').attr('class', 'heart outline icon');
+                                }
+                            }
+                        })
                     }
-                }
-            })
-        } else {
-            let postObj = {
-                'status':'false',
-                'sellID':sellID
-            }
-
-            $.ajax({
-                url: '${pageContext.request.contextPath}/want/delete',
-                method: 'post',
-                dataType: 'json',
-                data: JSON.stringify(postObj),
-                contentType: 'application/json; charset=utf-8',
-                success: function(pageResponse) {
+                } else {
                     alert(pageResponse.message);
-
-                    if(pageResponse.code == 'SUCCESS') {
-                        $('#want').attr('class', 'heart outline icon');
-                    }
                 }
-            })
-        }
+            }
+        });
     }
 </script>
 </body>
